@@ -82,6 +82,7 @@ body[data-v=seg] .nseg,body[data-v=seg] .charts{display:none!important}body[data
 .pan-title-bar h2{font-size:1.05em;font-weight:700;color:var(--ink);letter-spacing:.02em;text-transform:none;margin:0}
 .pan-badge{font-size:.75em;font-weight:700;padding:3px 8px;border-radius:6px;background:rgba(59,142,232,.18);color:var(--blue);border:1px solid rgba(59,142,232,.3)}
 .pan-badge.civ{background:rgba(242,184,61,.18);color:var(--desl);border-color:rgba(242,184,61,.3)}
+.pan-badge.bm{background:rgba(47,197,139,.18);color:var(--apto);border-color:rgba(47,197,139,.3)}
 .mil-sections{display:flex;flex-direction:column;gap:12px;flex:1}
 .mil-card{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:10px;padding:12px 14px;transition:transform .15s,border-color .15s,background .15s}
 .mil-card:hover{background:rgba(255,255,255,.06);border-color:var(--blue);transform:translateY(-2px)}
@@ -91,7 +92,23 @@ body[data-v=seg] .nseg,body[data-v=seg] .charts{display:none!important}body[data
 .mil-content{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
 .mil-content .big{min-width:130px;font-size:clamp(34px,3.8vw,60px)}
 .mil-content .stats{flex:1;min-width:240px;margin:0}
+.mil-prev-card{background:rgba(255,255,255,.02);border:1px dashed var(--line);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:12px;transition:background .15s,border-color .15s}
+.mil-prev-card:hover{background:rgba(255,255,255,.05);border-color:var(--blue)}
+.prev-badge{font-size:.72em;font-weight:700;padding:2px 7px;border-radius:6px;background:rgba(59,142,232,.15);color:var(--blue);border:1px solid rgba(59,142,232,.3);text-transform:uppercase;letter-spacing:.04em;flex:none}
+.prev-content{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.prev-content strong{font-size:.92em;color:var(--ink)}
+.prev-dates{font-size:.85em;color:var(--mut)}
+.bm-card{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:10px;padding:12px 14px;transition:transform .15s,border-color .15s,background .15s}
+.bm-card:hover{background:rgba(255,255,255,.06);border-color:var(--apto);transform:translateY(-2px)}
+.bm-subtitle{font-size:.78em;color:var(--mut);text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin:6px 0 8px}
+.bm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}
+.bm-item{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:3px;transition:border-color .15s,background .15s}
+.bm-item:hover{border-color:var(--apto);background:rgba(255,255,255,.07)}
+.bm-turma{font-size:.85em;font-weight:700;color:var(--blue)}
+.bm-date{font-size:.84em;color:var(--ink)}
+.bm-vagas{font-size:.8em;color:var(--apto);font-weight:600}
 .pan-civil{border-top-color:var(--desl)!important}
+.civ-subtitle{font-size:.78em;color:var(--mut);text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin-bottom:10px}
 .civ-box{display:flex;flex-direction:column;gap:10px;flex:1}
 .civ-item{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:12px;transition:background .15s,border-color .15s}
 .civ-item:hover{background:rgba(255,255,255,.07);border-color:var(--desl)}
@@ -139,7 +156,7 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
     <div class="pan pan-militar" style="--c:var(--blue)">
       <div class="pan-title-bar">
         <h2>Cursos de Guarda-Vidas Militar</h2>
-        <span class="pan-badge">CBMRS</span>
+        <span class="pan-badge">CBMRS / BMRS</span>
       </div>
       <div class="mil-sections">
         <div class="mil-card" data-go="rec" style="cursor:pointer">
@@ -171,6 +188,39 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
             </div>
           </div>
         </div>
+
+        <div class="mil-prev-card">
+          <span class="prev-badge">Previsão</span>
+          <div class="prev-content">
+            <strong>Capacitação T2</strong>
+            <span class="prev-dates">· Data prevista: 10 a 30 de novembro</span>
+          </div>
+        </div>
+
+        <div class="bm-card">
+          <div class="card-head">
+            <h3>Recertificação GV Brigada Militar</h3>
+            <span class="pan-badge bm">BMRS</span>
+          </div>
+          <div class="bm-subtitle">Previsão de Turmas:</div>
+          <div class="bm-grid">
+            <div class="bm-item">
+              <span class="bm-turma">T1</span>
+              <span class="bm-date">12 a 15 de novembro</span>
+              <b class="bm-vagas">50 militares</b>
+            </div>
+            <div class="bm-item">
+              <span class="bm-turma">T2</span>
+              <span class="bm-date">19 a 22 de novembro</span>
+              <b class="bm-vagas">50 militares</b>
+            </div>
+            <div class="bm-item">
+              <span class="bm-turma">T3</span>
+              <span class="bm-date">26 a 29 de novembro</span>
+              <b class="bm-vagas">36 militares</b>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -179,33 +229,34 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
         <h2>Cursos de Guarda-Vidas Civil Temporário</h2>
         <span class="pan-badge civ">GVCT</span>
       </div>
+      <div class="civ-subtitle">Previsão dos Cursos:</div>
       <div class="civ-box">
         <div class="civ-item">
           <div class="civ-icon">📅</div>
           <div class="civ-info">
-            <span class="civ-title">Previsão Recertificação LN</span>
-            <span class="civ-dates">30/10 - 05/11</span>
+            <span class="civ-title">Recertificação LN</span>
+            <span class="civ-dates">30 de outubro a 05 de novembro</span>
           </div>
         </div>
         <div class="civ-item">
           <div class="civ-icon">📅</div>
           <div class="civ-info">
             <span class="civ-title">Recertificação LS</span>
-            <span class="civ-dates">06/11 - 11/11</span>
+            <span class="civ-dates">06 a 11 de novembro</span>
           </div>
         </div>
         <div class="civ-item">
           <div class="civ-icon">📅</div>
           <div class="civ-info">
             <span class="civ-title">Capacitação LN</span>
-            <span class="civ-dates">06/11 - 26/11</span>
+            <span class="civ-dates">06 a 26 de novembro</span>
           </div>
         </div>
         <div class="civ-item">
           <div class="civ-icon">📅</div>
           <div class="civ-info">
             <span class="civ-title">Capacitação LS</span>
-            <span class="civ-dates">06/11 - 26/11</span>
+            <span class="civ-dates">06 a 26 de novembro</span>
           </div>
         </div>
       </div>
@@ -482,7 +533,7 @@ function renderSum(){
   <div class="pan pan-militar" style="--c:var(--blue)">
     <div class="pan-title-bar">
       <h2>Cursos de Guarda-Vidas Militar</h2>
-      <span class="pan-badge">CBMRS</span>
+      <span class="pan-badge">CBMRS / BMRS</span>
     </div>
     <div class="mil-sections">
       <div class="mil-card" data-go="rec" style="cursor:pointer">
@@ -514,6 +565,39 @@ function renderSum(){
           </div>
         </div>
       </div>
+
+      <div class="mil-prev-card">
+        <span class="prev-badge">Previsão</span>
+        <div class="prev-content">
+          <strong>Capacitação T2</strong>
+          <span class="prev-dates">· Data prevista: 10 a 30 de novembro</span>
+        </div>
+      </div>
+
+      <div class="bm-card">
+        <div class="card-head">
+          <h3>Recertificação GV Brigada Militar</h3>
+          <span class="pan-badge bm">BMRS</span>
+        </div>
+        <div class="bm-subtitle">Previsão de Turmas:</div>
+        <div class="bm-grid">
+          <div class="bm-item">
+            <span class="bm-turma">T1</span>
+            <span class="bm-date">12 a 15 de novembro</span>
+            <b class="bm-vagas">50 militares</b>
+          </div>
+          <div class="bm-item">
+            <span class="bm-turma">T2</span>
+            <span class="bm-date">19 a 22 de novembro</span>
+            <b class="bm-vagas">50 militares</b>
+          </div>
+          <div class="bm-item">
+            <span class="bm-turma">T3</span>
+            <span class="bm-date">26 a 29 de novembro</span>
+            <b class="bm-vagas">36 militares</b>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -522,33 +606,34 @@ function renderSum(){
       <h2>Cursos de Guarda-Vidas Civil Temporário</h2>
       <span class="pan-badge civ">GVCT</span>
     </div>
+    <div class="civ-subtitle">Previsão dos Cursos:</div>
     <div class="civ-box">
       <div class="civ-item">
         <div class="civ-icon">📅</div>
         <div class="civ-info">
-          <span class="civ-title">Previsão Recertificação LN</span>
-          <span class="civ-dates">30/10 - 05/11</span>
+          <span class="civ-title">Recertificação LN</span>
+          <span class="civ-dates">30 de outubro a 05 de novembro</span>
         </div>
       </div>
       <div class="civ-item">
         <div class="civ-icon">📅</div>
         <div class="civ-info">
           <span class="civ-title">Recertificação LS</span>
-          <span class="civ-dates">06/11 - 11/11</span>
+          <span class="civ-dates">06 a 11 de novembro</span>
         </div>
       </div>
       <div class="civ-item">
         <div class="civ-icon">📅</div>
         <div class="civ-info">
           <span class="civ-title">Capacitação LN</span>
-          <span class="civ-dates">06/11 - 26/11</span>
+          <span class="civ-dates">06 a 26 de novembro</span>
         </div>
       </div>
       <div class="civ-item">
         <div class="civ-icon">📅</div>
         <div class="civ-info">
           <span class="civ-title">Capacitação LS</span>
-          <span class="civ-dates">06/11 - 26/11</span>
+          <span class="civ-dates">06 a 26 de novembro</span>
         </div>
       </div>
     </div>
