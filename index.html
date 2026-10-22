@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Curso de Guarda-Vidas</title>
+<style>
+:root{--navy:#2a5da0;--blue:#3b8ee8;--bg:#06182f;--card:#0c2a4d;--ink:#eaf1fa;--mut:#93a9c4;--line:#1e4573;--apto:#2fc58b;--inapto:#f0626d;--desl:#f2b83d;--pend:#7f93ab;--r:12px;--g:12px}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:clamp(12px,.85vw,16px);display:flex;flex-direction:column}
+header{background:linear-gradient(100deg,#030c1a,#0a2a55);border-bottom:3px solid #c8102e;color:#fff;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex:none}
+h1{font-size:clamp(20px,1.9vw,32px);font-weight:700;letter-spacing:.2px}
+h1 small{display:block;font-size:.5em;font-weight:400;opacity:.8;margin-top:2px}
+.status{display:flex;align-items:center;gap:10px;font-size:.9em}
+.dot{width:10px;height:10px;border-radius:50%;background:#4be0a0}.dot.load{background:#ffd166}.dot.err{background:#ff6b6b}
+button{font:inherit;cursor:pointer;border:1px solid rgba(255,255,255,.5);background:rgba(255,255,255,.12);color:#fff;border-radius:8px;padding:5px 12px}
+button:hover{background:rgba(255,255,255,.25)}
+main{flex:1;min-height:0;display:flex;flex-direction:column;gap:var(--g);padding:var(--g) 20px 8px}
+.msg{display:none;background:#fff3cd;color:#7a5b00;border:1px solid #f0d98a;border-radius:8px;padding:6px 12px}
+.filters{display:grid;grid-template-columns:repeat(4,1fr) 1.4fr;gap:var(--g);flex:none}
+select,input{font:inherit;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);min-width:0}option{background:#0c2a4d}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:var(--g);flex:none}
+.kpi{background:var(--card);border-radius:var(--r);padding:10px 14px;border-top:4px solid var(--blue);box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.kpi .n{font-size:clamp(24px,2.5vw,42px);font-weight:700;line-height:1.1}
+.kpi .l{color:var(--mut);font-size:.85em;margin-top:2px}.kpi .s{font-size:.9em;color:var(--mut);margin-top:2px}
+.tabs{display:flex;gap:8px;padding:10px 20px 0;flex:none}
+.tab{font:inherit;font-weight:600;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--mut);border-radius:10px 10px 0 0;padding:9px 22px;margin-bottom:-1px}
+.tab.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.tab small{font-weight:400;opacity:.8;margin-left:6px}
+.charts{display:grid;grid-template-columns:1fr;gap:var(--g);flex:none}
+.vs,.vc{display:none}
+body[data-v=sum] .vs{display:grid}body[data-v=cap] .vc{display:block}body[data-v=cap] .tablecard.vc{display:flex}
+body[data-v=sum] .vd,body[data-v=cap] .vd{display:none!important}
+.kpi[data-r],.kpi[data-m],.cb,.stat,.trow{cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s}
+.kpi[data-r]:hover,.kpi[data-m]:hover,.cb:hover{transform:translateY(-3px);box-shadow:0 8px 16px rgba(13,37,64,.2)}
+.kpi:active,.cb:active,.stat:active,.trow:active{transform:scale(.97)}
+.kpi.sel{box-shadow:0 0 0 3px var(--blue),0 8px 16px rgba(13,37,64,.2)}.cb.sel{box-shadow:0 0 0 4px #9ec5ee}
+.sum{grid-template-columns:1.5fr 1fr 1fr;gap:var(--g);flex:1;min-height:0}
+.pan{background:var(--card);border-radius:var(--r);box-shadow:0 1px 3px rgba(13,37,64,.08);display:flex;flex-direction:column;min-height:0;overflow:hidden;border-top:5px solid var(--c,var(--blue));padding:14px 16px}
+.pan h3{font-size:.85em;text-transform:uppercase;letter-spacing:.08em;color:var(--mut)}
+.big{font-size:clamp(44px,5vw,88px);font-weight:700;line-height:1.05;color:var(--c)}.big small{display:block;font-size:.2em;color:var(--mut);font-weight:400}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px;margin:10px 0}
+.stat{border-radius:10px;padding:8px 10px;background:rgba(255,255,255,.06);border:2px solid transparent}.stat:hover{transform:translateY(-3px);box-shadow:0 8px 16px rgba(13,37,64,.18);border-color:var(--c)}
+.t200{margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}.t200 .stats{margin:8px 0}
+.stat .n{font-size:clamp(24px,2.6vw,44px);font-weight:700;color:var(--c);line-height:1.1}.stat .l{font-size:.8em;color:var(--mut)}
+.plist{overflow:auto;flex:1;min-height:0;margin-top:4px}
+.trow{padding:7px 8px;border-radius:8px;border:1px solid transparent}.trow:hover{background:rgba(255,255,255,.07);border-color:var(--line);transform:translateX(3px)}
+.trow .t{display:flex;justify-content:space-between;gap:8px;font-weight:600;font-size:.92em}.trow .t b{white-space:nowrap}
+body[data-v=cap] .cb .n{font-size:clamp(32px,3.8vw,64px)}body[data-v=cap] .cb{padding:14px 18px}body[data-v=cap] .capbars .row{font-size:1.1em;grid-template-columns:170px 1fr 110px}body[data-v=cap] .capbars .tr{height:24px}
+.card{background:var(--card);border-radius:var(--r);padding:12px 16px;box-shadow:0 1px 3px rgba(13,37,64,.08);min-width:0}
+h2{font-size:.8em;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);margin-bottom:8px;font-weight:600}
+.turmas{max-height:26vh;overflow:auto;padding-right:6px}
+.th{font-weight:600;margin-top:7px;font-size:.95em}.th span{color:var(--mut);font-weight:400}
+.bar{display:flex;height:16px;border-radius:8px;overflow:hidden;background:rgba(255,255,255,.1);margin-top:3px}
+.sub{font-size:.8em;color:var(--mut);margin-top:2px}
+.a{background:var(--apto)}.i{background:var(--inapto)}.d{background:var(--desl)}.p{background:var(--pend)}
+.legend{display:flex;gap:14px;font-size:.8em;color:var(--mut);margin-top:8px}.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px}
+.cap{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.cb{border-radius:10px;padding:8px 12px;color:#fff;border:0}.cb .n{font-size:clamp(26px,2.8vw,46px);font-weight:700;line-height:1}.cb .l{font-size:.8em;opacity:.9}
+.cb.t{background:var(--navy)}.cb.ap{background:var(--apto)}.cb.ds{background:var(--desl)}.cb.in{background:var(--inapto)}
+.capbars{margin-top:10px}.capbars .row{display:grid;grid-template-columns:130px 1fr 80px;gap:8px;align-items:center;margin-top:6px;font-size:.85em}
+.capbars .tr{height:14px;background:rgba(255,255,255,.1);border-radius:7px;overflow:hidden}.capbars .tr div{height:100%}
+.tablecard{flex:1;min-height:150px;display:flex;flex-direction:column}
+.tw{overflow:auto;flex:1;border:1px solid var(--line);border-radius:8px}
+table{width:100%;border-collapse:collapse;font-size:.92em}
+th,td{text-align:left;padding:6px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{position:sticky;top:0;background:#0f3563;color:var(--mut);font-weight:600;font-size:.85em;text-transform:uppercase;letter-spacing:.04em}
+td.name{font-weight:600}
+.tag{padding:2px 9px;border-radius:999px;font-size:.85em;font-weight:600}
+.t-apto{background:rgba(47,197,139,.18);color:#5ff0b4}.t-inapto{background:rgba(240,98,109,.2);color:#ff9aa2}.t-desl{background:rgba(242,184,61,.2);color:#ffd77a}.t-pend{background:rgba(147,169,196,.2);color:#c3d2e4}
+.empty{color:var(--mut);padding:10px}
+footer{font-size:.75em;color:var(--mut);text-align:center;padding:2px 0 6px;flex:none}
+@media(max-width:1000px){body{height:auto}.filters{grid-template-columns:1fr 1fr}.tw{max-height:60vh}}
+.brand{display:flex;align-items:center;gap:14px}.brand img{height:clamp(44px,5vw,78px);width:auto}
+.badge{display:inline-flex;align-items:center;justify-content:center;min-width:clamp(44px,5vw,78px);height:clamp(44px,5vw,78px);border:2px solid rgba(255,255,255,.6);border-radius:50%;font-weight:700;font-size:.8em}
+body[data-v=seg] .nseg,body[data-v=seg] .charts{display:none!important}body[data-v=seg] .filters{grid-template-columns:1fr 2fr}
+.cb.na{background:#5b7089}.cb.pv{background:#2a7fd4}
+.sum{grid-template-columns:1.9fr 1fr;grid-template-rows:1fr 1fr}.pan.rec{grid-row:1/3}.pan:not(.rec) .big{font-size:clamp(34px,3.6vw,64px)}
+.plist{display:flex;flex-direction:column;gap:6px}.trow{flex:1;min-height:44px;display:flex;flex-direction:column;justify-content:center}.trow .bar{height:20px}
+/* tabela da Capacitação só aparece na aba Capacitação T1 */
+.tablecard.vc{display:none}body[data-v=cap] .tablecard.vc{display:flex}
+/* gráfico de turmas: uma linha por turma, cabe todas sem rolagem */
+.plist{overflow:hidden;gap:4px;margin-top:6px}
+.trow{display:grid;grid-template-columns:minmax(220px,38%) 1fr minmax(200px,auto);align-items:center;gap:14px;padding:2px 8px;min-height:0;flex:1}
+.trow .t{display:flex;justify-content:space-between;gap:10px;font-size:.9em}.trow .t b{color:var(--blue)}
+.trow .bar{height:clamp(12px,1.6vh,20px);margin-top:0}.trow .sub{margin-top:0;white-space:nowrap;font-size:.82em}
+.pan.rec .stat .n{font-size:clamp(22px,2.2vw,38px)}.pan.rec .big{font-size:clamp(40px,4.2vw,72px)}
+body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi{padding:14px 18px}body[data-v=seg] .kpi .n{font-size:clamp(40px,4.6vw,76px)}body[data-v=seg] .kpi .l{font-size:1.05em}
+</style>
+</head>
+<body data-v="sum">
+<header>
+  <div class="brand">
+    <img src="brasao_cbmrs.png" alt="CBMRS" onerror="this.outerHTML='<span class=badge>CBMRS</span>'">
+    <img src="brasao_rs.png" alt="Estado do RS" onerror="this.outerHTML='<span class=badge>RS</span>'">
+    <h1>Curso de Guarda-Vidas<small id="subtitle">Carregando dados da planilha…</small></h1>
+  </div>
+  <div class="status"><span class="dot load" id="dot"></span><span id="statusText">Conectando…</span><button id="refreshBtn" type="button">Atualizar agora</button></div>
+</header>
+<nav class="tabs" id="tabs">
+  <button class="tab on" data-v="sum" type="button">Resumo geral</button>
+  <button class="tab" data-v="rec" type="button">Recertificação<small id="nRec"></small></button>
+  <button class="tab" data-v="seg" type="button">Curso de Segurança<small id="nSeg"></small></button>
+  <button class="tab" data-v="cap" type="button">Capacitação T1<small id="nCap"></small></button>
+</nav>
+<main>
+  <div class="msg" id="msg"></div>
+  <div class="filters vd">
+    <select id="fTurma" class="nseg"><option value="">Todas as turmas</option></select>
+    <select id="fModal" class="nseg"><option value="">Todas as modalidades</option></select>
+    <select id="fCrbm" class="nseg"><option value="">Todos os CRBM</option></select>
+    <select id="fRes"><option value="">Todos os resultados</option><option>Apto</option><option>Inapto</option><option>Desligado</option><option>Sem resultado</option></select>
+    <input id="fBusca" type="search" placeholder="Buscar por nome ou OBM…">
+  </div>
+  <section class="sum vs" id="sum"></section>
+  <section class="kpis vd" id="kpis"></section>
+  <section class="charts">
+    <div class="card vd"><h2>Resultado por turma</h2><div class="turmas" id="chTurmas"></div>
+      <div class="legend" id="lg"><span><i class="a"></i>Apto</span><span><i class="i"></i>Inapto</span><span><i class="d"></i>Desligado</span><span><i class="p"></i>Aguardando resultado</span></div></div>
+    <div class="card vc"><h2>Capacitação T1 · Curso e modalidade <span style="text-transform:none;letter-spacing:0">· clique nos cards para filtrar</span></h2><div id="chCap"><div class="empty">Carregando…</div></div></div>
+  </section>
+  <section class="card tablecard vc"><h2>Militares <span id="capCount" style="text-transform:none;letter-spacing:0"></span></h2>
+    <div class="tw"><table><thead id="capHead"></thead><tbody id="capBody"></tbody></table></div></section>
+  <section class="card tablecard vd">
+    <h2>Efetivo <span id="tblCount" style="text-transform:none;letter-spacing:0"></span></h2>
+    <div class="tw"><table><thead id="thead"><tr><th>Nome</th><th>Graduação</th><th>OBM</th><th>Turma</th><th>Modalidade</th><th>Chamada</th><th>Resultado</th></tr></thead><tbody id="tbody"></tbody></table></div>
+  </section>
+  <footer>Fonte: Google Sheets · atualização automática a cada <span id="ivl"></span> s · CPF, RG, telefone e e-mail não são exibidos.</footer>
+</main>
+<script>
+/* ===== CONFIGURAÇÃO ===== */
+const CONFIG = {
+  sheetId: '1s4sVNnV6C2CI8kM4--6uieG5S86Do2Rd__O-IDCApV0',
+  refreshSeconds: 30,
+  tabs: {
+    rec: { gid: '0' },                        // aba "Recertificacao CBM"
+    seg: { gid: '889021045' },                // aba "Curso Seguranca"
+    cap: { gid: '204610528' }                // aba "Capacitação - T1"
+  }
+};
+/* ========================= */
+let REC = [], SEG = [], ALL = [], CAP = null, view = 'sum', capSel = 'all', countdown = CONFIG.refreshSeconds, loading = false;
+const $ = id => document.getElementById(id);
+$('ivl').textContent = CONFIG.refreshSeconds;
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm = s => String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+
+/* ---------- leitura de uma aba (JSONP: evita bloqueio de CORS) ---------- */
+function fetchTab(tab){
+  return new Promise((res, rej) => {
+    const cb = '__g' + Math.random().toString(36).slice(2), s = document.createElement('script');
+    const end = () => { clearTimeout(tm); delete window[cb]; s.remove(); };
+    const tm = setTimeout(() => { end(); rej(new Error('tempo esgotado')); }, 15000);
+    window[cb] = r => {
+      end();
+      if (!r || r.status === 'error'){ const e = r && r.errors && r.errors[0]; rej(new Error(e ? (e.detailed_message || e.message) : 'erro desconhecido')); }
+      else res(r.table);
+    };
+    s.onload = () => { if (window[cb]){ end(); rej(new Error('resposta inválida — confira o compartilhamento')); } };
+    s.onerror = () => { end(); rej(new Error('sem acesso à planilha')); };
+    const q = tab.sheet ? 'sheet=' + encodeURIComponent(tab.sheet) : 'gid=' + tab.gid;
+    s.src = `https://docs.google.com/spreadsheets/d/${CONFIG.sheetId}/gviz/tq?${q}&headers=1&tqx=responseHandler:${cb}&_=${Date.now()}`;
+    document.head.appendChild(s);
+  });
+}
+async function load(){
+  if (loading) return;
+  loading = true; setStatus('load', 'Atualizando…');
+  const errs = [];
+  const jobs = [['rec','Recertificação', t => REC = ingest(t,false)], ['seg','Curso de Segurança', t => SEG = ingest(t,true)], ['cap','Capacitação T1', t => CAP = capacit(t)]];
+  await Promise.all(jobs.map(async ([k, nome, fn]) => { try { fn(await fetchTab(CONFIG.tabs[k])); } catch(e){ console.error(nome, e); errs.push(`${nome}: ${e.message}`); } }));
+  pick();
+  loading = false; countdown = CONFIG.refreshSeconds;
+  fillSelects(); render();
+  if (errs.length){ $('msg').textContent = 'Não foi possível atualizar → ' + errs.join(' | ') + ' (mantidos os últimos dados).'; $('msg').style.display = 'block'; setStatus('err', 'Atualização parcial'); }
+  else { $('msg').style.display = 'none'; setStatus('ok', `Atualizado às ${new Date().toLocaleTimeString('pt-BR')} · próxima em ${countdown}s`); }
+}
+function setStatus(kind, text){ $('dot').className = 'dot ' + (kind === 'ok' ? '' : kind); $('statusText').textContent = text; }
+
+/* ---------- tratamento dos dados ---------- */
+function cellText(cell){
+  if (!cell || cell.v == null) return '';
+  const v = cell.v;
+  if (typeof v === 'string' && v.startsWith('Date(')) return (cell.f != null ? String(cell.f) : '').trim();
+  return String(v).trim();
+}
+function prettyModal(s){
+  if (!s) return '—';
+  const n = norm(s);
+  if (n.includes('mar')) return 'Recertificação Mar';
+  if (n.includes('intern')) return 'Recertificação Águas Internas';
+  return s.replace(/_/g,' ').replace(/^./, c => c.toUpperCase());
+}
+function fixHeader(t){   // se a aba tiver linhas acima do cabeçalho, localiza a linha de títulos
+  const K = ['nome_completo','nome','nome completo'], has = a => a.some(l => K.includes(norm(l)));
+  if (has(t.cols.map(c => c.label || ''))) return t;
+  for (let k = 0; k < Math.min(10, t.rows.length); k++){
+    const cells = (t.rows[k].c || []).map(cellText);
+    if (has(cells)) return { cols: cells.map(label => ({label})), rows: t.rows.slice(k+1) };
+  }
+  return t;
+}
+function turmaOrder(t){ const m = String(t).match(/^(\d+)/); return m ? +m[1] : 99; }
+const finder = table => {
+  const labels = table.cols.map(c => norm(c.label));
+  return (...names) => { for (const n of names){ const i = labels.indexOf(norm(n)); if (i >= 0) return i; } return -1; };
+};
+
+/* isSeg=false: aba principal (Recertificação) · isSeg=true: aba "curso segurança" */
+function ingest(table, isSeg){
+  table = fixHeader(table);
+  const col = finder(table);
+  const ix = { turma: col('Turma'), obs: col('OBS'), apto: col('Apto/Inapto'), chamada: col('Chamada'), id: col('id_func'),
+    grad: col('graduacao'), nome: col('nome_completo','nome','nome completo'), obm: col('obm_origem','obm'), modal: col('modalidade'), situ: col('Situacao','Situação') };
+  if (ix.nome < 0) throw new Error('coluna "nome_completo" não encontrada');
+  if (!isSeg && ix.turma < 0) throw new Error('coluna "Turma" não encontrada');
+  const seen = new Set(), out = [];
+  for (const r of table.rows){
+    const c = r.c || [], g = i => i < 0 ? '' : cellText(c[i]);
+    const nome = g(ix.nome); if (!nome) continue;
+    const obs = g(ix.obs);
+    const turmaRaw = isSeg ? 'Curso de Segurança' : g(ix.turma);
+
+    let turma = turmaRaw, turmaCurta = turmaRaw.split(' - ')[0].trim();
+    const nTurma = turmaOrder(turmaRaw), nt = norm(turmaRaw);
+    if (!isSeg && nTurma === 2){ const o = obs || 'Sem OBS'; turma = turmaRaw + ' · ' + o; turmaCurta += ' · ' + o; }
+    else if (!isSeg && nTurma === 8 && nt.includes('07 de novembro') && !nt.includes('cbfbm')){ turma = turmaRaw + ' (Alunos CBFBM)'; turmaCurta += ' (Alunos CBFBM)'; }
+
+    const a = norm(g(ix.apto));
+    let resultado = a === 'apto' ? 'Apto' : (a === 'inapto' || a === 'inpato') ? 'Inapto' : a === 'desligado' ? 'Desligado' : 'Sem resultado';
+    if (isSeg) resultado = norm(g(ix.situ)).includes('desligad') ? 'Desligado' : 'Ativo';   // aba Curso Seguranca: coluna Situacao
+    const obm = g(ix.obm), first = obm.split(' - ')[0].trim();
+    out.push({ nome, turma, turmaCurta, resultado, chamada: g(ix.chamada) || '—', obm, grad: g(ix.grad) || '—',
+      crbm: !obm ? '—' : /CRBM/.test(first) ? first : 'Unidades de apoio / Capital',
+      modal: isSeg ? (g(ix.grad) || '—') : prettyModal(g(ix.modal)), obs, situ: g(ix.situ) || '—' });
+  }
+  return out;
+}
+
+/* Capacitação T1: colunas A (OBS) até M (modalidade) · cards pela coluna "Curso" e pela "modalidade" */
+function capacit(table){
+  table = fixHeader(table);
+  const col = finder(table), labels = table.cols.map(c => norm(c.label));
+  const curso = col('Curso'), modal = col('modalidade');
+  if (curso < 0) throw new Error('coluna "Curso" não encontrada');
+  let nome = col('nome_completo','nome','nome completo'); if (nome < 0) nome = labels.findIndex(l => l.includes('nome'));
+  const ncol = Math.max(13, modal + 1), heads = table.cols.slice(0, ncol).map(c => String(c.label || '').trim());   // colunas A..M
+  const list = [];
+  for (const r of table.rows){
+    const c = r.c || [], g = i => i < 0 ? '' : cellText(c[i]);
+    if (nome >= 0 ? !g(nome) : !c.some(x => cellText(x))) continue;
+    const k = norm(g(curso)), m = norm(g(modal));
+    list.push({ cells: heads.map((_, i) => g(i)), k: k.includes('deslig') ? 'dl' : k === 'em curso' ? 'ec' : 'ot', m: m.includes('novo') ? 'nv' : m.includes('troca') ? 'tr' : '' });
+  }
+  const q = (f, v) => list.filter(x => x[f] === v).length;
+  return { total: list.length, ec: q('k','ec'), dl: q('k','dl'), nv: q('m','nv'), tr: q('m','tr'), heads, curso, modal, list };
+}
+
+/* ---------- visões independentes: cada aba da planilha é uma situação separada ---------- */
+const NOMES = { rec: 'Recertificação', seg: 'Curso de Segurança', cap: 'Capacitação T1' };
+function pick(){ ALL = view === 'seg' ? SEG : REC; }
+function go(v, f = {}){
+  view = v; document.body.dataset.v = v;
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.v === v));
+  ['fTurma','fModal','fCrbm','fRes','fBusca'].forEach(id => $(id).value = '');
+  pick(); fillSelects();
+  if (f.t) $('fTurma').value = f.t; if (f.r) $('fRes').value = f.r;
+  capSel = f.c || 'all'; render();
+}
+document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => go(b.dataset.v)));
+document.addEventListener('click', e => {
+  const t = e.target.closest ? e.target : e.target.parentElement;
+  let el = t.closest('[data-go]');
+  if (el){ go(el.dataset.go, { t: el.dataset.t, r: el.dataset.r, c: el.dataset.c }); return; }
+  el = t.closest('.kpi[data-r],.kpi[data-m]');
+  if (el){ const f = el.dataset.r !== undefined ? $('fRes') : $('fModal'), v = el.dataset.r !== undefined ? el.dataset.r : el.dataset.m; f.value = f.value === v ? '' : v; render(); return; }
+  el = t.closest('.cb[data-c]');
+  if (el){ capSel = capSel === el.dataset.c ? 'all' : el.dataset.c; render(); }
+});
+/* ---------- filtros ---------- */
+function fillSelect(id, values, first, sorter){
+  const el = $(id), cur = el.value;
+  const list = [...new Set(values)].filter(Boolean).sort(sorter || ((a,b) => a.localeCompare(b,'pt-BR')));
+  el.innerHTML = `<option value="">${first}</option>` + list.map(v => `<option value="${esc(v)}">${esc(v)}</option>`).join('');
+  if (list.includes(cur)) el.value = cur;
+}
+function fillSelects(){
+  fillSelect('fTurma', ALL.map(r=>r.turma), 'Todas as turmas', (a,b) => turmaOrder(a)-turmaOrder(b) || a.localeCompare(b,'pt-BR'));
+  fillSelect('fModal', ALL.map(r=>r.modal), view === 'seg' ? 'Todas as graduações' : 'Todas as modalidades');
+  const fr = $('fRes'), cur = fr.value, ops = view === 'seg' ? ['Ativo','Desligado'] : ['Apto','Inapto','Desligado','Sem resultado'];
+  fr.innerHTML = '<option value="">Todos os resultados</option>' + ops.map(o => `<option>${o}</option>`).join(''); if (ops.includes(cur)) fr.value = cur;
+  fillSelect('fCrbm', ALL.map(r=>r.crbm), 'Todos os CRBM');
+}
+function filtered(skipModal){
+  const t=$('fTurma').value, m=$('fModal').value, c=$('fCrbm').value, res=$('fRes').value, q=norm($('fBusca').value);
+  return ALL.filter(r => (!t||r.turma===t) && (!m||skipModal||r.modal===m) && (!c||r.crbm===c) && (!res||r.resultado===res) && (!q || norm(r.nome).includes(q) || norm(r.obm).includes(q)));
+}
+['fTurma','fModal','fCrbm','fRes'].forEach(id => $(id).addEventListener('change', render));
+$('fBusca').addEventListener('input', render);
+$('refreshBtn').addEventListener('click', load);
+
+/* ---------- renderização ---------- */
+function count(arr, fn){ const m = new Map(); arr.forEach(x => { const k = fn(x); if (k) m.set(k,(m.get(k)||0)+1); }); return [...m.entries()]; }
+function render(){
+  const rows = filtered(), n = rows.length;
+  const aptos = rows.filter(r=>r.resultado==='Apto').length, inaptos = rows.filter(r=>r.resultado==='Inapto').length;
+  const desl = rows.filter(r=>r.resultado==='Desligado').length, pend = n - aptos - inaptos - desl;
+  const presentes = rows.filter(r=>r.chamada==='Presente').length, avaliados = aptos + inaptos;
+  $('nRec').textContent = REC.length ? REC.length : ''; $('nSeg').textContent = SEG.length ? SEG.length : ''; $('nCap').textContent = CAP ? CAP.total : '';
+  $('subtitle').textContent = view === 'sum' ? 'Resumo geral · Recertificação, Curso de Segurança e Capacitação T1' : view === 'cap' ? `Capacitação T1 · ${CAP ? CAP.total : 0} inscritos` : `${NOMES[view]} · ${ALL.length} inscritos · ${new Set(ALL.map(r=>r.turma)).size} turma(s)`;
+
+  const fr = $('fRes').value, fm = $('fModal').value;
+  const kpi = (num,label,color,sub='',attr='',sel=false) => `<div class="kpi${sel?' sel':''}" ${attr} style="border-top-color:${color}"><div class="n">${num}</div><div class="l">${label}</div>${sub?`<div class="s">${sub}</div>`:''}</div>`;
+  const kr = (v,num,label,color,sub='') => kpi(num,label,color,sub,`data-r="${v}"`,fr===v);
+  const isSeg = view === 'seg', base = filtered(true);
+  const modK = () => count(base, r=>r.modal).sort((a,b) => (/Mar$/.test(b[0])?1:0)-(/Mar$/.test(a[0])?1:0) || b[1]-a[1]).map(([m]) => {
+    const rs = base.filter(r=>r.modal===m), a = rs.filter(r=>r.resultado==='Apto').length, p = rs.filter(r=>r.resultado==='Sem resultado').length;
+    return kpi(rs.length, esc(m), 'var(--blue)', `<b style="color:var(--apto)">${a}</b> aptos · <b>${p}</b> aguardando resultado`, `data-m="${esc(m)}"`, fm===m); }).join('');
+  const all = kpi(n,'Inscritos','var(--navy)', n!==ALL.length ? `de ${ALL.length} no total` : '', 'data-r=""', false);
+  $('kpis').innerHTML = isSeg
+    ? all + kr('Ativo',n-desl,'Ativos (não desligados)','var(--apto)') + kr('Desligado',desl,'Desligados','var(--desl)')
+    : all + modK() + kr('Apto',aptos,'Aptos','var(--apto)') + kr('Inapto',inaptos,'Inaptos','var(--inapto)') + kr('Desligado',desl,'Desligados','var(--desl)');
+
+  $('lg').innerHTML = isSeg ? '<span><i class="a"></i>Ativos</span><span><i class="d"></i>Desligados</span>' : '<span><i class="a"></i>Apto</span><span><i class="i"></i>Inapto</span><span><i class="d"></i>Desligado</span><span><i class="p"></i>Aguardando resultado</span>';
+  const turmas = [...new Set(rows.map(r=>r.turma))].sort((a,b) => turmaOrder(a)-turmaOrder(b) || a.localeCompare(b,'pt-BR'));
+  $('chTurmas').innerHTML = turmas.length ? turmas.map(t => {
+    const rs = rows.filter(r=>r.turma===t), tot = rs.length, f = x => rs.filter(r=>r.resultado===x).length;
+    const a = f('Apto') + f('Ativo'), i = f('Inapto'), d = f('Desligado'), p = tot-a-i-d, w = v => (v/tot*100).toFixed(2)+'%';
+    return `<div class="th">${esc(t)} <span>· ${tot} inscritos</span></div>
+      <div class="bar"><div class="a" style="width:${w(a)}" title="Apto: ${a}"></div><div class="i" style="width:${w(i)}" title="Inapto: ${i}"></div><div class="d" style="width:${w(d)}" title="Desligado: ${d}"></div><div class="p" style="width:${w(p)}" title="Sem resultado: ${p}"></div></div>
+      <div class="sub">${isSeg ? `${a} ativos · ${d} desligados` : `${a} apto · ${i} inapto · ${d} desligado · ${p} aguardando`}</div>`;
+  }).join('') : '<div class="empty">Sem dados para o filtro atual.</div>';
+
+  if (CAP){
+    const w = v => CAP.total ? (v/CAP.total*100) : 0;
+    const bar = (l,v,c) => `<div class="row"><span>${l}</span><div class="tr"><div style="width:${w(v).toFixed(1)}%;background:${c}"></div></div><b>${v} de ${CAP.total}</b></div>`;
+    const cb = (k,cl,num,l) => `<div class="cb ${cl}${capSel===k?' sel':''}" data-c="${k}"><div class="n">${num}</div><div class="l">${l}</div></div>`;
+    $('chCap').innerHTML = `<div class="cap">${cb('all','t',CAP.total,'Total de inscritos')}${cb('ec','ap',CAP.ec,'Em curso')}${CAP.dl?cb('dl','ds',CAP.dl,'Desligados'):''}${cb('nv','pv',CAP.nv,'Novo')}${cb('tr','na',CAP.tr,'Troca')}</div>
+      <div class="capbars">${bar('Em curso',CAP.ec,'var(--apto)')}${CAP.dl?bar('Desligados',CAP.dl,'var(--desl)'):''}${bar('Novo',CAP.nv,'#2a7fd4')}${bar('Troca',CAP.tr,'#5b7089')}</div>`;
+    const cl = CAP.list.filter(x => capSel === 'all' || x.k === capSel || x.m === capSel);
+    $('capCount').textContent = `· ${cl.length} registros`;
+    $('capHead').innerHTML = '<tr>' + CAP.heads.map(h => `<th>${esc(h)}</th>`).join('') + '</tr>';
+    const cell = (x, v, i) => i === CAP.curso && v ? `<span class="tag ${x.k==='ec'?'t-apto':x.k==='dl'?'t-desl':'t-pend'}">${esc(v)}</span>`
+      : i === CAP.modal && x.m ? `<span class="tag t-pend">${x.m==='nv'?'Novo':'Troca'}</span>` : esc(v || '—');
+    $('capBody').innerHTML = cl.map(x => '<tr>' + x.cells.map((v, i) => `<td${CAP.heads[i] && /nome/.test(norm(CAP.heads[i])) ? ' class="name"' : ''}>${cell(x, v, i)}</td>`).join('') + '</tr>').join('');
+  }
+  renderSum();
+
+  const sorted = [...rows].sort((a,b) => turmaOrder(a.turma)-turmaOrder(b.turma) || a.turma.localeCompare(b.turma,'pt-BR') || a.nome.localeCompare(b.nome,'pt-BR'));
+  $('tblCount').textContent = isSeg ? `· ${n} inscritos · ${n-desl} ativos · ${desl} desligados` : `· ${n} registros`;
+  const cls = {Apto:'t-apto', Inapto:'t-inapto', Desligado:'t-desl', 'Sem resultado':'t-pend'};
+  const tagc = r => `<span class="tag ${cls[r.resultado] || 't-apto'}">${r.resultado}</span>`;
+  $('thead').innerHTML = isSeg ? '<tr><th>Nome</th><th>Graduação</th><th>OBM</th><th>Situação</th></tr>' : '<tr><th>Nome</th><th>Graduação</th><th>OBM</th><th>Turma</th><th>Modalidade</th><th>Chamada</th><th>Resultado</th></tr>';
+  $('tbody').innerHTML = sorted.map(r => isSeg
+    ? `<tr><td class="name">${esc(r.nome)}</td><td>${esc(r.grad)}</td><td>${esc(r.obm)}</td><td>${tagc(r)}</td></tr>`
+    : `<tr><td class="name">${esc(r.nome)}</td><td>${esc(r.grad)}</td><td>${esc(r.obm)}</td><td>${esc(r.turma)}</td><td>${esc(r.modal)}</td><td>${esc(r.chamada)}</td><td>${tagc(r)}</td></tr>`).join('');
+}
+
+/* ---------- resumo geral (cada aba continua separada) ---------- */
+function tally(rows){ const f = x => rows.filter(r=>r.resultado===x).length, a = f('Apto'), i = f('Inapto'), d = f('Desligado'); return { t: rows.length, a, i, d, p: rows.length-a-i-d }; }
+function renderSum(){
+  const R = tally(REC), C = CAP || { total: 0, ec: 0, dl: 0 };
+  const segForm = SEG.filter(r => norm(r.situ) === 'apto').length;   // coluna Situacao = Apto
+  const stat = (n,l,c,attrs) => `<div class="stat" style="--c:${c}" ${attrs}><div class="n">${n}</div><div class="l">${l}</div></div>`;
+  const seg = (parts,tot) => parts.map(([v,c]) => `<div style="width:${tot?(v/tot*100).toFixed(2):0}%;background:${c}"></div>`).join('');
+  const turmas = [...new Set(REC.map(r=>r.turma))].sort((a,b) => turmaOrder(a)-turmaOrder(b) || a.localeCompare(b,'pt-BR'));
+  const tl = turmas.map(t => ({ t, x: tally(REC.filter(r=>r.turma===t)) })), mx = Math.max(1, ...tl.map(o => o.x.t));
+  const rows = tl.map(({t,x}) => `<div class="trow" data-go="rec" data-t="${esc(t)}"><div class="t"><span>${esc(t)}</span><b>${x.t} inscritos</b></div>
+      <div class="bar" style="width:${Math.max(6,x.t/mx*100).toFixed(1)}%">${seg([[x.a,'var(--apto)'],[x.i,'var(--inapto)'],[x.d,'var(--desl)'],[x.p,'var(--pend)']],x.t)}</div>
+      <div class="sub"><b style="color:var(--apto)">${x.a}</b> apto · <b style="color:var(--inapto)">${x.i}</b> inapto · <b>${x.p}</b> aguardando${x.d?` · <b style="color:var(--desl)">${x.d}</b> desligado`:''}</div></div>`).join('');
+  $('sum').innerHTML = `
+  <div class="pan rec" style="--c:var(--blue)"><h3 data-go="rec" style="cursor:pointer">Recertificação ›</h3>
+    <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap"><div class="big" data-go="rec" style="cursor:pointer">${R.t}<small>militares inscritos</small></div>
+    <div class="stats" style="flex:1;min-width:300px">${stat(R.a,'Aptos','var(--apto)','data-go="rec" data-r="Apto"')}${stat(R.i,'Inaptos','var(--inapto)','data-go="rec" data-r="Inapto"')}${stat(R.p,'Aguardando resultado','var(--pend)','data-go="rec" data-r="Sem resultado"')}${R.d?stat(R.d,'Desligados','var(--desl)','data-go="rec" data-r="Desligado"'):''}</div></div>
+    <h3>Inscritos por turma · ${turmas.length} turma(s)</h3><div class="plist">${rows || '<div class="empty">Sem dados.</div>'}</div>
+    <div class="legend"><span><i class="a"></i>Apto</span><span><i class="i"></i>Inapto</span><span><i class="p"></i>Aguardando resultado</span><span><i class="d"></i>Desligado</span></div></div>
+  <div class="pan" style="--c:var(--apto);overflow:auto"><h3 data-go="cap" style="cursor:pointer">Capacitação T1 ›</h3>
+    <div style="display:flex;gap:16px;align-items:center"><div class="big" data-go="cap" style="cursor:pointer">${C.total}<small>total de inscritos</small></div>
+    <div class="stats" style="flex:1">${stat(C.ec,'Em curso','var(--apto)','data-go="cap" data-c="ec"')}${stat(C.dl,'Desligados','var(--desl)','data-go="cap" data-c="dl"')}</div></div>
+    <div class="bar">${seg([[C.ec,'var(--apto)'],[C.dl,'var(--desl)'],[C.total-C.ec-C.dl,'var(--pend)']],C.total)}</div></div>
+  <div class="pan" style="--c:var(--navy)"><h3 data-go="seg" style="cursor:pointer">Curso de Segurança ›</h3>
+    <div class="big" data-go="seg" style="cursor:pointer;color:var(--apto)">${segForm}<small>Seguranças formados</small></div></div>`;
+}
+
+/* ---------- ciclo de atualização ---------- */
+setInterval(() => {
+  if (--countdown <= 0){ load(); return; }
+  if (!loading && $('dot').className.indexOf('err') < 0) $('statusText').textContent = $('statusText').textContent.replace(/próxima em \d+s/, `próxima em ${countdown}s`);
+}, 1000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) load(); });
+load();
+</script>
+</body>
+</html>
