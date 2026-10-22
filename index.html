@@ -76,16 +76,35 @@ footer{font-size:.75em;color:var(--mut);text-align:center;padding:2px 0 6px;flex
 .badge{display:inline-flex;align-items:center;justify-content:center;min-width:clamp(44px,5vw,78px);height:clamp(44px,5vw,78px);border:2px solid rgba(255,255,255,.6);border-radius:50%;font-weight:700;font-size:.8em}
 body[data-v=seg] .nseg,body[data-v=seg] .charts{display:none!important}body[data-v=seg] .filters{grid-template-columns:1fr 2fr}
 .cb.na{background:#5b7089}.cb.pv{background:#2a7fd4}
-.sum{grid-template-columns:1.9fr 1fr;grid-template-rows:1fr 1fr}.pan.rec{grid-row:1/3}.pan:not(.rec) .big{font-size:clamp(34px,3.6vw,64px)}
-.plist{display:flex;flex-direction:column;gap:6px}.trow{flex:1;min-height:44px;display:flex;flex-direction:column;justify-content:center}.trow .bar{height:20px}
+.sum{grid-template-columns:3fr 1fr;gap:var(--g);flex:1;min-height:0;overflow:auto}
+@media(max-width:1024px){.sum{grid-template-columns:1fr;overflow:visible}}
+.pan-title-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.pan-title-bar h2{font-size:1.05em;font-weight:700;color:var(--ink);letter-spacing:.02em;text-transform:none;margin:0}
+.pan-badge{font-size:.75em;font-weight:700;padding:3px 8px;border-radius:6px;background:rgba(59,142,232,.18);color:var(--blue);border:1px solid rgba(59,142,232,.3)}
+.pan-badge.civ{background:rgba(242,184,61,.18);color:var(--desl);border-color:rgba(242,184,61,.3)}
+.mil-sections{display:flex;flex-direction:column;gap:12px;flex:1}
+.mil-card{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:10px;padding:12px 14px;transition:transform .15s,border-color .15s,background .15s}
+.mil-card:hover{background:rgba(255,255,255,.06);border-color:var(--blue);transform:translateY(-2px)}
+.mil-card .card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.mil-card h3{font-size:1em;font-weight:700;color:#fff;letter-spacing:.03em;margin:0}
+.mil-card .sub-link{font-size:.8em;color:var(--mut);font-weight:500}
+.mil-content{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.mil-content .big{min-width:130px;font-size:clamp(34px,3.8vw,60px)}
+.mil-content .stats{flex:1;min-width:240px;margin:0}
+.pan-civil{border-top-color:var(--desl)!important}
+.civ-box{display:flex;flex-direction:column;gap:10px;flex:1}
+.civ-item{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:12px;transition:background .15s,border-color .15s}
+.civ-item:hover{background:rgba(255,255,255,.07);border-color:var(--desl)}
+.civ-icon{font-size:1.2em;flex:none}
+.civ-info{display:flex;flex-direction:column;gap:3px}
+.civ-title{font-weight:600;font-size:.92em;color:var(--ink)}
+.civ-dates{font-size:.88em;font-weight:700;color:var(--desl);letter-spacing:.02em}
 /* tabela da Capacitação só aparece na aba Capacitação T1 */
 .tablecard.vc{display:none}body[data-v=cap] .tablecard.vc{display:flex}
-/* gráfico de turmas: uma linha por turma, cabe todas sem rolagem */
-.plist{overflow:hidden;gap:4px;margin-top:6px}
+.plist{display:flex;flex-direction:column;gap:4px;overflow:hidden;margin-top:6px}
 .trow{display:grid;grid-template-columns:minmax(220px,38%) 1fr minmax(200px,auto);align-items:center;gap:14px;padding:2px 8px;min-height:0;flex:1}
 .trow .t{display:flex;justify-content:space-between;gap:10px;font-size:.9em}.trow .t b{color:var(--blue)}
 .trow .bar{height:clamp(12px,1.6vh,20px);margin-top:0}.trow .sub{margin-top:0;white-space:nowrap;font-size:.82em}
-.pan.rec .stat .n{font-size:clamp(22px,2.2vw,38px)}.pan.rec .big{font-size:clamp(40px,4.2vw,72px)}
 body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi{padding:14px 18px}body[data-v=seg] .kpi .n{font-size:clamp(40px,4.6vw,76px)}body[data-v=seg] .kpi .l{font-size:1.05em}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -117,35 +136,81 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
     <input id="fBusca" type="search" placeholder="Buscar por nome ou OBM…">
   </div>
   <section class="sum vs" id="sum">
-  <div class="pan rec" style="--c:var(--blue)"><h3 data-go="rec" style="cursor:pointer">Recertificação ›</h3>
-    <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap"><div class="big" data-go="rec" style="cursor:pointer">538<small>militares inscritos</small></div>
-    <div class="stats" style="flex:1;min-width:300px"><div class="stat" style="--c:var(--apto)" data-go="rec" data-r="Apto"><div class="n">195</div><div class="l">Aptos</div></div><div class="stat" style="--c:var(--inapto)" data-go="rec" data-r="Inapto"><div class="n">1</div><div class="l">Inaptos</div></div><div class="stat" style="--c:var(--pend)" data-go="rec" data-r="Sem resultado"><div class="n">328</div><div class="l">Aguardando resultado</div></div><div class="stat" style="--c:var(--desl)" data-go="rec" data-r="Desligado"><div class="n">14</div><div class="l">Desligados</div></div></div></div>
-    <h3>Inscritos por turma · 9 turma(s)</h3><div class="plist"><div class="trow" data-go="rec" data-t="1ª - 30 de setembro a 02 de outubro"><div class="t"><span>1ª - 30 de setembro a 02 de outubro</span><b>76 inscritos</b></div>
-      <div class="bar" style="width:100.0%"><div style="width:92.11%;background:var(--apto)"></div><div style="width:0.00%;background:var(--inapto)"></div><div style="width:7.89%;background:var(--desl)"></div><div style="width:0.00%;background:var(--pend)"></div></div>
-      <div class="sub"><b style="color:var(--apto)">70</b> apto · <b style="color:var(--inapto)">0</b> inapto · <b>0</b> aguardando · <b style="color:var(--desl)">6</b> desligado</div></div><div class="trow" data-go="rec" data-t="2ª - 06 outubro a 10 de outubro · Sem OBS"><div class="t"><span>2ª - 06 outubro a 10 de outubro · Sem OBS</span><b>69 inscritos</b></div>
-      <div class="bar" style="width:90.8%"><div style="width:100.00%;background:var(--apto)"></div><div style="width:0.00%;background:var(--inapto)"></div><div style="width:0.00%;background:var(--desl)"></div><div style="width:0.00%;background:var(--pend)"></div></div>
-      <div class="sub"><b style="color:var(--apto)">69</b> apto · <b style="color:var(--inapto)">0</b> inapto · <b>0</b> aguardando</div></div><div class="trow" data-go="rec" data-t="3ª - 14 outubro a 16 de outubro"><div class="t"><span>3ª - 14 outubro a 16 de outubro</span><b>61 inscritos</b></div>
-      <div class="bar" style="width:80.3%"><div style="width:91.80%;background:var(--apto)"></div><div style="width:1.64%;background:var(--inapto)"></div><div style="width:6.56%;background:var(--desl)"></div><div style="width:0.00%;background:var(--pend)"></div></div>
-      <div class="sub"><b style="color:var(--apto)">56</b> apto · <b style="color:var(--inapto)">1</b> inapto · <b>0</b> aguardando · <b style="color:var(--desl)">4</b> desligado</div></div><div class="trow" data-go="rec" data-t="4ª- 21 de outubro a 23 de outubro"><div class="t"><span>4ª- 21 de outubro a 23 de outubro</span><b>47 inscritos</b></div>
-      <div class="bar" style="width:61.8%"><div style="width:0.00%;background:var(--apto)"></div><div style="width:0.00%;background:var(--inapto)"></div><div style="width:0.00%;background:var(--desl)"></div><div style="width:100.00%;background:var(--pend)"></div></div>
-      <div class="sub"><b style="color:var(--apto)">0</b> apto · <b style="color:var(--inapto)">0</b> inapto · <b>47</b> aguardando</div></div><div class="trow" data-go="rec" data-t="5ª - 28 de outubro a 30 de outubro"><div class="t"><span>5ª - 28 de outubro a 30 de outubro</span><b>54 inscritos</b></div>
-      <div class="bar" style="width:71.1%"><div style="width:0.00%;background:var(--apto)"></div><div style="width:0.00%;background:var(--inapto)"></div><div style="width:1.85%;background:var(--desl)"></div><div style="width:98.15%;background:var(--pend)"></div></div>
-      <div class="sub"><b style="color:var(--apto)">0</b> apto · <b style="color:var(--inapto)">0</b> inapto · <b>53</b> aguardando · <b style="color:var(--desl)">1</b> desligado</div></div><div class="trow" data-go="rec" data-t="6ª - 12 de novembro a 15 de novembro"><div class="t"><span>6ª - 12 de novembro a 15 de novembro</span><b>66 inscritos</b></div>
-      <div class="bar" style="width:86.8%"><div style="width:0.00%;background:var(--apto)"></div><div style="width:0.00%;background:var(--inapto)"></div><div style="width:3.03%;background:var(--desl)"></div><div style="width:96.97%;background:var(--pend)"></div></div>
-      <div class="sub"><b style="color:var(--apto)">0</b> apto · <b style="color:var(--inapto)">0</b> inapto · <b>64</b> aguardando · <b style="color:var(--desl)">2</b> desligado</div></div><div class="trow" data-go="rec" data-t="7ª - 19 de novembro a 22 de novembro"><div class="t"><span>7ª - 19 de novembro a 22 de novembro</span><b>66 inscritos</b></div>
-      <div class="bar" style="width:86.8%"><div style="width:0.00%;background:var(--apto)"></div><div style="width:0.00%;background:var(--inapto)"></div><div style="width:0.00%;background:var(--desl)"></div><div style="width:100.00%;background:var(--pend)"></div></div>
-      <div class="sub"><b style="color:var(--apto)">0</b> apto · <b style="color:var(--inapto)">0</b> inapto · <b>66</b> aguardando</div></div><div class="trow" data-go="rec" data-t="8ª - 07 de novembro (Alunos CBFBM)"><div class="t"><span>8ª - 07 de novembro (Alunos CBFBM)</span><b>35 inscritos</b></div>
-      <div class="bar" style="width:46.1%"><div style="width:0.00%;background:var(--apto)"></div><div style="width:0.00%;background:var(--inapto)"></div><div style="width:0.00%;background:var(--desl)"></div><div style="width:100.00%;background:var(--pend)"></div></div>
-      <div class="sub"><b style="color:var(--apto)">0</b> apto · <b style="color:var(--inapto)">0</b> inapto · <b>35</b> aguardando</div></div><div class="trow" data-go="rec" data-t="8ª - 26 de novembro a 29 de novembro"><div class="t"><span>8ª - 26 de novembro a 29 de novembro</span><b>64 inscritos</b></div>
-      <div class="bar" style="width:84.2%"><div style="width:0.00%;background:var(--apto)"></div><div style="width:0.00%;background:var(--inapto)"></div><div style="width:1.56%;background:var(--desl)"></div><div style="width:98.44%;background:var(--pend)"></div></div>
-      <div class="sub"><b style="color:var(--apto)">0</b> apto · <b style="color:var(--inapto)">0</b> inapto · <b>63</b> aguardando · <b style="color:var(--desl)">1</b> desligado</div></div></div>
-    <div class="legend"><span><i class="a"></i>Apto</span><span><i class="i"></i>Inapto</span><span><i class="p"></i>Aguardando resultado</span><span><i class="d"></i>Desligado</span></div></div>
-  <div class="pan" style="--c:var(--apto);overflow:auto"><h3 data-go="cap" style="cursor:pointer">Capacitação T1 ›</h3>
-    <div style="display:flex;gap:16px;align-items:center"><div class="big" data-go="cap" style="cursor:pointer">33<small>total de inscritos</small></div>
-    <div class="stats" style="flex:1"><div class="stat" style="--c:var(--apto)" data-go="cap" data-c="ec"><div class="n">33</div><div class="l">Em curso</div></div><div class="stat" style="--c:var(--desl)" data-go="cap" data-c="dl"><div class="n">0</div><div class="l">Desligados</div></div></div></div>
-    <div class="bar"><div style="width:100.00%;background:var(--apto)"></div><div style="width:0.00%;background:var(--desl)"></div><div style="width:0.00%;background:var(--pend)"></div></div></div>
-  <div class="pan" style="--c:var(--navy)"><h3 data-go="seg" style="cursor:pointer">Curso de Segurança ›</h3>
-    <div class="big" data-go="seg" style="cursor:pointer;color:var(--apto)">40<small>Seguranças formados</small></div></div></section>
+    <div class="pan pan-militar" style="--c:var(--blue)">
+      <div class="pan-title-bar">
+        <h2>Cursos de Guarda-Vidas Militar</h2>
+        <span class="pan-badge">CBMRS</span>
+      </div>
+      <div class="mil-sections">
+        <div class="mil-card" data-go="rec" style="cursor:pointer">
+          <div class="card-head">
+            <h3>Recertificação ›</h3>
+            <span class="sub-link">Ver detalhes</span>
+          </div>
+          <div class="mil-content">
+            <div class="big" data-go="rec">538<small>militares inscritos</small></div>
+            <div class="stats">
+              <div class="stat" style="--c:var(--apto)" data-go="rec" data-r="Apto"><div class="n">195</div><div class="l">Aptos</div></div>
+              <div class="stat" style="--c:var(--inapto)" data-go="rec" data-r="Inapto"><div class="n">1</div><div class="l">Inaptos</div></div>
+              <div class="stat" style="--c:var(--desl)" data-go="rec" data-r="Desligado"><div class="n">14</div><div class="l">Desligados</div></div>
+              <div class="stat" style="--c:var(--pend)" data-go="rec" data-r="Sem resultado"><div class="n">328</div><div class="l">Aguardando resultado</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mil-card" data-go="cap" style="cursor:pointer">
+          <div class="card-head">
+            <h3>Capacitação T1 ›</h3>
+            <span class="sub-link">Ver detalhes</span>
+          </div>
+          <div class="mil-content">
+            <div class="big" data-go="cap" style="color:var(--apto)">33<small>total de inscritos</small></div>
+            <div class="stats">
+              <div class="stat" style="--c:var(--apto)" data-go="cap" data-c="ec"><div class="n">33</div><div class="l">Em curso</div></div>
+              <div class="stat" style="--c:var(--desl)" data-go="cap" data-c="dl"><div class="n">0</div><div class="l">Desligados</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pan pan-civil" style="--c:var(--desl)">
+      <div class="pan-title-bar">
+        <h2>Cursos de Guarda-Vidas Civil Temporário</h2>
+        <span class="pan-badge civ">GVCT</span>
+      </div>
+      <div class="civ-box">
+        <div class="civ-item">
+          <div class="civ-icon">📅</div>
+          <div class="civ-info">
+            <span class="civ-title">Previsão Recertificação LN</span>
+            <span class="civ-dates">30/10 - 05/11</span>
+          </div>
+        </div>
+        <div class="civ-item">
+          <div class="civ-icon">📅</div>
+          <div class="civ-info">
+            <span class="civ-title">Recertificação LS</span>
+            <span class="civ-dates">06/11 - 11/11</span>
+          </div>
+        </div>
+        <div class="civ-item">
+          <div class="civ-icon">📅</div>
+          <div class="civ-info">
+            <span class="civ-title">Capacitação LN</span>
+            <span class="civ-dates">06/11 - 26/11</span>
+          </div>
+        </div>
+        <div class="civ-item">
+          <div class="civ-icon">📅</div>
+          <div class="civ-info">
+            <span class="civ-title">Capacitação LS</span>
+            <span class="civ-dates">06/11 - 26/11</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
   <section class="kpis vd" id="kpis"><div class="kpi" data-r="" style="border-top-color:var(--navy)"><div class="n">538</div><div class="l">Inscritos</div></div><div class="kpi" data-m="Recertificação Mar" style="border-top-color:var(--blue)"><div class="n">493</div><div class="l">Recertificação Mar</div><div class="s"><b style="color:var(--apto)">183</b> aptos · <b>296</b> aguardando resultado</div></div><div class="kpi" data-m="Recertificação Águas Internas" style="border-top-color:var(--blue)"><div class="n">45</div><div class="l">Recertificação Águas Internas</div><div class="s"><b style="color:var(--apto)">12</b> aptos · <b>32</b> aguardando resultado</div></div><div class="kpi" data-r="Apto" style="border-top-color:var(--apto)"><div class="n">195</div><div class="l">Aptos</div></div><div class="kpi" data-r="Inapto" style="border-top-color:var(--inapto)"><div class="n">1</div><div class="l">Inaptos</div></div><div class="kpi" data-r="Desligado" style="border-top-color:var(--desl)"><div class="n">14</div><div class="l">Desligados</div></div></section>
   <section class="charts">
     <div class="card vd"><h2>Resultado por turma</h2><div class="turmas" id="chTurmas"><div class="th">1ª - 30 de setembro a 02 de outubro <span>· 76 inscritos</span></div>
@@ -412,26 +477,82 @@ function render(){
 function tally(rows){ const f = x => rows.filter(r=>r.resultado===x).length, a = f('Apto'), i = f('Inapto'), d = f('Desligado'); return { t: rows.length, a, i, d, p: rows.length-a-i-d }; }
 function renderSum(){
   const R = tally(REC), C = CAP || { total: 0, ec: 0, dl: 0 };
-  const segForm = SEG.filter(r => norm(r.situ) === 'apto').length;   // coluna Situacao = Apto
   const stat = (n,l,c,attrs) => `<div class="stat" style="--c:${c}" ${attrs}><div class="n">${n}</div><div class="l">${l}</div></div>`;
-  const seg = (parts,tot) => parts.map(([v,c]) => `<div style="width:${tot?(v/tot*100).toFixed(2):0}%;background:${c}"></div>`).join('');
-  const turmas = [...new Set(REC.map(r=>r.turma))].sort((a,b) => turmaOrder(a)-turmaOrder(b) || a.localeCompare(b,'pt-BR'));
-  const tl = turmas.map(t => ({ t, x: tally(REC.filter(r=>r.turma===t)) })), mx = Math.max(1, ...tl.map(o => o.x.t));
-  const rows = tl.map(({t,x}) => `<div class="trow" data-go="rec" data-t="${esc(t)}"><div class="t"><span>${esc(t)}</span><b>${x.t} inscritos</b></div>
-      <div class="bar" style="width:${Math.max(6,x.t/mx*100).toFixed(1)}%">${seg([[x.a,'var(--apto)'],[x.i,'var(--inapto)'],[x.d,'var(--desl)'],[x.p,'var(--pend)']],x.t)}</div>
-      <div class="sub"><b style="color:var(--apto)">${x.a}</b> apto · <b style="color:var(--inapto)">${x.i}</b> inapto · <b>${x.p}</b> aguardando${x.d?` · <b style="color:var(--desl)">${x.d}</b> desligado`:''}</div></div>`).join('');
   $('sum').innerHTML = `
-  <div class="pan rec" style="--c:var(--blue)"><h3 data-go="rec" style="cursor:pointer">Recertificação ›</h3>
-    <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap"><div class="big" data-go="rec" style="cursor:pointer">${R.t}<small>militares inscritos</small></div>
-    <div class="stats" style="flex:1;min-width:300px">${stat(R.a,'Aptos','var(--apto)','data-go="rec" data-r="Apto"')}${stat(R.i,'Inaptos','var(--inapto)','data-go="rec" data-r="Inapto"')}${stat(R.p,'Aguardando resultado','var(--pend)','data-go="rec" data-r="Sem resultado"')}${R.d?stat(R.d,'Desligados','var(--desl)','data-go="rec" data-r="Desligado"'):''}</div></div>
-    <h3>Inscritos por turma · ${turmas.length} turma(s)</h3><div class="plist">${rows || '<div class="empty">Sem dados.</div>'}</div>
-    <div class="legend"><span><i class="a"></i>Apto</span><span><i class="i"></i>Inapto</span><span><i class="p"></i>Aguardando resultado</span><span><i class="d"></i>Desligado</span></div></div>
-  <div class="pan" style="--c:var(--apto);overflow:auto"><h3 data-go="cap" style="cursor:pointer">Capacitação T1 ›</h3>
-    <div style="display:flex;gap:16px;align-items:center"><div class="big" data-go="cap" style="cursor:pointer">${C.total}<small>total de inscritos</small></div>
-    <div class="stats" style="flex:1">${stat(C.ec,'Em curso','var(--apto)','data-go="cap" data-c="ec"')}${stat(C.dl,'Desligados','var(--desl)','data-go="cap" data-c="dl"')}</div></div>
-    <div class="bar">${seg([[C.ec,'var(--apto)'],[C.dl,'var(--desl)'],[C.total-C.ec-C.dl,'var(--pend)']],C.total)}</div></div>
-  <div class="pan" style="--c:var(--navy)"><h3 data-go="seg" style="cursor:pointer">Curso de Segurança ›</h3>
-    <div class="big" data-go="seg" style="cursor:pointer;color:var(--apto)">${segForm}<small>Seguranças formados</small></div></div>`;
+  <div class="pan pan-militar" style="--c:var(--blue)">
+    <div class="pan-title-bar">
+      <h2>Cursos de Guarda-Vidas Militar</h2>
+      <span class="pan-badge">CBMRS</span>
+    </div>
+    <div class="mil-sections">
+      <div class="mil-card" data-go="rec" style="cursor:pointer">
+        <div class="card-head">
+          <h3>Recertificação ›</h3>
+          <span class="sub-link">Ver detalhes</span>
+        </div>
+        <div class="mil-content">
+          <div class="big" data-go="rec">${R.t}<small>militares inscritos</small></div>
+          <div class="stats">
+            ${stat(R.a, 'Aptos', 'var(--apto)', 'data-go="rec" data-r="Apto"')}
+            ${stat(R.i, 'Inaptos', 'var(--inapto)', 'data-go="rec" data-r="Inapto"')}
+            ${stat(R.d, 'Desligados', 'var(--desl)', 'data-go="rec" data-r="Desligado"')}
+            ${stat(R.p, 'Aguardando resultado', 'var(--pend)', 'data-go="rec" data-r="Sem resultado"')}
+          </div>
+        </div>
+      </div>
+
+      <div class="mil-card" data-go="cap" style="cursor:pointer">
+        <div class="card-head">
+          <h3>Capacitação T1 ›</h3>
+          <span class="sub-link">Ver detalhes</span>
+        </div>
+        <div class="mil-content">
+          <div class="big" data-go="cap" style="color:var(--apto)">${C.total}<small>total de inscritos</small></div>
+          <div class="stats">
+            ${stat(C.ec, 'Em curso', 'var(--apto)', 'data-go="cap" data-c="ec"')}
+            ${stat(C.dl, 'Desligados', 'var(--desl)', 'data-go="cap" data-c="dl"')}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pan pan-civil" style="--c:var(--desl)">
+    <div class="pan-title-bar">
+      <h2>Cursos de Guarda-Vidas Civil Temporário</h2>
+      <span class="pan-badge civ">GVCT</span>
+    </div>
+    <div class="civ-box">
+      <div class="civ-item">
+        <div class="civ-icon">📅</div>
+        <div class="civ-info">
+          <span class="civ-title">Previsão Recertificação LN</span>
+          <span class="civ-dates">30/10 - 05/11</span>
+        </div>
+      </div>
+      <div class="civ-item">
+        <div class="civ-icon">📅</div>
+        <div class="civ-info">
+          <span class="civ-title">Recertificação LS</span>
+          <span class="civ-dates">06/11 - 11/11</span>
+        </div>
+      </div>
+      <div class="civ-item">
+        <div class="civ-icon">📅</div>
+        <div class="civ-info">
+          <span class="civ-title">Capacitação LN</span>
+          <span class="civ-dates">06/11 - 26/11</span>
+        </div>
+      </div>
+      <div class="civ-item">
+        <div class="civ-icon">📅</div>
+        <div class="civ-info">
+          <span class="civ-title">Capacitação LS</span>
+          <span class="civ-dates">06/11 - 26/11</span>
+        </div>
+      </div>
+    </div>
+  </div>`;
 }
 
 /* ---------- ciclo de atualização ---------- */
