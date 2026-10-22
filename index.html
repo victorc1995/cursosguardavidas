@@ -2,7 +2,8 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Curso de Guarda-Vidas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cursos de Guarda-Vidas</title>
 <!-- Atualização: Resumo Geral e GVCT -->
 <style>
 :root{--navy:#2a5da0;--blue:#3b8ee8;--bg:#06182f;--card:#0c2a4d;--ink:#eaf1fa;--mut:#93a9c4;--line:#1e4573;--apto:#2fc58b;--inapto:#f0626d;--desl:#f2b83d;--pend:#7f93ab;--r:12px;--g:12px}
@@ -133,7 +134,7 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
   <div class="brand">
     <img src="./brasao_cbmrs.png" alt="CBMRS" onerror="this.outerHTML='&lt;span class=badge&gt;CBMRS&lt;/span&gt;'">
     <img src="./brasao_rs.png" alt="Estado do RS" onerror="this.outerHTML='&lt;span class=badge&gt;RS&lt;/span&gt;'">
-    <h1>Curso de Guarda-Vidas<small id="subtitle">Resumo geral · Recertificação, Curso de Segurança e Capacitação T1</small></h1>
+    <h1>Cursos de Guarda-Vidas<small id="subtitle"></small></h1>
   </div>
   <div class="status"><span class="dot " id="dot"></span><span id="statusText">Atualizado às 21:15:30 · próxima em 22s</span><button id="refreshBtn" type="button">Atualizar agora</button></div>
 </header>
@@ -475,7 +476,7 @@ function render(){
   const desl = rows.filter(r=>r.resultado==='Desligado').length, pend = n - aptos - inaptos - desl;
   const presentes = rows.filter(r=>r.chamada==='Presente').length, avaliados = aptos + inaptos;
   $('nRec').textContent = REC.length ? REC.length : ''; $('nSeg').textContent = SEG.length ? SEG.length : ''; $('nCap').textContent = CAP ? CAP.total : '';
-  $('subtitle').textContent = view === 'sum' ? 'Resumo geral · Recertificação, Curso de Segurança e Capacitação T1' : view === 'cap' ? `Capacitação T1 · ${CAP ? CAP.total : 0} inscritos` : `${NOMES[view]} · ${ALL.length} inscritos · ${new Set(ALL.map(r=>r.turma)).size} turma(s)`;
+  $('subtitle').textContent = '';
 
   const fr = $('fRes').value, fm = $('fModal').value;
   const kpi = (num,label,color,sub='',attr='',sel=false) => `<div class="kpi${sel?' sel':''}" ${attr} style="border-top-color:${color}"><div class="n">${num}</div><div class="l">${label}</div>${sub?`<div class="s">${sub}</div>`:''}</div>`;
