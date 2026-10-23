@@ -170,8 +170,8 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
             <div class="stats">
               <div class="stat" style="--c:var(--apto)" data-go="rec" data-r="Apto"><div class="n">195</div><div class="l">Aptos</div></div>
               <div class="stat" style="--c:var(--inapto)" data-go="rec" data-r="Inapto"><div class="n">1</div><div class="l">Inaptos</div></div>
-              <div class="stat" style="--c:var(--desl)" data-go="rec" data-r="Desligado"><div class="n">14</div><div class="l">Desligados</div></div>
-              <div class="stat" style="--c:var(--pend)" data-go="rec" data-r="Sem resultado"><div class="n">328</div><div class="l">Aguardando resultado</div></div>
+              <div class="stat" style="--c:var(--desl)" data-go="rec" data-r="Desligado"><div class="n">16</div><div class="l">Desligados / Desistências</div></div>
+              <div class="stat" style="--c:var(--pend)" data-go="rec" data-r="Sem resultado"><div class="n">326</div><div class="l">Aguardando resultado</div></div>
             </div>
           </div>
         </div>
@@ -395,8 +395,9 @@ function ingest(table, isSeg){
     if (!isSeg && nTurma === 2){ const o = obs || 'Sem OBS'; turma = turmaRaw + ' · ' + o; turmaCurta += ' · ' + o; }
     else if (!isSeg && nTurma === 8 && nt.includes('07 de novembro') && !nt.includes('cbfbm')){ turma = turmaRaw + ' (Alunos CBFBM)'; turmaCurta += ' (Alunos CBFBM)'; }
 
-    const a = norm(g(ix.apto));
-    let resultado = a === 'apto' ? 'Apto' : (a === 'inapto' || a === 'inpato') ? 'Inapto' : a === 'desligado' ? 'Desligado' : 'Sem resultado';
+    const a = norm(g(ix.apto)), ch = norm(g(ix.chamada)), obsNorm = norm(g(ix.obs));
+    const isDesl = a.includes('deslig') || a.includes('desist') || ch.includes('deslig') || ch.includes('desist') || obsNorm.includes('desist') || obsNorm.includes('deslig');
+    let resultado = a === 'apto' ? 'Apto' : (a === 'inapto' || a === 'inpato') ? 'Inapto' : isDesl ? 'Desligado' : 'Sem resultado';
     if (isSeg) resultado = norm(g(ix.situ)).includes('desligad') ? 'Desligado' : 'Ativo';   // aba Curso Seguranca: coluna Situacao
     const obm = g(ix.obm), first = obm.split(' - ')[0].trim();
     out.push({ nome, turma, turmaCurta, resultado, chamada: g(ix.chamada) || '—', obm, grad: g(ix.grad) || '—',
@@ -456,8 +457,10 @@ function fillSelect(id, values, first, sorter){
 function fillSelects(){
   fillSelect('fTurma', ALL.map(r=>r.turma), 'Todas as turmas', (a,b) => turmaOrder(a)-turmaOrder(b) || a.localeCompare(b,'pt-BR'));
   fillSelect('fModal', ALL.map(r=>r.modal), view === 'seg' ? 'Todas as graduações' : 'Todas as modalidades');
-  const fr = $('fRes'), cur = fr.value, ops = view === 'seg' ? ['Ativo','Desligado'] : ['Apto','Inapto','Desligado','Sem resultado'];
-  fr.innerHTML = '<option value="">Todos os resultados</option>' + ops.map(o => `<option>${o}</option>`).join(''); if (ops.includes(cur)) fr.value = cur;
+  const fr = $('fRes'), cur = fr.value, ops = view === 'seg'
+    ? [{v:'Ativo',l:'Ativo'},{v:'Desligado',l:'Desligados'}]
+    : [{v:'Apto',l:'Apto'},{v:'Inapto',l:'Inapto'},{v:'Desligado',l:'Desligados / Desistências'},{v:'Sem resultado',l:'Sem resultado'}];
+  fr.innerHTML = '<option value="">Todos os resultados</option>' + ops.map(o => `<option value="${o.v}">${o.l}</option>`).join(''); if (ops.some(o => o.v === cur)) fr.value = cur;
   fillSelect('fCrbm', ALL.map(r=>r.crbm), 'Todos os CRBM');
 }
 function filtered(skipModal){
@@ -488,16 +491,16 @@ function render(){
   const all = kpi(n,'Inscritos','var(--navy)', n!==ALL.length ? `de ${ALL.length} no total` : '', 'data-r=""', false);
   $('kpis').innerHTML = isSeg
     ? all + kr('Ativo',n-desl,'Ativos (não desligados)','var(--apto)') + kr('Desligado',desl,'Desligados','var(--desl)')
-    : all + modK() + kr('Apto',aptos,'Aptos','var(--apto)') + kr('Inapto',inaptos,'Inaptos','var(--inapto)') + kr('Desligado',desl,'Desligados','var(--desl)');
+    : all + modK() + kr('Apto',aptos,'Aptos','var(--apto)') + kr('Inapto',inaptos,'Inaptos','var(--inapto)') + kr('Desligado',desl,'Desligados / Desistências','var(--desl)');
 
-  $('lg').innerHTML = isSeg ? '<span><i class="a"></i>Ativos</span><span><i class="d"></i>Desligados</span>' : '<span><i class="a"></i>Apto</span><span><i class="i"></i>Inapto</span><span><i class="d"></i>Desligado</span><span><i class="p"></i>Aguardando resultado</span>';
+  $('lg').innerHTML = isSeg ? '<span><i class="a"></i>Ativos</span><span><i class="d"></i>Desligados</span>' : '<span><i class="a"></i>Apto</span><span><i class="i"></i>Inapto</span><span><i class="d"></i>Desligado / Desistência</span><span><i class="p"></i>Aguardando resultado</span>';
   const turmas = [...new Set(rows.map(r=>r.turma))].sort((a,b) => turmaOrder(a)-turmaOrder(b) || a.localeCompare(b,'pt-BR'));
   $('chTurmas').innerHTML = turmas.length ? turmas.map(t => {
     const rs = rows.filter(r=>r.turma===t), tot = rs.length, f = x => rs.filter(r=>r.resultado===x).length;
     const a = f('Apto') + f('Ativo'), i = f('Inapto'), d = f('Desligado'), p = tot-a-i-d, w = v => (v/tot*100).toFixed(2)+'%';
     return `<div class="th">${esc(t)} <span>· ${tot} inscritos</span></div>
-      <div class="bar"><div class="a" style="width:${w(a)}" title="Apto: ${a}"></div><div class="i" style="width:${w(i)}" title="Inapto: ${i}"></div><div class="d" style="width:${w(d)}" title="Desligado: ${d}"></div><div class="p" style="width:${w(p)}" title="Sem resultado: ${p}"></div></div>
-      <div class="sub">${isSeg ? `${a} ativos · ${d} desligados` : `${a} apto · ${i} inapto · ${d} desligado · ${p} aguardando`}</div>`;
+      <div class="bar"><div class="a" style="width:${w(a)}" title="Apto: ${a}"></div><div class="i" style="width:${w(i)}" title="Inapto: ${i}"></div><div class="d" style="width:${w(d)}" title="Desligado / Desistência: ${d}"></div><div class="p" style="width:${w(p)}" title="Sem resultado: ${p}"></div></div>
+      <div class="sub">${isSeg ? `${a} ativos · ${d} desligados` : `${a} apto · ${i} inapto · ${d} desl./desist. · ${p} aguardando`}</div>`;
   }).join('') : '<div class="empty">Sem dados para o filtro atual.</div>';
 
   if (CAP){
@@ -547,7 +550,7 @@ function renderSum(){
           <div class="stats">
             ${stat(R.a, 'Aptos', 'var(--apto)', 'data-go="rec" data-r="Apto"')}
             ${stat(R.i, 'Inaptos', 'var(--inapto)', 'data-go="rec" data-r="Inapto"')}
-            ${stat(R.d, 'Desligados', 'var(--desl)', 'data-go="rec" data-r="Desligado"')}
+            ${stat(R.d, 'Desligados / Desistências', 'var(--desl)', 'data-go="rec" data-r="Desligado"')}
             ${stat(R.p, 'Aguardando resultado', 'var(--pend)', 'data-go="rec" data-r="Sem resultado"')}
           </div>
         </div>
