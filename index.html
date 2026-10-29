@@ -143,6 +143,7 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
   <button class="tab" data-v="rec" type="button">Recertificação<small id="nRec">538</small></button>
   <button class="tab" data-v="seg" type="button">Curso de Segurança<small id="nSeg">58</small></button>
   <button class="tab" data-v="cap" type="button">Capacitação T1<small id="nCap">33</small></button>
+  <button class="tab" data-v="gvct" type="button">GVCT<small id="nGVCT">283</small></button>
 </nav>
 <main>
   <div class="msg" id="msg" style="display: none;"></div>
@@ -230,6 +231,19 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
         <h2>Cursos de Guarda-Vidas Civil Temporário</h2>
         <span class="pan-badge civ">GVCT</span>
       </div>
+      <div class="mil-card" data-go="gvct" style="cursor:pointer;margin-bottom:12px">
+        <div class="card-head">
+          <h3 style="color:var(--desl)">Cursos GVCT ›</h3>
+          <span class="sub-link">Ver detalhes</span>
+        </div>
+        <div class="mil-content">
+          <div class="big" data-go="gvct" style="color:var(--desl)"><span id="sumGvctTotal">283</span><small>total de inscritos</small></div>
+          <div class="stats">
+            <div class="stat" style="--c:var(--apto)" data-go="gvct"><div class="n" id="sumGvctEmCurso">283</div><div class="l">Em curso</div></div>
+            <div class="stat" style="--c:var(--desl)" data-go="gvct"><div class="n" id="sumGvctDesl">0</div><div class="l">Desligados / Inaptos</div></div>
+          </div>
+        </div>
+      </div>
       <div class="civ-subtitle">Previsão dos Cursos:</div>
       <div class="civ-box">
         <div class="civ-item">
@@ -250,14 +264,14 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
           <div class="civ-icon">📅</div>
           <div class="civ-info">
             <span class="civ-title">Capacitação LN</span>
-            <span class="civ-dates">06 a 26 de novembro</span>
+            <span class="civ-dates">04 a 23 de novembro</span>
           </div>
         </div>
         <div class="civ-item">
           <div class="civ-icon">📅</div>
           <div class="civ-info">
             <span class="civ-title">Capacitação LS</span>
-            <span class="civ-dates">06 a 26 de novembro</span>
+            <span class="civ-dates">06 a 25 de novembro</span>
           </div>
         </div>
       </div>
@@ -304,15 +318,16 @@ const CONFIG = {
   tabs: {
     rec: { gid: '0' },                        // aba "Recertificacao CBM"
     seg: { gid: '889021045' },                // aba "Curso Seguranca"
-    cap: { gid: '204610528' }                // aba "Capacitação - T1"
+    cap: { gid: '204610528' },                // aba "Capacitação - T1"
+    gvct: { gid: '899794340', sheet: 'GVCT' } // aba "GVCT"
   }
 };
 /* ========================= */
-let REC = [], SEG = [], ALL = [], CAP = null, view = 'sum', capSel = 'all', countdown = CONFIG.refreshSeconds, loading = false;
+let REC = [], SEG = [], ALL = [], GVCT = [], CAP = null, view = 'sum', capSel = 'all', countdown = CONFIG.refreshSeconds, loading = false;
 const $ = id => document.getElementById(id);
 $('ivl').textContent = CONFIG.refreshSeconds;
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const norm = s => String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+const norm = s => String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim();
 
 /* ---------- leitura de uma aba (JSONP: evita bloqueio de CORS) ---------- */
 function fetchTab(tab){
@@ -336,7 +351,12 @@ async function load(){
   if (loading) return;
   loading = true; setStatus('load', 'Atualizando…');
   const errs = [];
-  const jobs = [['rec','Recertificação', t => REC = ingest(t,false)], ['seg','Curso de Segurança', t => SEG = ingest(t,true)], ['cap','Capacitação T1', t => CAP = capacit(t)]];
+  const jobs = [
+    ['rec','Recertificação', t => REC = ingest(t,false)],
+    ['seg','Curso de Segurança', t => SEG = ingest(t,true)],
+    ['cap','Capacitação T1', t => CAP = capacit(t)],
+    ['gvct','GVCT', t => GVCT = ingestGVCT(t)]
+  ];
   await Promise.all(jobs.map(async ([k, nome, fn]) => { try { fn(await fetchTab(CONFIG.tabs[k])); } catch(e){ console.error(nome, e); errs.push(`${nome}: ${e.message}`); } }));
   pick();
   loading = false; countdown = CONFIG.refreshSeconds;
@@ -383,7 +403,7 @@ function ingest(table, isSeg){
     grad: col('graduacao'), nome: col('nome_completo','nome','nome completo'), obm: col('obm_origem','obm'), modal: col('modalidade'), situ: col('Situacao','Situação') };
   if (ix.nome < 0) throw new Error('coluna "nome_completo" não encontrada');
   if (!isSeg && ix.turma < 0) throw new Error('coluna "Turma" não encontrada');
-  const seen = new Set(), out = [];
+  const out = [];
   for (const r of table.rows){
     const c = r.c || [], g = i => i < 0 ? '' : cellText(c[i]);
     const nome = g(ix.nome); if (!nome) continue;
@@ -426,27 +446,97 @@ function capacit(table){
   return { total: list.length, ec: q('k','ec'), dl: q('k','dl'), nv: q('m','nv'), tr: q('m','tr'), heads, curso, modal, list };
 }
 
+/* GVCT: Guarda-Vidas Civil Temporário · Somente colunas permitidas pela LAI: Situação, Nome, Local, Curso e Habilidade */
+function ingestGVCT(table){
+  table = fixHeader(table);
+  const col = finder(table);
+  const ix = {
+    situ: col('situacao curso', 'situação curso', 'situacao', 'situação', 'situacao no curso'),
+    nome: col('nome_completo', 'nome', 'nome completo'),
+    local: col('processo_seletivo', 'processo seletivo', 'local'),
+    curso: col('capacitacao_recertificacao', 'capacitação_recertificação', 'curso', 'qual curso'),
+    hab: col('habilidade', 'habilidades')
+  };
+  if (ix.nome < 0) throw new Error('coluna "NOME_COMPLETO" não encontrada na aba GVCT');
+  const out = [];
+  for (const r of table.rows){
+    const c = r.c || [], g = i => (i < 0 || i >= c.length || !c[i]) ? '' : cellText(c[i]);
+    const nome = g(ix.nome);
+    if (!nome) continue;
+
+    const sRaw = g(ix.situ);
+    const sNorm = norm(sRaw);
+    let situacao = 'Aguardando';
+    if (sNorm.includes('apto') && !sNorm.includes('inapto')) situacao = 'Apto';
+    else if (sNorm.includes('inapto')) situacao = 'Inapto';
+    else if (sNorm.includes('ausente') || sNorm.includes('desist') || sNorm.includes('deslig')) situacao = 'Ausente';
+    else if (sRaw) situacao = sRaw.charAt(0).toUpperCase() + sRaw.slice(1).toLowerCase();
+
+    const cRaw = g(ix.curso);
+    const cNorm = norm(cRaw);
+    let curso = cRaw || '—';
+    if (cNorm.includes('recert')) curso = 'Recertificação';
+    else if (cNorm.includes('capacit')) curso = 'Capacitação';
+
+    const hRaw = g(ix.hab);
+    let habilidade = hRaw || '—';
+    if (norm(hRaw).includes('mar')) habilidade = 'Águas de Mar';
+    else if (norm(hRaw).includes('intern')) habilidade = 'Águas Internas';
+
+    const local = g(ix.local) || '—';
+
+    out.push({
+      nome,
+      situacao,
+      resultado: situacao,
+      local,
+      curso,
+      habilidade,
+      turma: curso + ' · ' + local,
+      modal: habilidade
+    });
+  }
+  return out;
+}
+
 /* ---------- visões independentes: cada aba da planilha é uma situação separada ---------- */
-const NOMES = { rec: 'Recertificação', seg: 'Curso de Segurança', cap: 'Capacitação T1' };
-function pick(){ ALL = view === 'seg' ? SEG : REC; }
+const NOMES = { rec: 'Recertificação', seg: 'Curso de Segurança', cap: 'Capacitação T1', gvct: 'Guarda-Vidas Civil Temporário' };
+function pick(){
+  if (view === 'seg') ALL = SEG;
+  else if (view === 'gvct') ALL = GVCT;
+  else ALL = REC;
+}
 function go(v, f = {}){
   view = v; document.body.dataset.v = v;
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.v === v));
   ['fTurma','fModal','fCrbm','fRes','fBusca'].forEach(id => $(id).value = '');
   pick(); fillSelects();
-  if (f.t) $('fTurma').value = f.t; if (f.r) $('fRes').value = f.r;
-  capSel = f.c || 'all'; render();
+  if (f.t) $('fTurma').value = f.t;
+  if (f.r) $('fRes').value = f.r;
+  if (f.c && v === 'gvct') $('fCrbm').value = f.c;
+  capSel = f.c || 'all';
+  render();
 }
 document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => go(b.dataset.v)));
 document.addEventListener('click', e => {
   const t = e.target.closest ? e.target : e.target.parentElement;
   let el = t.closest('[data-go]');
   if (el){ go(el.dataset.go, { t: el.dataset.t, r: el.dataset.r, c: el.dataset.c }); return; }
-  el = t.closest('.kpi[data-r],.kpi[data-m]');
-  if (el){ const f = el.dataset.r !== undefined ? $('fRes') : $('fModal'), v = el.dataset.r !== undefined ? el.dataset.r : el.dataset.m; f.value = f.value === v ? '' : v; render(); return; }
+  el = t.closest('.kpi[data-r],.kpi[data-m],.kpi[data-curso]');
+  if (el){
+    if (el.dataset.curso !== undefined){
+      $('fTurma').value = $('fTurma').value === el.dataset.curso ? '' : el.dataset.curso;
+    } else {
+      const f = el.dataset.r !== undefined ? $('fRes') : $('fModal'), v = el.dataset.r !== undefined ? el.dataset.r : el.dataset.m;
+      f.value = f.value === v ? '' : v;
+    }
+    render();
+    return;
+  }
   el = t.closest('.cb[data-c]');
   if (el){ capSel = capSel === el.dataset.c ? 'all' : el.dataset.c; render(); }
 });
+
 /* ---------- filtros ---------- */
 function fillSelect(id, values, first, sorter){
   const el = $(id), cur = el.value;
@@ -455,16 +545,35 @@ function fillSelect(id, values, first, sorter){
   if (list.includes(cur)) el.value = cur;
 }
 function fillSelects(){
+  if (view === 'gvct'){
+    fillSelect('fTurma', ALL.map(r=>r.curso), 'Todos os cursos');
+    fillSelect('fModal', ALL.map(r=>r.habilidade), 'Todas as habilidades');
+    fillSelect('fCrbm', ALL.map(r=>r.local), 'Todos os locais');
+    const fr = $('fRes'), cur = fr.value, ops = [{v:'Apto',l:'Apto'},{v:'Inapto',l:'Inapto'},{v:'Ausente',l:'Ausente'}];
+    fr.innerHTML = '<option value="">Todas as situações</option>' + ops.map(o => `<option value="${o.v}">${o.l}</option>`).join('');
+    if (ops.some(o => o.v === cur)) fr.value = cur;
+    $('fBusca').placeholder = 'Buscar por nome ou local…';
+    return;
+  }
   fillSelect('fTurma', ALL.map(r=>r.turma), 'Todas as turmas', (a,b) => turmaOrder(a)-turmaOrder(b) || a.localeCompare(b,'pt-BR'));
   fillSelect('fModal', ALL.map(r=>r.modal), view === 'seg' ? 'Todas as graduações' : 'Todas as modalidades');
   const fr = $('fRes'), cur = fr.value, ops = view === 'seg'
     ? [{v:'Ativo',l:'Ativo'},{v:'Desligado',l:'Desligados'}]
     : [{v:'Apto',l:'Apto'},{v:'Inapto',l:'Inapto'},{v:'Desligado',l:'Desligados / Desistências'},{v:'Sem resultado',l:'Sem resultado'}];
-  fr.innerHTML = '<option value="">Todos os resultados</option>' + ops.map(o => `<option value="${o.v}">${o.l}</option>`).join(''); if (ops.some(o => o.v === cur)) fr.value = cur;
+  fr.innerHTML = '<option value="">Todos os resultados</option>' + ops.map(o => `<option value="${o.v}">${o.l}</option>`).join('');
+  if (ops.some(o => o.v === cur)) fr.value = cur;
   fillSelect('fCrbm', ALL.map(r=>r.crbm), 'Todos os CRBM');
+  $('fBusca').placeholder = 'Buscar por nome ou OBM…';
 }
 function filtered(skipModal){
   const t=$('fTurma').value, m=$('fModal').value, c=$('fCrbm').value, res=$('fRes').value, q=norm($('fBusca').value);
+  if (view === 'gvct'){
+    return ALL.filter(r => (!t || r.curso === t) &&
+                           (!m || skipModal || r.habilidade === m) &&
+                           (!c || r.local === c) &&
+                           (!res || r.situacao === res) &&
+                           (!q || norm(r.nome).includes(q) || norm(r.local).includes(q)));
+  }
   return ALL.filter(r => (!t||r.turma===t) && (!m||skipModal||r.modal===m) && (!c||r.crbm===c) && (!res||r.resultado===res) && (!q || norm(r.nome).includes(q) || norm(r.obm).includes(q)));
 }
 ['fTurma','fModal','fCrbm','fRes'].forEach(id => $(id).addEventListener('change', render));
@@ -475,32 +584,50 @@ $('refreshBtn').addEventListener('click', load);
 function count(arr, fn){ const m = new Map(); arr.forEach(x => { const k = fn(x); if (k) m.set(k,(m.get(k)||0)+1); }); return [...m.entries()]; }
 function render(){
   const rows = filtered(), n = rows.length;
+  const isSeg = view === 'seg', isGvct = view === 'gvct';
   const aptos = rows.filter(r=>r.resultado==='Apto').length, inaptos = rows.filter(r=>r.resultado==='Inapto').length;
-  const desl = rows.filter(r=>r.resultado==='Desligado').length, pend = n - aptos - inaptos - desl;
-  const presentes = rows.filter(r=>r.chamada==='Presente').length, avaliados = aptos + inaptos;
-  $('nRec').textContent = REC.length ? REC.length : ''; $('nSeg').textContent = SEG.length ? SEG.length : ''; $('nCap').textContent = CAP ? CAP.total : '';
-  $('subtitle').textContent = '';
+  const desl = rows.filter(r=>r.resultado==='Desligado' || r.resultado==='Ausente').length;
+  const pend = isGvct ? 0 : (n - aptos - inaptos - desl);
 
-  const fr = $('fRes').value, fm = $('fModal').value;
+  $('nRec').textContent = REC.length ? REC.length : '';
+  $('nSeg').textContent = SEG.length ? SEG.length : '';
+  $('nCap').textContent = CAP ? CAP.total : '';
+  if ($('nGVCT')) $('nGVCT').textContent = GVCT.length ? GVCT.length : '';
+  $('subtitle').textContent = isGvct ? 'Guarda-Vidas Civil Temporário · Processo Seletivo' : isSeg ? 'Curso de Segurança' : '';
+
+  const fr = $('fRes').value, fm = $('fModal').value, ft = $('fTurma').value;
   const kpi = (num,label,color,sub='',attr='',sel=false) => `<div class="kpi${sel?' sel':''}" ${attr} style="border-top-color:${color}"><div class="n">${num}</div><div class="l">${label}</div>${sub?`<div class="s">${sub}</div>`:''}</div>`;
   const kr = (v,num,label,color,sub='') => kpi(num,label,color,sub,`data-r="${v}"`,fr===v);
-  const isSeg = view === 'seg', base = filtered(true);
-  const modK = () => count(base, r=>r.modal).sort((a,b) => (/Mar$/.test(b[0])?1:0)-(/Mar$/.test(a[0])?1:0) || b[1]-a[1]).map(([m]) => {
-    const rs = base.filter(r=>r.modal===m), a = rs.filter(r=>r.resultado==='Apto').length, p = rs.filter(r=>r.resultado==='Sem resultado').length;
-    return kpi(rs.length, esc(m), 'var(--blue)', `<b style="color:var(--apto)">${a}</b> aptos · <b>${p}</b> aguardando resultado`, `data-m="${esc(m)}"`, fm===m); }).join('');
-  const all = kpi(n,'Inscritos','var(--navy)', n!==ALL.length ? `de ${ALL.length} no total` : '', 'data-r=""', false);
-  $('kpis').innerHTML = isSeg
-    ? all + kr('Ativo',n-desl,'Ativos (não desligados)','var(--apto)') + kr('Desligado',desl,'Desligados','var(--desl)')
-    : all + modK() + kr('Apto',aptos,'Aptos','var(--apto)') + kr('Inapto',inaptos,'Inaptos','var(--inapto)') + kr('Desligado',desl,'Desligados / Desistências','var(--desl)');
+  const base = filtered(true);
 
-  $('lg').innerHTML = isSeg ? '<span><i class="a"></i>Ativos</span><span><i class="d"></i>Desligados</span>' : '<span><i class="a"></i>Apto</span><span><i class="i"></i>Inapto</span><span><i class="d"></i>Desligado / Desistência</span><span><i class="p"></i>Aguardando resultado</span>';
-  const turmas = [...new Set(rows.map(r=>r.turma))].sort((a,b) => turmaOrder(a)-turmaOrder(b) || a.localeCompare(b,'pt-BR'));
+  if (isGvct){
+    const recCount = base.filter(r => r.curso === 'Recertificação').length;
+    const capCount = base.filter(r => r.curso === 'Capacitação').length;
+    const all = kpi(n, 'Inscritos', 'var(--navy)', n !== ALL.length ? `de ${ALL.length} no total` : '', 'data-r=""', !fr && !ft && !fm && !$('fCrbm').value);
+    const kRec = kpi(recCount, 'Recertificação', 'var(--blue)', '', 'data-curso="Recertificação"', ft === 'Recertificação');
+    const kCap = kpi(capCount, 'Capacitação', 'var(--blue)', '', 'data-curso="Capacitação"', ft === 'Capacitação');
+    $('kpis').innerHTML = all + kRec + kCap + kr('Apto', aptos, 'Aptos', 'var(--apto)') + kr('Inapto', inaptos, 'Inaptos', 'var(--inapto)') + kr('Ausente', desl, 'Ausentes', 'var(--desl)');
+    $('lg').innerHTML = '<span><i class="a"></i>Apto</span><span><i class="i"></i>Inapto</span><span><i class="d"></i>Ausente</span>';
+  } else if (isSeg){
+    const all = kpi(n,'Inscritos','var(--navy)', n!==ALL.length ? `de ${ALL.length} no total` : '', 'data-r=""', false);
+    $('kpis').innerHTML = all + kr('Ativo',n-desl,'Ativos (não desligados)','var(--apto)') + kr('Desligado',desl,'Desligados','var(--desl)');
+    $('lg').innerHTML = '<span><i class="a"></i>Ativos</span><span><i class="d"></i>Desligados</span>';
+  } else {
+    const modK = () => count(base, r=>r.modal).sort((a,b) => (/Mar$/.test(b[0])?1:0)-(/Mar$/.test(a[0])?1:0) || b[1]-a[1]).map(([m]) => {
+      const rs = base.filter(r=>r.modal===m), a = rs.filter(r=>r.resultado==='Apto').length, p = rs.filter(r=>r.resultado==='Sem resultado').length;
+      return kpi(rs.length, esc(m), 'var(--blue)', `<b style="color:var(--apto)">${a}</b> aptos · <b>${p}</b> aguardando resultado`, `data-m="${esc(m)}"`, fm===m); }).join('');
+    const all = kpi(n,'Inscritos','var(--navy)', n!==ALL.length ? `de ${ALL.length} no total` : '', 'data-r=""', false);
+    $('kpis').innerHTML = all + modK() + kr('Apto',aptos,'Aptos','var(--apto)') + kr('Inapto',inaptos,'Inaptos','var(--inapto)') + kr('Desligado',desl,'Desligados / Desistências','var(--desl)');
+    $('lg').innerHTML = '<span><i class="a"></i>Apto</span><span><i class="i"></i>Inapto</span><span><i class="d"></i>Desligado / Desistência</span><span><i class="p"></i>Aguardando resultado</span>';
+  }
+
+  const turmas = [...new Set(rows.map(r=>r.turma))].sort((a,b) => isGvct ? a.localeCompare(b,'pt-BR') : turmaOrder(a)-turmaOrder(b) || a.localeCompare(b,'pt-BR'));
   $('chTurmas').innerHTML = turmas.length ? turmas.map(t => {
     const rs = rows.filter(r=>r.turma===t), tot = rs.length, f = x => rs.filter(r=>r.resultado===x).length;
-    const a = f('Apto') + f('Ativo'), i = f('Inapto'), d = f('Desligado'), p = tot-a-i-d, w = v => (v/tot*100).toFixed(2)+'%';
+    const a = f('Apto') + (isSeg ? f('Ativo') : 0), i = f('Inapto'), d = f('Desligado') + f('Ausente'), p = isGvct ? 0 : tot-a-i-d, w = v => (v/tot*100).toFixed(2)+'%';
     return `<div class="th">${esc(t)} <span>· ${tot} inscritos</span></div>
-      <div class="bar"><div class="a" style="width:${w(a)}" title="Apto: ${a}"></div><div class="i" style="width:${w(i)}" title="Inapto: ${i}"></div><div class="d" style="width:${w(d)}" title="Desligado / Desistência: ${d}"></div><div class="p" style="width:${w(p)}" title="Sem resultado: ${p}"></div></div>
-      <div class="sub">${isSeg ? `${a} ativos · ${d} desligados` : `${a} apto · ${i} inapto · ${d} desl./desist. · ${p} aguardando`}</div>`;
+      <div class="bar"><div class="a" style="width:${w(a)}" title="Apto: ${a}"></div><div class="i" style="width:${w(i)}" title="Inapto: ${i}"></div><div class="d" style="width:${w(d)}" title="${isGvct?'Ausente: ':'Desligado / Desistência: '}${d}"></div>${isGvct?'':`<div class="p" style="width:${w(p)}" title="Sem resultado: ${p}"></div>`}</div>
+      <div class="sub">${isSeg ? `${a} ativos · ${d} desligados` : isGvct ? `${a} apto · ${i} inapto · ${d} ausente` : `${a} apto · ${i} inapto · ${d} desl./desist. · ${p} aguardando`}</div>`;
   }).join('') : '<div class="empty">Sem dados para o filtro atual.</div>';
 
   if (CAP){
@@ -518,20 +645,44 @@ function render(){
   }
   renderSum();
 
-  const sorted = [...rows].sort((a,b) => turmaOrder(a.turma)-turmaOrder(b.turma) || a.turma.localeCompare(b.turma,'pt-BR') || a.nome.localeCompare(b.nome,'pt-BR'));
-  $('tblCount').textContent = isSeg ? `· ${n} inscritos · ${n-desl} ativos · ${desl} desligados` : `· ${n} registros`;
-  const cls = {Apto:'t-apto', Inapto:'t-inapto', Desligado:'t-desl', 'Sem resultado':'t-pend'};
-  const tagc = r => `<span class="tag ${cls[r.resultado] || 't-apto'}">${r.resultado}</span>`;
-  $('thead').innerHTML = isSeg ? '<tr><th>Nome</th><th>Graduação</th><th>OBM</th><th>Situação</th></tr>' : '<tr><th>Nome</th><th>Graduação</th><th>OBM</th><th>Turma</th><th>Modalidade</th><th>Chamada</th><th>Resultado</th></tr>';
-  $('tbody').innerHTML = sorted.map(r => isSeg
-    ? `<tr><td class="name">${esc(r.nome)}</td><td>${esc(r.grad)}</td><td>${esc(r.obm)}</td><td>${tagc(r)}</td></tr>`
-    : `<tr><td class="name">${esc(r.nome)}</td><td>${esc(r.grad)}</td><td>${esc(r.obm)}</td><td>${esc(r.turma)}</td><td>${esc(r.modal)}</td><td>${esc(r.chamada)}</td><td>${tagc(r)}</td></tr>`).join('');
+  if (isGvct){
+    const sorted = [...rows].sort((a,b) => a.curso.localeCompare(b.curso,'pt-BR') || a.local.localeCompare(b.local,'pt-BR') || a.nome.localeCompare(b.nome,'pt-BR'));
+    $('tblCount').textContent = `· ${n} inscritos · ${aptos} aptos · ${inaptos} inaptos · ${desl} ausentes`;
+    const tagGvct = s => `<span class="tag ${s==='Apto'?'t-apto':s==='Inapto'?'t-inapto':'t-desl'}">${esc(s)}</span>`;
+    $('thead').innerHTML = '<tr><th>Situação no Curso</th><th>Nome</th><th>Local</th><th>Qual Curso</th><th>Habilidade</th></tr>';
+    $('tbody').innerHTML = sorted.map(r => `<tr>
+      <td>${tagGvct(r.situacao)}</td>
+      <td class="name">${esc(r.nome)}</td>
+      <td>${esc(r.local)}</td>
+      <td><span class="tag t-pend">${esc(r.curso)}</span></td>
+      <td>${esc(r.habilidade)}</td>
+    </tr>`).join('');
+  } else if (isSeg){
+    const sorted = [...rows].sort((a,b) => a.nome.localeCompare(b.nome,'pt-BR'));
+    $('tblCount').textContent = `· ${n} inscritos · ${n-desl} ativos · ${desl} desligados`;
+    const tagc = r => `<span class="tag ${r.resultado==='Ativo'?'t-apto':'t-desl'}">${r.resultado}</span>`;
+    $('thead').innerHTML = '<tr><th>Nome</th><th>Graduação</th><th>OBM</th><th>Situação</th></tr>';
+    $('tbody').innerHTML = sorted.map(r => `<tr><td class="name">${esc(r.nome)}</td><td>${esc(r.grad)}</td><td>${esc(r.obm)}</td><td>${tagc(r)}</td></tr>`).join('');
+  } else {
+    const sorted = [...rows].sort((a,b) => turmaOrder(a.turma)-turmaOrder(b.turma) || a.turma.localeCompare(b.turma,'pt-BR') || a.nome.localeCompare(b.nome,'pt-BR'));
+    $('tblCount').textContent = `· ${n} registros`;
+    const cls = {Apto:'t-apto', Inapto:'t-inapto', Desligado:'t-desl', 'Sem resultado':'t-pend'};
+    const tagc = r => `<span class="tag ${cls[r.resultado] || 't-apto'}">${r.resultado}</span>`;
+    $('thead').innerHTML = '<tr><th>Nome</th><th>Graduação</th><th>OBM</th><th>Turma</th><th>Modalidade</th><th>Chamada</th><th>Resultado</th></tr>';
+    $('tbody').innerHTML = sorted.map(r => `<tr><td class="name">${esc(r.nome)}</td><td>${esc(r.grad)}</td><td>${esc(r.obm)}</td><td>${esc(r.turma)}</td><td>${esc(r.modal)}</td><td>${esc(r.chamada)}</td><td>${tagc(r)}</td></tr>`).join('');
+  }
 }
 
 /* ---------- resumo geral (cada aba continua separada) ---------- */
 function tally(rows){ const f = x => rows.filter(r=>r.resultado===x).length, a = f('Apto'), i = f('Inapto'), d = f('Desligado'); return { t: rows.length, a, i, d, p: rows.length-a-i-d }; }
+function tallyGvct(rows){
+  const t = rows.length;
+  // Como os cursos ainda não iniciaram e há prazo de recurso para inaptos/ausentes,
+  // todos os inscritos contam como "Em curso" e 0 em "Desligados / Inaptos".
+  return { t, ec: t, dl: 0, a: rows.filter(r=>r.situacao==='Apto').length, i: rows.filter(r=>r.situacao==='Inapto').length, d: rows.filter(r=>r.situacao==='Ausente').length };
+}
 function renderSum(){
-  const R = tally(REC), C = CAP || { total: 0, ec: 0, dl: 0 };
+  const R = tally(REC), C = CAP || { total: 0, ec: 0, dl: 0 }, G = tallyGvct(GVCT);
   const stat = (n,l,c,attrs) => `<div class="stat" style="--c:${c}" ${attrs}><div class="n">${n}</div><div class="l">${l}</div></div>`;
   $('sum').innerHTML = `
   <div class="pan pan-militar" style="--c:var(--blue)">
@@ -610,6 +761,19 @@ function renderSum(){
       <h2>Cursos de Guarda-Vidas Civil Temporário</h2>
       <span class="pan-badge civ">GVCT</span>
     </div>
+    <div class="mil-card" data-go="gvct" style="cursor:pointer;margin-bottom:12px">
+      <div class="card-head">
+        <h3 style="color:var(--desl)">Cursos GVCT ›</h3>
+        <span class="sub-link">Ver detalhes</span>
+      </div>
+      <div class="mil-content">
+        <div class="big" data-go="gvct" style="color:var(--desl)"><span id="sumGvctTotal">${G.t}</span><small>total de inscritos</small></div>
+        <div class="stats">
+          ${stat(G.ec, 'Em curso', 'var(--apto)', 'data-go="gvct"')}
+          ${stat(G.dl, 'Desligados / Inaptos', 'var(--desl)', 'data-go="gvct"')}
+        </div>
+      </div>
+    </div>
     <div class="civ-subtitle">Previsão dos Cursos:</div>
     <div class="civ-box">
       <div class="civ-item">
@@ -630,14 +794,14 @@ function renderSum(){
         <div class="civ-icon">📅</div>
         <div class="civ-info">
           <span class="civ-title">Capacitação LN</span>
-          <span class="civ-dates">06 a 26 de novembro</span>
+          <span class="civ-dates">04 a 23 de novembro</span>
         </div>
       </div>
       <div class="civ-item">
         <div class="civ-icon">📅</div>
         <div class="civ-info">
           <span class="civ-title">Capacitação LS</span>
-          <span class="civ-dates">06 a 26 de novembro</span>
+          <span class="civ-dates">06 a 25 de novembro</span>
         </div>
       </div>
     </div>
