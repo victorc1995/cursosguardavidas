@@ -77,8 +77,8 @@ footer{font-size:.75em;color:var(--mut);text-align:center;padding:2px 0 6px;flex
 .badge{display:inline-flex;align-items:center;justify-content:center;min-width:clamp(44px,5vw,78px);height:clamp(44px,5vw,78px);border:2px solid rgba(255,255,255,.6);border-radius:50%;font-weight:700;font-size:.8em}
 body[data-v=seg] .nseg,body[data-v=seg] .charts{display:none!important}body[data-v=seg] .filters{grid-template-columns:1fr 2fr}
 .cb.na{background:#5b7089}.cb.pv{background:#2a7fd4}
-.sum{grid-template-columns:2.5fr 1fr;gap:var(--g);flex:1;min-height:0;overflow:auto}
-@media(max-width:1024px){.sum{grid-template-columns:1fr;overflow:visible}}
+.sum{grid-template-columns:1.4fr 1fr;gap:var(--g);flex:1;min-height:0;overflow:auto}
+@media(max-width:1100px){.sum{grid-template-columns:1fr;overflow:visible}}
 .pan-title-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
 .pan-title-bar h2{font-size:1.05em;font-weight:700;color:var(--ink);letter-spacing:.02em;text-transform:none;margin:0}
 .pan-badge{font-size:.75em;font-weight:700;padding:3px 8px;border-radius:6px;background:rgba(59,142,232,.18);color:var(--blue);border:1px solid rgba(59,142,232,.3)}
@@ -109,23 +109,25 @@ body[data-v=seg] .nseg,body[data-v=seg] .charts{display:none!important}body[data
 .bm-date{font-size:.84em;color:var(--ink)}
 .bm-vagas{font-size:.8em;color:var(--apto);font-weight:600}
 .pan-civil{border-top-color:var(--desl)!important}
-.civ-cards{display:flex;flex-direction:column;gap:7px;flex:1}
-.civ-card{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:9px;padding:8px 11px;transition:transform .15s,border-color .15s,background .15s}
-.civ-card:hover{background:rgba(255,255,255,.07);border-color:var(--desl);transform:translateY(-2px)}
-.civ-card-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px}
-.civ-title-wrap{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
-.civ-name{font-weight:700;font-size:.9em;color:var(--ink)}
-.civ-dates{font-size:.79em;color:var(--mut)}
-.civ-card .sub-link{font-size:.76em;color:var(--mut);white-space:nowrap}
-.civ-stats{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px 10px;background:rgba(0,0,0,.22);padding:5px 9px;border-radius:7px;font-size:.82em}
-.civ-stat{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
-.civ-lbl{color:var(--mut)}
-.civ-stat.ec .civ-val{color:var(--apto);font-weight:700}
-.civ-stat.sub .civ-lbl{color:var(--mut)}
-.civ-stat.sub .civ-val{color:var(--ink);font-weight:600}
-.civ-stat.dl .civ-lbl{color:var(--mut)}
-.civ-stat.dl .civ-val{color:#e53935;font-weight:700}
-/* tabela da Capacitação só aparece na aba Capacitação T1 */
+.civ-cards{display:flex;flex-direction:column;gap:10px;flex:1}
+.civ-card{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:10px;padding:12px 14px;transition:transform .15s,border-color .15s,background .15s}
+.civ-card:hover{background:rgba(255,255,255,.06);border-color:var(--blue);transform:translateY(-2px)}
+.civ-card .card-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+.civ-card h3{font-size:1.02em;font-weight:700;color:#fff;letter-spacing:.02em;margin:0}
+.civ-dates{font-size:.84em;color:var(--mut);display:block;margin-top:2px}
+.civ-card .sub-link{font-size:.8em;color:var(--mut);font-weight:500;white-space:nowrap}
+.civ-list{display:flex;flex-direction:column;gap:5px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.05);border-radius:8px;padding:8px 12px;margin-top:8px}
+.civ-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.civ-row:last-child{border-bottom:none}
+.civ-row.sub{padding-left:12px}
+.civ-lbl{color:var(--mut);font-size:.95em}
+.civ-val{font-size:1.1em;font-weight:600;color:var(--ink)}
+.civ-row.ec .civ-val{color:var(--apto);font-weight:700;font-size:1.18em}
+.civ-row.sub .civ-lbl{color:var(--mut);font-size:.92em}
+.civ-row.sub .civ-val{color:var(--ink);font-weight:600;font-size:1.05em}
+.civ-row.dl .civ-lbl{color:var(--mut);font-size:.95em}
+.civ-row.dl .civ-val{color:var(--inapto);font-weight:700;font-size:1.18em}
+/* tabela da Capacitação só aparece na aba Capacitação Militar */
 .tablecard.vc{display:none}body[data-v=cap] .tablecard.vc{display:flex}
 .plist{display:flex;flex-direction:column;gap:4px;overflow:hidden;margin-top:6px}
 .trow{display:grid;grid-template-columns:minmax(220px,38%) 1fr minmax(200px,auto);align-items:center;gap:14px;padding:2px 8px;min-height:0;flex:1}
@@ -150,7 +152,7 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
   <button class="tab on" data-v="sum" type="button">Resumo geral</button>
   <button class="tab" data-v="rec" type="button">Recertificação<small id="nRec">538</small></button>
   <button class="tab" data-v="seg" type="button">Curso de Segurança<small id="nSeg">58</small></button>
-  <button class="tab" data-v="cap" type="button">Capacitação T1<small id="nCap">33</small></button>
+  <button class="tab" data-v="cap" type="button">Capacitação Militar<small id="nCap">33</small></button>
   <button class="tab" data-v="gvct" type="button">GVCT<small id="nGVCT">283</small></button>
 </nav>
 <main>
@@ -187,7 +189,7 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
 
         <div class="mil-card" data-go="cap" style="cursor:pointer">
           <div class="card-head">
-            <h3>Capacitação T1 ›</h3>
+            <h3>Capacitação Militar ›</h3>
             <span class="sub-link">Ver detalhes</span>
           </div>
           <div class="mil-content">
@@ -241,63 +243,111 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
       </div>
       <div class="civ-cards">
         <div class="civ-card" data-go="gvct" data-t="Recertificação" data-c="Metade Norte" style="cursor:pointer">
-          <div class="civ-card-head">
-            <div class="civ-title-wrap">
-              <span class="civ-name">Recertificação LN</span>
+          <div class="card-head">
+            <div>
+              <h3>Recertificação LN ›</h3>
               <span class="civ-dates">(30 de outubro a 03 de novembro)</span>
             </div>
-            <span class="sub-link">Ver detalhes ›</span>
+            <span class="sub-link">Ver detalhes</span>
           </div>
-          <div class="civ-stats">
-            <div class="civ-stat ec"><span class="civ-lbl">Em Curso:</span><b class="civ-val">140</b></div>
-            <div class="civ-stat sub"><span class="civ-lbl">Mar:</span><b class="civ-val">122</b></div>
-            <div class="civ-stat sub"><span class="civ-lbl">Interna:</span><b class="civ-val">18</b></div>
-            <div class="civ-stat dl"><span class="civ-lbl">Desligados:</span><b class="civ-val">0</b></div>
+          <div class="civ-list">
+            <div class="civ-row ec">
+              <span class="civ-lbl">Em curso:</span>
+              <b class="civ-val">140</b>
+            </div>
+            <div class="civ-row sub">
+              <span class="civ-lbl">Mar:</span>
+              <b class="civ-val">122</b>
+            </div>
+            <div class="civ-row sub">
+              <span class="civ-lbl">Interna:</span>
+              <b class="civ-val">18</b>
+            </div>
+            <div class="civ-row dl">
+              <span class="civ-lbl">Desligados:</span>
+              <b class="civ-val">0</b>
+            </div>
           </div>
         </div>
         <div class="civ-card" data-go="gvct" data-t="Capacitação" data-c="Metade Norte" style="cursor:pointer">
-          <div class="civ-card-head">
-            <div class="civ-title-wrap">
-              <span class="civ-name">Capacitação LN</span>
+          <div class="card-head">
+            <div>
+              <h3>Capacitação LN ›</h3>
               <span class="civ-dates">(04 a 23 de novembro)</span>
             </div>
-            <span class="sub-link">Ver detalhes ›</span>
+            <span class="sub-link">Ver detalhes</span>
           </div>
-          <div class="civ-stats">
-            <div class="civ-stat ec"><span class="civ-lbl">Em Curso:</span><b class="civ-val">57</b></div>
-            <div class="civ-stat sub"><span class="civ-lbl">Mar:</span><b class="civ-val">53</b></div>
-            <div class="civ-stat sub"><span class="civ-lbl">Interna:</span><b class="civ-val">4</b></div>
-            <div class="civ-stat dl"><span class="civ-lbl">Desligados:</span><b class="civ-val">0</b></div>
+          <div class="civ-list">
+            <div class="civ-row ec">
+              <span class="civ-lbl">Em curso:</span>
+              <b class="civ-val">57</b>
+            </div>
+            <div class="civ-row sub">
+              <span class="civ-lbl">Mar:</span>
+              <b class="civ-val">53</b>
+            </div>
+            <div class="civ-row sub">
+              <span class="civ-lbl">Interna:</span>
+              <b class="civ-val">4</b>
+            </div>
+            <div class="civ-row dl">
+              <span class="civ-lbl">Desligados:</span>
+              <b class="civ-val">0</b>
+            </div>
           </div>
         </div>
         <div class="civ-card" data-go="gvct" data-t="Recertificação" data-c="Metade Sul" style="cursor:pointer">
-          <div class="civ-card-head">
-            <div class="civ-title-wrap">
-              <span class="civ-name">Recertificação LS</span>
+          <div class="card-head">
+            <div>
+              <h3>Recertificação LS ›</h3>
               <span class="civ-dates">(06 a 11 de novembro)</span>
             </div>
-            <span class="sub-link">Ver detalhes ›</span>
+            <span class="sub-link">Ver detalhes</span>
           </div>
-          <div class="civ-stats">
-            <div class="civ-stat ec"><span class="civ-lbl">Em Curso:</span><b class="civ-val">53</b></div>
-            <div class="civ-stat sub"><span class="civ-lbl">Mar:</span><b class="civ-val">47</b></div>
-            <div class="civ-stat sub"><span class="civ-lbl">Interna:</span><b class="civ-val">6</b></div>
-            <div class="civ-stat dl"><span class="civ-lbl">Desligados:</span><b class="civ-val">0</b></div>
+          <div class="civ-list">
+            <div class="civ-row ec">
+              <span class="civ-lbl">Em curso:</span>
+              <b class="civ-val">53</b>
+            </div>
+            <div class="civ-row sub">
+              <span class="civ-lbl">Mar:</span>
+              <b class="civ-val">47</b>
+            </div>
+            <div class="civ-row sub">
+              <span class="civ-lbl">Interna:</span>
+              <b class="civ-val">6</b>
+            </div>
+            <div class="civ-row dl">
+              <span class="civ-lbl">Desligados:</span>
+              <b class="civ-val">0</b>
+            </div>
           </div>
         </div>
         <div class="civ-card" data-go="gvct" data-t="Capacitação" data-c="Metade Sul" style="cursor:pointer">
-          <div class="civ-card-head">
-            <div class="civ-title-wrap">
-              <span class="civ-name">Capacitação LS</span>
+          <div class="card-head">
+            <div>
+              <h3>Capacitação LS ›</h3>
               <span class="civ-dates">(06 a 25 de novembro)</span>
             </div>
-            <span class="sub-link">Ver detalhes ›</span>
+            <span class="sub-link">Ver detalhes</span>
           </div>
-          <div class="civ-stats">
-            <div class="civ-stat ec"><span class="civ-lbl">Em Curso:</span><b class="civ-val">33</b></div>
-            <div class="civ-stat sub"><span class="civ-lbl">Mar:</span><b class="civ-val">26</b></div>
-            <div class="civ-stat sub"><span class="civ-lbl">Interna:</span><b class="civ-val">7</b></div>
-            <div class="civ-stat dl"><span class="civ-lbl">Desligados:</span><b class="civ-val">0</b></div>
+          <div class="civ-list">
+            <div class="civ-row ec">
+              <span class="civ-lbl">Em curso:</span>
+              <b class="civ-val">33</b>
+            </div>
+            <div class="civ-row sub">
+              <span class="civ-lbl">Mar:</span>
+              <b class="civ-val">26</b>
+            </div>
+            <div class="civ-row sub">
+              <span class="civ-lbl">Interna:</span>
+              <b class="civ-val">7</b>
+            </div>
+            <div class="civ-row dl">
+              <span class="civ-lbl">Desligados:</span>
+              <b class="civ-val">0</b>
+            </div>
           </div>
         </div>
       </div>
@@ -325,7 +375,7 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
       <div class="bar"><div class="a" style="width:0.00%" title="Apto: 0"></div><div class="i" style="width:0.00%" title="Inapto: 0"></div><div class="d" style="width:1.56%" title="Desligado: 1"></div><div class="p" style="width:98.44%" title="Sem resultado: 63"></div></div>
       <div class="sub">0 apto · 0 inapto · 1 desligado · 63 aguardando</div></div>
       <div class="legend" id="lg"><span><i class="a"></i>Apto</span><span><i class="i"></i>Inapto</span><span><i class="d"></i>Desligado</span><span><i class="p"></i>Aguardando resultado</span></div></div>
-    <div class="card vc"><h2>Capacitação T1 · Curso e modalidade <span style="text-transform:none;letter-spacing:0">· clique nos cards para filtrar</span></h2><div id="chCap"><div class="cap"><div class="cb t sel" data-c="all"><div class="n">33</div><div class="l">Total de inscritos</div></div><div class="cb ap" data-c="ec"><div class="n">33</div><div class="l">Em curso</div></div><div class="cb pv" data-c="nv"><div class="n">26</div><div class="l">Novo</div></div><div class="cb na" data-c="tr"><div class="n">7</div><div class="l">Troca</div></div></div>
+    <div class="card vc"><h2>Capacitação Militar · Curso e modalidade <span style="text-transform:none;letter-spacing:0">· clique nos cards para filtrar</span></h2><div id="chCap"><div class="cap"><div class="cb t sel" data-c="all"><div class="n">33</div><div class="l">Total de inscritos</div></div><div class="cb ap" data-c="ec"><div class="n">33</div><div class="l">Em curso</div></div><div class="cb pv" data-c="nv"><div class="n">26</div><div class="l">Novo</div></div><div class="cb na" data-c="tr"><div class="n">7</div><div class="l">Troca</div></div></div>
       <div class="capbars"><div class="row"><span>Em curso</span><div class="tr"><div style="width:100.0%;background:var(--apto)"></div></div><b>33 de 33</b></div><div class="row"><span>Novo</span><div class="tr"><div style="width:78.8%;background:#2a7fd4"></div></div><b>26 de 33</b></div><div class="row"><span>Troca</span><div class="tr"><div style="width:21.2%;background:#5b7089"></div></div><b>7 de 33</b></div></div></div></div>
   </section>
   <section class="card tablecard vc"><h2>Militares <span id="capCount" style="text-transform:none;letter-spacing:0">· 33 registros</span></h2>
@@ -380,7 +430,7 @@ async function load(){
   const jobs = [
     ['rec','Recertificação', t => REC = ingest(t,false)],
     ['seg','Curso de Segurança', t => SEG = ingest(t,true)],
-    ['cap','Capacitação T1', t => CAP = capacit(t)],
+    ['cap','Capacitação Militar', t => CAP = capacit(t)],
     ['gvct','GVCT', t => GVCT = ingestGVCT(t)]
   ];
   await Promise.all(jobs.map(async ([k, nome, fn]) => { try { fn(await fetchTab(CONFIG.tabs[k])); } catch(e){ console.error(nome, e); errs.push(`${nome}: ${e.message}`); } }));
@@ -453,7 +503,7 @@ function ingest(table, isSeg){
   return out;
 }
 
-/* Capacitação T1: colunas A (OBS) até M (modalidade) · cards pela coluna "Curso" e pela "modalidade" */
+/* Capacitação Militar: colunas A (OBS) até M (modalidade) · cards pela coluna "Curso" e pela "modalidade" */
 function capacit(table){
   table = fixHeader(table);
   const col = finder(table), labels = table.cols.map(c => norm(c.label));
@@ -524,7 +574,7 @@ function ingestGVCT(table){
 }
 
 /* ---------- visões independentes: cada aba da planilha é uma situação separada ---------- */
-const NOMES = { rec: 'Recertificação', seg: 'Curso de Segurança', cap: 'Capacitação T1', gvct: 'Guarda-Vidas Civil Temporário' };
+const NOMES = { rec: 'Recertificação', seg: 'Curso de Segurança', cap: 'Capacitação Militar', gvct: 'Guarda-Vidas Civil Temporário' };
 function pick(){
   if (view === 'seg') ALL = SEG;
   else if (view === 'gvct') ALL = GVCT;
@@ -619,7 +669,7 @@ function render(){
   $('nSeg').textContent = SEG.length ? SEG.length : '';
   $('nCap').textContent = CAP ? CAP.total : '';
   if ($('nGVCT')) $('nGVCT').textContent = GVCT.length ? GVCT.length : '';
-  $('subtitle').textContent = isGvct ? 'Guarda-Vidas Civil Temporário · Processo Seletivo' : isSeg ? 'Curso de Segurança' : '';
+  $('subtitle').textContent = isGvct ? 'Guarda-Vidas Civil Temporário · Processo Seletivo' : isSeg ? 'Curso de Segurança' : (view === 'cap' ? 'Capacitação Militar' : '');
 
   const fr = $('fRes').value, fm = $('fModal').value, ft = $('fTurma').value, fc = $('fCrbm').value;
   const kpi = (num,label,color,sub='',attr='',sel=false) => `<div class="kpi${sel?' sel':''}" ${attr} style="border-top-color:${color}"><div class="n">${num}</div><div class="l">${label}</div>${sub?`<div class="s">${sub}</div>`:''}</div>`;
@@ -749,20 +799,32 @@ function renderSum(){
   const G = GVCT.length ? tallyGvct(GVCT) : fallback;
   const stat = (n,l,c,attrs) => `<div class="stat" style="--c:${c}" ${attrs}><div class="n">${n}</div><div class="l">${l}</div></div>`;
   const civBox = s => `
-    <div class="civ-stats">
-      <div class="civ-stat ec"><span class="civ-lbl">Em Curso:</span><b class="civ-val">${s.ec}</b></div>
-      <div class="civ-stat sub"><span class="civ-lbl">Mar:</span><b class="civ-val">${s.mar}</b></div>
-      <div class="civ-stat sub"><span class="civ-lbl">Interna:</span><b class="civ-val">${s.interna}</b></div>
-      <div class="civ-stat dl"><span class="civ-lbl">Desligados:</span><b class="civ-val">${s.dl}</b></div>
+    <div class="civ-list">
+      <div class="civ-row ec">
+        <span class="civ-lbl">Em curso:</span>
+        <b class="civ-val">${s.ec}</b>
+      </div>
+      <div class="civ-row sub">
+        <span class="civ-lbl">Mar:</span>
+        <b class="civ-val">${s.mar}</b>
+      </div>
+      <div class="civ-row sub">
+        <span class="civ-lbl">Interna:</span>
+        <b class="civ-val">${s.interna}</b>
+      </div>
+      <div class="civ-row dl">
+        <span class="civ-lbl">Desligados:</span>
+        <b class="civ-val">${s.dl}</b>
+      </div>
     </div>`;
   const civCard = (title, dates, s, curso, local) => `
     <div class="civ-card" data-go="gvct" data-t="${curso}" data-c="${local}" style="cursor:pointer">
-      <div class="civ-card-head">
-        <div class="civ-title-wrap">
-          <span class="civ-name">${title}</span>
+      <div class="card-head">
+        <div>
+          <h3>${title} ›</h3>
           <span class="civ-dates">${dates}</span>
         </div>
-        <span class="sub-link">Ver detalhes ›</span>
+        <span class="sub-link">Ver detalhes</span>
       </div>
       ${civBox(s)}
     </div>`;
@@ -792,7 +854,7 @@ function renderSum(){
 
       <div class="mil-card" data-go="cap" style="cursor:pointer">
         <div class="card-head">
-          <h3>Capacitação T1 ›</h3>
+          <h3>Capacitação Militar ›</h3>
           <span class="sub-link">Ver detalhes</span>
         </div>
         <div class="mil-content">
