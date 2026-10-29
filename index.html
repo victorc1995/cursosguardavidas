@@ -231,47 +231,16 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
         <h2>Cursos de Guarda-Vidas Civil Temporário</h2>
         <span class="pan-badge civ">GVCT</span>
       </div>
-      <div class="mil-card" data-go="gvct" style="cursor:pointer;margin-bottom:12px">
+      <div class="mil-card" data-go="gvct" data-t="Recertificação" data-c="Metade Norte" style="cursor:pointer">
         <div class="card-head">
-          <h3 style="color:var(--desl)">Cursos GVCT ›</h3>
+          <h3 style="color:var(--desl)">Recertificação LN (30 de outubro a 03 de novembro) ›</h3>
           <span class="sub-link">Ver detalhes</span>
         </div>
         <div class="mil-content">
-          <div class="big" data-go="gvct" style="color:var(--desl)"><span id="sumGvctTotal">283</span><small>total de inscritos</small></div>
+          <div class="big" data-go="gvct" data-t="Recertificação" data-c="Metade Norte" style="color:var(--desl)"><span id="sumGvctTotal">140</span><small>civis inscritos</small></div>
           <div class="stats">
-            <div class="stat" style="--c:var(--apto)" data-go="gvct"><div class="n" id="sumGvctEmCurso">283</div><div class="l">Em curso</div></div>
-            <div class="stat" style="--c:var(--desl)" data-go="gvct"><div class="n" id="sumGvctDesl">0</div><div class="l">Desligados / Inaptos</div></div>
-          </div>
-        </div>
-      </div>
-      <div class="civ-subtitle">Previsão dos Cursos:</div>
-      <div class="civ-box">
-        <div class="civ-item">
-          <div class="civ-icon">📅</div>
-          <div class="civ-info">
-            <span class="civ-title">Recertificação LN</span>
-            <span class="civ-dates">30 de outubro a 03 de novembro</span>
-          </div>
-        </div>
-        <div class="civ-item">
-          <div class="civ-icon">📅</div>
-          <div class="civ-info">
-            <span class="civ-title">Recertificação LS</span>
-            <span class="civ-dates">06 a 11 de novembro</span>
-          </div>
-        </div>
-        <div class="civ-item">
-          <div class="civ-icon">📅</div>
-          <div class="civ-info">
-            <span class="civ-title">Capacitação LN</span>
-            <span class="civ-dates">04 a 23 de novembro</span>
-          </div>
-        </div>
-        <div class="civ-item">
-          <div class="civ-icon">📅</div>
-          <div class="civ-info">
-            <span class="civ-title">Capacitação LS</span>
-            <span class="civ-dates">06 a 25 de novembro</span>
+            <div class="stat" style="--c:var(--apto)" data-go="gvct" data-t="Recertificação" data-c="Metade Norte"><div class="n" id="sumGvctEmCurso">140</div><div class="l">Em curso</div></div>
+            <div class="stat" style="--c:var(--desl)" data-go="gvct" data-t="Recertificação" data-c="Metade Norte"><div class="n" id="sumGvctDesl">0</div><div class="l">Desligados</div></div>
           </div>
         </div>
       </div>
@@ -676,10 +645,12 @@ function render(){
 /* ---------- resumo geral (cada aba continua separada) ---------- */
 function tally(rows){ const f = x => rows.filter(r=>r.resultado===x).length, a = f('Apto'), i = f('Inapto'), d = f('Desligado'); return { t: rows.length, a, i, d, p: rows.length-a-i-d }; }
 function tallyGvct(rows){
-  const t = rows.length;
-  // Como os cursos ainda não iniciaram e há prazo de recurso para inaptos/ausentes,
-  // todos os inscritos contam como "Em curso" e 0 em "Desligados / Inaptos".
-  return { t, ec: t, dl: 0, a: rows.filter(r=>r.situacao==='Apto').length, i: rows.filter(r=>r.situacao==='Inapto').length, d: rows.filter(r=>r.situacao==='Ausente').length };
+  const ln = rows.filter(r => norm(r.curso).includes('recert') && norm(r.local).includes('norte'));
+  const target = ln.length ? ln : rows;
+  const t = target.length;
+  // Como o curso ainda não iniciou e inaptos/ausentes podem entrar com recurso,
+  // todos os inscritos contam como "Em curso" e 0 em "Desligados".
+  return { t, ec: t, dl: 0, a: target.filter(r=>r.situacao==='Apto').length, i: target.filter(r=>r.situacao==='Inapto').length, d: target.filter(r=>r.situacao==='Ausente').length };
 }
 function renderSum(){
   const R = tally(REC), C = CAP || { total: 0, ec: 0, dl: 0 }, G = tallyGvct(GVCT);
@@ -761,47 +732,16 @@ function renderSum(){
       <h2>Cursos de Guarda-Vidas Civil Temporário</h2>
       <span class="pan-badge civ">GVCT</span>
     </div>
-    <div class="mil-card" data-go="gvct" style="cursor:pointer;margin-bottom:12px">
+    <div class="mil-card" data-go="gvct" data-t="Recertificação" data-c="Metade Norte" style="cursor:pointer">
       <div class="card-head">
-        <h3 style="color:var(--desl)">Cursos GVCT ›</h3>
+        <h3 style="color:var(--desl)">Recertificação LN (30 de outubro a 03 de novembro) ›</h3>
         <span class="sub-link">Ver detalhes</span>
       </div>
       <div class="mil-content">
-        <div class="big" data-go="gvct" style="color:var(--desl)"><span id="sumGvctTotal">${G.t}</span><small>total de inscritos</small></div>
+        <div class="big" data-go="gvct" data-t="Recertificação" data-c="Metade Norte" style="color:var(--desl)"><span id="sumGvctTotal">${G.t}</span><small>civis inscritos</small></div>
         <div class="stats">
-          ${stat(G.ec, 'Em curso', 'var(--apto)', 'data-go="gvct"')}
-          ${stat(G.dl, 'Desligados / Inaptos', 'var(--desl)', 'data-go="gvct"')}
-        </div>
-      </div>
-    </div>
-    <div class="civ-subtitle">Previsão dos Cursos:</div>
-    <div class="civ-box">
-      <div class="civ-item">
-        <div class="civ-icon">📅</div>
-        <div class="civ-info">
-          <span class="civ-title">Recertificação LN</span>
-          <span class="civ-dates">30 de outubro a 03 de novembro</span>
-        </div>
-      </div>
-      <div class="civ-item">
-        <div class="civ-icon">📅</div>
-        <div class="civ-info">
-          <span class="civ-title">Recertificação LS</span>
-          <span class="civ-dates">06 a 11 de novembro</span>
-        </div>
-      </div>
-      <div class="civ-item">
-        <div class="civ-icon">📅</div>
-        <div class="civ-info">
-          <span class="civ-title">Capacitação LN</span>
-          <span class="civ-dates">04 a 23 de novembro</span>
-        </div>
-      </div>
-      <div class="civ-item">
-        <div class="civ-icon">📅</div>
-        <div class="civ-info">
-          <span class="civ-title">Capacitação LS</span>
-          <span class="civ-dates">06 a 25 de novembro</span>
+          ${stat(G.ec, 'Em curso', 'var(--apto)', 'data-go="gvct" data-t="Recertificação" data-c="Metade Norte"')}
+          ${stat(G.dl, 'Desligados', 'var(--desl)', 'data-go="gvct" data-t="Recertificação" data-c="Metade Norte"')}
         </div>
       </div>
     </div>
