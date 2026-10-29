@@ -77,7 +77,7 @@ footer{font-size:.75em;color:var(--mut);text-align:center;padding:2px 0 6px;flex
 .badge{display:inline-flex;align-items:center;justify-content:center;min-width:clamp(44px,5vw,78px);height:clamp(44px,5vw,78px);border:2px solid rgba(255,255,255,.6);border-radius:50%;font-weight:700;font-size:.8em}
 body[data-v=seg] .nseg,body[data-v=seg] .charts{display:none!important}body[data-v=seg] .filters{grid-template-columns:1fr 2fr}
 .cb.na{background:#5b7089}.cb.pv{background:#2a7fd4}
-.sum{grid-template-columns:3fr 1fr;gap:var(--g);flex:1;min-height:0;overflow:auto}
+.sum{grid-template-columns:1.35fr 1fr;gap:var(--g);flex:1;min-height:0;overflow:auto}
 @media(max-width:1024px){.sum{grid-template-columns:1fr;overflow:visible}}
 .pan-title-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
 .pan-title-bar h2{font-size:1.05em;font-weight:700;color:var(--ink);letter-spacing:.02em;text-transform:none;margin:0}
@@ -109,14 +109,22 @@ body[data-v=seg] .nseg,body[data-v=seg] .charts{display:none!important}body[data
 .bm-date{font-size:.84em;color:var(--ink)}
 .bm-vagas{font-size:.8em;color:var(--apto);font-weight:600}
 .pan-civil{border-top-color:var(--desl)!important}
-.civ-subtitle{font-size:.78em;color:var(--mut);text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin-bottom:10px}
-.civ-box{display:flex;flex-direction:column;gap:10px;flex:1}
-.civ-item{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:12px;transition:background .15s,border-color .15s}
-.civ-item:hover{background:rgba(255,255,255,.07);border-color:var(--desl)}
-.civ-icon{font-size:1.2em;flex:none}
-.civ-info{display:flex;flex-direction:column;gap:3px}
-.civ-title{font-weight:600;font-size:.92em;color:var(--ink)}
-.civ-dates{font-size:.88em;font-weight:700;color:var(--desl);letter-spacing:.02em}
+.civ-cards{display:flex;flex-direction:column;gap:8px;flex:1}
+.civ-card{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:10px;padding:9px 12px;transition:transform .15s,border-color .15s,background .15s}
+.civ-card:hover{background:rgba(255,255,255,.07);border-color:var(--desl);transform:translateY(-2px)}
+.civ-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.civ-title-wrap{display:flex;flex-direction:column}
+.civ-name{font-weight:700;font-size:.92em;color:var(--ink)}
+.civ-dates{font-size:.81em;color:var(--mut);margin-top:1px}
+.civ-stat-box{background:rgba(0,0,0,.22);padding:7px 10px;border-radius:8px;font-size:.84em;margin-top:6px;display:flex;flex-direction:column;gap:3px}
+.civ-stat{display:flex;justify-content:space-between;align-items:center}
+.civ-stat.ec .civ-val{color:var(--apto);font-weight:700}
+.civ-stat.dl .civ-val{color:var(--desl);font-weight:700}
+.civ-sub-row{display:flex;gap:18px;padding-left:10px;margin:1px 0}
+.civ-sub-item{display:flex;gap:6px;align-items:center}
+.civ-sub-item .civ-lbl{color:var(--mut);font-size:.92em}
+.civ-sub-item .civ-val{color:var(--ink);font-weight:600}
+.civ-lbl{color:var(--mut)}
 /* tabela da Capacitação só aparece na aba Capacitação T1 */
 .tablecard.vc{display:none}body[data-v=cap] .tablecard.vc{display:flex}
 .plist{display:flex;flex-direction:column;gap:4px;overflow:hidden;margin-top:6px}
@@ -231,16 +239,73 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
         <h2>Cursos de Guarda-Vidas Civil Temporário</h2>
         <span class="pan-badge civ">GVCT</span>
       </div>
-      <div class="mil-card" data-go="gvct" data-t="Recertificação" data-c="Metade Norte" style="cursor:pointer">
-        <div class="card-head">
-          <h3 style="color:var(--desl)">Recertificação LN (30 de outubro a 03 de novembro) ›</h3>
-          <span class="sub-link">Ver detalhes</span>
+      <div class="civ-cards">
+        <div class="civ-card" data-go="gvct" data-t="Recertificação" data-c="Metade Norte" style="cursor:pointer">
+          <div class="civ-card-head">
+            <div class="civ-title-wrap">
+              <span class="civ-name">Recertificação LN</span>
+              <span class="civ-dates">(30 de outubro a 03 de novembro)</span>
+            </div>
+            <span class="sub-link">Ver detalhes ›</span>
+          </div>
+          <div class="civ-stat-box">
+            <div class="civ-stat ec"><span class="civ-lbl">Em Curso:</span><b class="civ-val">140</b></div>
+            <div class="civ-sub-row">
+              <div class="civ-sub-item"><span class="civ-lbl">Mar:</span><b class="civ-val">122</b></div>
+              <div class="civ-sub-item"><span class="civ-lbl">Interna:</span><b class="civ-val">18</b></div>
+            </div>
+            <div class="civ-stat dl"><span class="civ-lbl">Desligados:</span><b class="civ-val">0</b></div>
+          </div>
         </div>
-        <div class="mil-content">
-          <div class="big" data-go="gvct" data-t="Recertificação" data-c="Metade Norte" style="color:var(--desl)"><span id="sumGvctTotal">140</span><small>civis inscritos</small></div>
-          <div class="stats">
-            <div class="stat" style="--c:var(--apto)" data-go="gvct" data-t="Recertificação" data-c="Metade Norte"><div class="n" id="sumGvctEmCurso">140</div><div class="l">Em curso</div></div>
-            <div class="stat" style="--c:var(--desl)" data-go="gvct" data-t="Recertificação" data-c="Metade Norte"><div class="n" id="sumGvctDesl">0</div><div class="l">Desligados</div></div>
+        <div class="civ-card" data-go="gvct" data-t="Capacitação" data-c="Metade Norte" style="cursor:pointer">
+          <div class="civ-card-head">
+            <div class="civ-title-wrap">
+              <span class="civ-name">Capacitação LN</span>
+              <span class="civ-dates">(04 a 23 de novembro)</span>
+            </div>
+            <span class="sub-link">Ver detalhes ›</span>
+          </div>
+          <div class="civ-stat-box">
+            <div class="civ-stat ec"><span class="civ-lbl">Em Curso:</span><b class="civ-val">57</b></div>
+            <div class="civ-sub-row">
+              <div class="civ-sub-item"><span class="civ-lbl">Mar:</span><b class="civ-val">53</b></div>
+              <div class="civ-sub-item"><span class="civ-lbl">Interna:</span><b class="civ-val">4</b></div>
+            </div>
+            <div class="civ-stat dl"><span class="civ-lbl">Desligados:</span><b class="civ-val">0</b></div>
+          </div>
+        </div>
+        <div class="civ-card" data-go="gvct" data-t="Recertificação" data-c="Metade Sul" style="cursor:pointer">
+          <div class="civ-card-head">
+            <div class="civ-title-wrap">
+              <span class="civ-name">Recertificação LS</span>
+              <span class="civ-dates">(06 a 11 de novembro)</span>
+            </div>
+            <span class="sub-link">Ver detalhes ›</span>
+          </div>
+          <div class="civ-stat-box">
+            <div class="civ-stat ec"><span class="civ-lbl">Em Curso:</span><b class="civ-val">53</b></div>
+            <div class="civ-sub-row">
+              <div class="civ-sub-item"><span class="civ-lbl">Mar:</span><b class="civ-val">47</b></div>
+              <div class="civ-sub-item"><span class="civ-lbl">Interna:</span><b class="civ-val">6</b></div>
+            </div>
+            <div class="civ-stat dl"><span class="civ-lbl">Desligados:</span><b class="civ-val">0</b></div>
+          </div>
+        </div>
+        <div class="civ-card" data-go="gvct" data-t="Capacitação" data-c="Metade Sul" style="cursor:pointer">
+          <div class="civ-card-head">
+            <div class="civ-title-wrap">
+              <span class="civ-name">Capacitação LS</span>
+              <span class="civ-dates">(06 a 25 de novembro)</span>
+            </div>
+            <span class="sub-link">Ver detalhes ›</span>
+          </div>
+          <div class="civ-stat-box">
+            <div class="civ-stat ec"><span class="civ-lbl">Em Curso:</span><b class="civ-val">33</b></div>
+            <div class="civ-sub-row">
+              <div class="civ-sub-item"><span class="civ-lbl">Mar:</span><b class="civ-val">26</b></div>
+              <div class="civ-sub-item"><span class="civ-lbl">Interna:</span><b class="civ-val">7</b></div>
+            </div>
+            <div class="civ-stat dl"><span class="civ-lbl">Desligados:</span><b class="civ-val">0</b></div>
           </div>
         </div>
       </div>
@@ -435,11 +500,9 @@ function ingestGVCT(table){
 
     const sRaw = g(ix.situ);
     const sNorm = norm(sRaw);
-    let situacao = 'Aguardando';
-    if (sNorm.includes('apto') && !sNorm.includes('inapto')) situacao = 'Apto';
-    else if (sNorm.includes('inapto')) situacao = 'Inapto';
-    else if (sNorm.includes('ausente') || sNorm.includes('desist') || sNorm.includes('deslig')) situacao = 'Ausente';
-    else if (sRaw) situacao = sRaw.charAt(0).toUpperCase() + sRaw.slice(1).toLowerCase();
+    // Cursos ainda não iniciaram e candidatos têm prazo recursal: todos contam como "Em curso"
+    let situacao = 'Em curso';
+    if (sNorm.includes('deslig') || sNorm.includes('desist')) situacao = 'Desligado';
 
     const cRaw = g(ix.curso);
     const cNorm = norm(cRaw);
@@ -483,6 +546,7 @@ function go(v, f = {}){
   if (f.t) $('fTurma').value = f.t;
   if (f.r) $('fRes').value = f.r;
   if (f.c && v === 'gvct') $('fCrbm').value = f.c;
+  if (f.m && v === 'gvct') $('fModal').value = f.m;
   capSel = f.c || 'all';
   render();
 }
@@ -490,7 +554,7 @@ document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () =>
 document.addEventListener('click', e => {
   const t = e.target.closest ? e.target : e.target.parentElement;
   let el = t.closest('[data-go]');
-  if (el){ go(el.dataset.go, { t: el.dataset.t, r: el.dataset.r, c: el.dataset.c }); return; }
+  if (el){ go(el.dataset.go, { t: el.dataset.t, r: el.dataset.r, c: el.dataset.c, m: el.dataset.m }); return; }
   el = t.closest('.kpi[data-r],.kpi[data-m],.kpi[data-curso]');
   if (el){
     if (el.dataset.curso !== undefined){
@@ -518,7 +582,7 @@ function fillSelects(){
     fillSelect('fTurma', ALL.map(r=>r.curso), 'Todos os cursos');
     fillSelect('fModal', ALL.map(r=>r.habilidade), 'Todas as habilidades');
     fillSelect('fCrbm', ALL.map(r=>r.local), 'Todos os locais');
-    const fr = $('fRes'), cur = fr.value, ops = [{v:'Apto',l:'Apto'},{v:'Inapto',l:'Inapto'},{v:'Ausente',l:'Ausente'}];
+    const fr = $('fRes'), cur = fr.value, ops = [{v:'Em curso',l:'Em curso'},{v:'Desligado',l:'Desligados'}];
     fr.innerHTML = '<option value="">Todas as situações</option>' + ops.map(o => `<option value="${o.v}">${o.l}</option>`).join('');
     if (ops.some(o => o.v === cur)) fr.value = cur;
     $('fBusca').placeholder = 'Buscar por nome ou local…';
@@ -555,8 +619,9 @@ function render(){
   const rows = filtered(), n = rows.length;
   const isSeg = view === 'seg', isGvct = view === 'gvct';
   const aptos = rows.filter(r=>r.resultado==='Apto').length, inaptos = rows.filter(r=>r.resultado==='Inapto').length;
-  const desl = rows.filter(r=>r.resultado==='Desligado' || r.resultado==='Ausente').length;
+  const desl = rows.filter(r=>r.resultado==='Desligado' || (!isGvct && r.resultado==='Ausente')).length;
   const pend = isGvct ? 0 : (n - aptos - inaptos - desl);
+  const emCurso = rows.filter(r=>r.situacao==='Em curso').length;
 
   $('nRec').textContent = REC.length ? REC.length : '';
   $('nSeg').textContent = SEG.length ? SEG.length : '';
@@ -564,7 +629,7 @@ function render(){
   if ($('nGVCT')) $('nGVCT').textContent = GVCT.length ? GVCT.length : '';
   $('subtitle').textContent = isGvct ? 'Guarda-Vidas Civil Temporário · Processo Seletivo' : isSeg ? 'Curso de Segurança' : '';
 
-  const fr = $('fRes').value, fm = $('fModal').value, ft = $('fTurma').value;
+  const fr = $('fRes').value, fm = $('fModal').value, ft = $('fTurma').value, fc = $('fCrbm').value;
   const kpi = (num,label,color,sub='',attr='',sel=false) => `<div class="kpi${sel?' sel':''}" ${attr} style="border-top-color:${color}"><div class="n">${num}</div><div class="l">${label}</div>${sub?`<div class="s">${sub}</div>`:''}</div>`;
   const kr = (v,num,label,color,sub='') => kpi(num,label,color,sub,`data-r="${v}"`,fr===v);
   const base = filtered(true);
@@ -572,11 +637,17 @@ function render(){
   if (isGvct){
     const recCount = base.filter(r => r.curso === 'Recertificação').length;
     const capCount = base.filter(r => r.curso === 'Capacitação').length;
-    const all = kpi(n, 'Inscritos', 'var(--navy)', n !== ALL.length ? `de ${ALL.length} no total` : '', 'data-r=""', !fr && !ft && !fm && !$('fCrbm').value);
+    const marCount = base.filter(r => norm(r.habilidade).includes('mar')).length;
+    const intCount = base.filter(r => norm(r.habilidade).includes('intern')).length;
+    const all = kpi(n, 'Inscritos', 'var(--navy)', n !== ALL.length ? `de ${ALL.length} no total` : '', 'data-r=""', !fr && !ft && !fm && !fc);
+    const kEc = kr('Em curso', emCurso, 'Em curso', 'var(--apto)');
+    const kDl = kr('Desligado', desl, 'Desligados', 'var(--desl)');
     const kRec = kpi(recCount, 'Recertificação', 'var(--blue)', '', 'data-curso="Recertificação"', ft === 'Recertificação');
     const kCap = kpi(capCount, 'Capacitação', 'var(--blue)', '', 'data-curso="Capacitação"', ft === 'Capacitação');
-    $('kpis').innerHTML = all + kRec + kCap + kr('Apto', aptos, 'Aptos', 'var(--apto)') + kr('Inapto', inaptos, 'Inaptos', 'var(--inapto)') + kr('Ausente', desl, 'Ausentes', 'var(--desl)');
-    $('lg').innerHTML = '<span><i class="a"></i>Apto</span><span><i class="i"></i>Inapto</span><span><i class="d"></i>Ausente</span>';
+    const kMar = kpi(marCount, 'Águas de Mar', 'var(--blue)', '', 'data-m="Águas de Mar"', fm === 'Águas de Mar');
+    const kInt = kpi(intCount, 'Águas Internas', 'var(--blue)', '', 'data-m="Águas Internas"', fm === 'Águas Internas');
+    $('kpis').innerHTML = all + kEc + kDl + kRec + kCap + kMar + kInt;
+    $('lg').innerHTML = '<span><i class="a"></i>Em curso</span><span><i class="d"></i>Desligado</span>';
   } else if (isSeg){
     const all = kpi(n,'Inscritos','var(--navy)', n!==ALL.length ? `de ${ALL.length} no total` : '', 'data-r=""', false);
     $('kpis').innerHTML = all + kr('Ativo',n-desl,'Ativos (não desligados)','var(--apto)') + kr('Desligado',desl,'Desligados','var(--desl)');
@@ -592,11 +663,20 @@ function render(){
 
   const turmas = [...new Set(rows.map(r=>r.turma))].sort((a,b) => isGvct ? a.localeCompare(b,'pt-BR') : turmaOrder(a)-turmaOrder(b) || a.localeCompare(b,'pt-BR'));
   $('chTurmas').innerHTML = turmas.length ? turmas.map(t => {
-    const rs = rows.filter(r=>r.turma===t), tot = rs.length, f = x => rs.filter(r=>r.resultado===x).length;
-    const a = f('Apto') + (isSeg ? f('Ativo') : 0), i = f('Inapto'), d = f('Desligado') + f('Ausente'), p = isGvct ? 0 : tot-a-i-d, w = v => (v/tot*100).toFixed(2)+'%';
+    const rs = rows.filter(r=>r.turma===t), tot = rs.length;
+    if (isGvct){
+      const ec = rs.filter(r=>r.situacao==='Em curso').length;
+      const dl = rs.filter(r=>r.situacao==='Desligado').length;
+      const w = v => (v/tot*100).toFixed(2)+'%';
+      return `<div class="th">${esc(t)} <span>· ${tot} inscritos</span></div>
+        <div class="bar"><div class="a" style="width:${w(ec)}" title="Em curso: ${ec}"></div><div class="d" style="width:${w(dl)}" title="Desligados: ${dl}"></div></div>
+        <div class="sub">${ec} em curso · ${dl} desligados</div>`;
+    }
+    const f = x => rs.filter(r=>r.resultado===x).length;
+    const a = f('Apto') + (isSeg ? f('Ativo') : 0), i = f('Inapto'), d = f('Desligado') + f('Ausente'), p = tot-a-i-d, w = v => (v/tot*100).toFixed(2)+'%';
     return `<div class="th">${esc(t)} <span>· ${tot} inscritos</span></div>
-      <div class="bar"><div class="a" style="width:${w(a)}" title="Apto: ${a}"></div><div class="i" style="width:${w(i)}" title="Inapto: ${i}"></div><div class="d" style="width:${w(d)}" title="${isGvct?'Ausente: ':'Desligado / Desistência: '}${d}"></div>${isGvct?'':`<div class="p" style="width:${w(p)}" title="Sem resultado: ${p}"></div>`}</div>
-      <div class="sub">${isSeg ? `${a} ativos · ${d} desligados` : isGvct ? `${a} apto · ${i} inapto · ${d} ausente` : `${a} apto · ${i} inapto · ${d} desl./desist. · ${p} aguardando`}</div>`;
+      <div class="bar"><div class="a" style="width:${w(a)}" title="Apto: ${a}"></div><div class="i" style="width:${w(i)}" title="Inapto: ${i}"></div><div class="d" style="width:${w(d)}" title="${isSeg?'Desligado: ':'Desligado / Desistência: '}${d}"></div><div class="p" style="width:${w(p)}" title="Sem resultado: ${p}"></div></div>
+      <div class="sub">${isSeg ? `${a} ativos · ${d} desligados` : `${a} apto · ${i} inapto · ${d} desl./desist. · ${p} aguardando`}</div>`;
   }).join('') : '<div class="empty">Sem dados para o filtro atual.</div>';
 
   if (CAP){
@@ -616,8 +696,8 @@ function render(){
 
   if (isGvct){
     const sorted = [...rows].sort((a,b) => a.curso.localeCompare(b.curso,'pt-BR') || a.local.localeCompare(b.local,'pt-BR') || a.nome.localeCompare(b.nome,'pt-BR'));
-    $('tblCount').textContent = `· ${n} inscritos · ${aptos} aptos · ${inaptos} inaptos · ${desl} ausentes`;
-    const tagGvct = s => `<span class="tag ${s==='Apto'?'t-apto':s==='Inapto'?'t-inapto':'t-desl'}">${esc(s)}</span>`;
+    $('tblCount').textContent = `· ${n} inscritos · ${emCurso} em curso · ${desl} desligados`;
+    const tagGvct = s => `<span class="tag ${s==='Em curso'?'t-apto':'t-desl'}">${esc(s)}</span>`;
     $('thead').innerHTML = '<tr><th>Situação no Curso</th><th>Nome</th><th>Local</th><th>Qual Curso</th><th>Habilidade</th></tr>';
     $('tbody').innerHTML = sorted.map(r => `<tr>
       <td>${tagGvct(r.situacao)}</td>
@@ -645,16 +725,58 @@ function render(){
 /* ---------- resumo geral (cada aba continua separada) ---------- */
 function tally(rows){ const f = x => rows.filter(r=>r.resultado===x).length, a = f('Apto'), i = f('Inapto'), d = f('Desligado'); return { t: rows.length, a, i, d, p: rows.length-a-i-d }; }
 function tallyGvct(rows){
-  const ln = rows.filter(r => norm(r.curso).includes('recert') && norm(r.local).includes('norte'));
-  const target = ln.length ? ln : rows;
-  const t = target.length;
-  // Como o curso ainda não iniciou e inaptos/ausentes podem entrar com recurso,
-  // todos os inscritos contam como "Em curso" e 0 em "Desligados".
-  return { t, ec: t, dl: 0, a: target.filter(r=>r.situacao==='Apto').length, i: target.filter(r=>r.situacao==='Inapto').length, d: target.filter(r=>r.situacao==='Ausente').length };
+  const stat = (isRec, isNorte) => {
+    const sub = rows.filter(r => {
+      const cRec = norm(r.curso).includes('recert');
+      const lNorte = norm(r.local).includes('norte');
+      return (isRec ? cRec : !cRec) && (isNorte ? lNorte : !lNorte);
+    });
+    const ec = sub.filter(r => r.situacao === 'Em curso').length;
+    const dl = sub.filter(r => r.situacao === 'Desligado').length;
+    const mar = sub.filter(r => norm(r.habilidade).includes('mar')).length;
+    const interna = sub.filter(r => norm(r.habilidade).includes('intern')).length;
+    return { total: sub.length, ec, dl, mar, interna };
+  };
+  return {
+    recLN: stat(true, true),
+    capLN: stat(false, true),
+    recLS: stat(true, false),
+    capLS: stat(false, false),
+    total: rows.length
+  };
 }
 function renderSum(){
-  const R = tally(REC), C = CAP || { total: 0, ec: 0, dl: 0 }, G = tallyGvct(GVCT);
+  const R = tally(REC), C = CAP || { total: 0, ec: 0, dl: 0 };
+  const fallback = {
+    recLN: { total: 140, ec: 140, dl: 0, mar: 122, interna: 18 },
+    capLN: { total: 57, ec: 57, dl: 0, mar: 53, interna: 4 },
+    recLS: { total: 53, ec: 53, dl: 0, mar: 47, interna: 6 },
+    capLS: { total: 33, ec: 33, dl: 0, mar: 26, interna: 7 },
+    total: 283
+  };
+  const G = GVCT.length ? tallyGvct(GVCT) : fallback;
   const stat = (n,l,c,attrs) => `<div class="stat" style="--c:${c}" ${attrs}><div class="n">${n}</div><div class="l">${l}</div></div>`;
+  const civBox = s => `
+    <div class="civ-stat-box">
+      <div class="civ-stat ec"><span class="civ-lbl">Em Curso:</span><b class="civ-val">${s.ec}</b></div>
+      <div class="civ-sub-row">
+        <div class="civ-sub-item"><span class="civ-lbl">Mar:</span><b class="civ-val">${s.mar}</b></div>
+        <div class="civ-sub-item"><span class="civ-lbl">Interna:</span><b class="civ-val">${s.interna}</b></div>
+      </div>
+      <div class="civ-stat dl"><span class="civ-lbl">Desligados:</span><b class="civ-val">${s.dl}</b></div>
+    </div>`;
+  const civCard = (title, dates, s, curso, local) => `
+    <div class="civ-card" data-go="gvct" data-t="${curso}" data-c="${local}" style="cursor:pointer">
+      <div class="civ-card-head">
+        <div class="civ-title-wrap">
+          <span class="civ-name">${title}</span>
+          <span class="civ-dates">${dates}</span>
+        </div>
+        <span class="sub-link">Ver detalhes ›</span>
+      </div>
+      ${civBox(s)}
+    </div>`;
+
   $('sum').innerHTML = `
   <div class="pan pan-militar" style="--c:var(--blue)">
     <div class="pan-title-bar">
@@ -732,18 +854,11 @@ function renderSum(){
       <h2>Cursos de Guarda-Vidas Civil Temporário</h2>
       <span class="pan-badge civ">GVCT</span>
     </div>
-    <div class="mil-card" data-go="gvct" data-t="Recertificação" data-c="Metade Norte" style="cursor:pointer">
-      <div class="card-head">
-        <h3 style="color:var(--desl)">Recertificação LN (30 de outubro a 03 de novembro) ›</h3>
-        <span class="sub-link">Ver detalhes</span>
-      </div>
-      <div class="mil-content">
-        <div class="big" data-go="gvct" data-t="Recertificação" data-c="Metade Norte" style="color:var(--desl)"><span id="sumGvctTotal">${G.t}</span><small>civis inscritos</small></div>
-        <div class="stats">
-          ${stat(G.ec, 'Em curso', 'var(--apto)', 'data-go="gvct" data-t="Recertificação" data-c="Metade Norte"')}
-          ${stat(G.dl, 'Desligados', 'var(--desl)', 'data-go="gvct" data-t="Recertificação" data-c="Metade Norte"')}
-        </div>
-      </div>
+    <div class="civ-cards">
+      ${civCard('Recertificação LN', '(30 de outubro a 03 de novembro)', G.recLN, 'Recertificação', 'Metade Norte')}
+      ${civCard('Capacitação LN', '(04 a 23 de novembro)', G.capLN, 'Capacitação', 'Metade Norte')}
+      ${civCard('Recertificação LS', '(06 a 11 de novembro)', G.recLS, 'Recertificação', 'Metade Sul')}
+      ${civCard('Capacitação LS', '(06 a 25 de novembro)', G.capLS, 'Capacitação', 'Metade Sul')}
     </div>
   </div>`;
 }
