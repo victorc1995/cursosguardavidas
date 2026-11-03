@@ -290,12 +290,12 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
       <div class="civ-cards">
         <div class="civ-card" data-go="gvct" data-t="Recertificação" data-c="Metade Norte" style="cursor:pointer">
           <div class="card-head">
-            <h3>Recertificação LN › <span class="civ-dates">(30 de outubro a 03 de novembro)</span></h3>
+            <h3>Recertificação LN › <span class="civ-dates">(30 de outubro a 03 de novembro)</span> <span class="pan-badge bm" style="font-size:.7em;padding:1px 6px">Concluído</span></h3>
             <span class="sub-link">Ver detalhes</span>
           </div>
           <div class="civ-list">
             <div class="civ-row ec">
-              <span class="civ-lbl">Em curso:</span>
+              <span class="civ-lbl">Aptos:</span>
               <b class="civ-val">140</b>
             </div>
             <div class="civ-row sub">
@@ -969,14 +969,15 @@ function render(){
     const marCount = base.filter(r => norm(r.habilidade).includes('mar')).length;
     const intCount = base.filter(r => norm(r.habilidade).includes('intern')).length;
     const all = kpi(n, 'Inscritos', 'var(--navy)', n !== ALL.length ? `de ${ALL.length} no total` : '', 'data-r=""', !fr && !ft && !fm && !fc);
-    const kEc = kr('Em curso', emCurso, 'Em curso', 'var(--apto)');
+    const isFilteredRecLN = (ft === 'Recertificação' && norm(fc).includes('norte')) || (ft === 'Recertificação · Metade Norte');
+    const kEc = kr('Em curso', emCurso, isFilteredRecLN ? 'Aptos' : 'Em curso', 'var(--apto)');
     const kDl = kr('Desligado', desl, 'Desligados', 'var(--desl)');
     const kRec = kpi(recCount, 'Recertificação', 'var(--blue)', '', 'data-curso="Recertificação"', ft === 'Recertificação');
     const kCap = kpi(capCount, 'Capacitação', 'var(--blue)', '', 'data-curso="Capacitação"', ft === 'Capacitação');
     const kMar = kpi(marCount, 'Águas de Mar', 'var(--blue)', '', 'data-m="Águas de Mar"', fm === 'Águas de Mar');
     const kInt = kpi(intCount, 'Águas Internas', 'var(--blue)', '', 'data-m="Águas Internas"', fm === 'Águas Internas');
     $('kpis').innerHTML = all + kEc + kDl + kRec + kCap + kMar + kInt;
-    $('lg').innerHTML = '<span><i class="a"></i>Em curso</span><span><i class="d"></i>Desligado</span>';
+    $('lg').innerHTML = '<span><i class="a"></i>' + (isFilteredRecLN ? 'Aptos' : 'Em curso') + '</span><span><i class="d"></i>Desligado</span>';
   } else if (isSeg){
     const all = kpi(n,'Inscritos','var(--navy)', n!==ALL.length ? `de ${ALL.length} no total` : '', 'data-r=""', false);
     $('kpis').innerHTML = all + kr('Ativo',n-desl,'Ativos (não desligados)','var(--apto)') + kr('Desligado',desl,'Desligados','var(--desl)');
@@ -994,12 +995,15 @@ function render(){
   $('chTurmas').innerHTML = turmas.length ? turmas.map(t => {
     const rs = rows.filter(r=>r.turma===t), tot = rs.length;
     if (isGvct){
+      const isRecLN = t.includes('Recertificação') && (t.includes('Norte') || t.includes('LN'));
       const ec = rs.filter(r=>r.situacao==='Em curso').length;
       const dl = rs.filter(r=>r.situacao==='Desligado').length;
       const w = v => (v/tot*100).toFixed(2)+'%';
-      return `<div class="th">${esc(t)} <span>· ${tot} inscritos</span></div>
-        <div class="bar"><div class="a" style="width:${w(ec)}" title="Em curso: ${ec}"></div><div class="d" style="width:${w(dl)}" title="Desligados: ${dl}"></div></div>
-        <div class="sub">${ec} em curso · ${dl} desligados</div>`;
+      const labelEc = isRecLN ? 'aptos' : 'em curso';
+      const badge = isRecLN ? ' <span class="pan-badge bm" style="font-size:.7em;padding:1px 6px">Concluído</span>' : '';
+      return `<div class="th">${esc(t)}${badge} <span>· ${tot} inscritos</span></div>
+        <div class="bar"><div class="a" style="width:${w(ec)}" title="${isRecLN ? 'Aptos' : 'Em curso'}: ${ec}"></div><div class="d" style="width:${w(dl)}" title="Desligados: ${dl}"></div></div>
+        <div class="sub">${ec} ${labelEc} · ${dl} desligados</div>`;
     }
     const f = x => rs.filter(r=>r.resultado===x).length;
     const a = f('Apto') + (isSeg ? f('Ativo') : 0), i = f('Inapto'), d = f('Desligado') + f('Ausente'), p = tot-a-i-d, w = v => (v/tot*100).toFixed(2)+'%';
@@ -1013,11 +1017,17 @@ function render(){
 
   if (isGvct){
     const sorted = [...rows].sort((a,b) => a.curso.localeCompare(b.curso,'pt-BR') || a.local.localeCompare(b.local,'pt-BR') || a.nome.localeCompare(b.nome,'pt-BR'));
-    $('tblCount').textContent = `· ${n} inscritos · ${emCurso} em curso · ${desl} desligados`;
-    const tagGvct = s => `<span class="tag ${s==='Em curso'?'t-apto':'t-desl'}">${esc(s)}</span>`;
+    const isFilteredRecLN = (ft === 'Recertificação' && norm(fc).includes('norte')) || (ft === 'Recertificação · Metade Norte');
+    const labelTot = isFilteredRecLN ? 'aptos' : 'em curso';
+    $('tblCount').textContent = `· ${n} inscritos · ${emCurso} ${labelTot} · ${desl} desligados`;
+    const tagGvct = (s, r) => {
+      const isRecLN = r && r.curso === 'Recertificação' && norm(r.local).includes('norte');
+      const text = (isRecLN && s === 'Em curso') ? 'Apto' : s;
+      return `<span class="tag ${s==='Em curso'?'t-apto':'t-desl'}">${esc(text)}</span>`;
+    };
     $('thead').innerHTML = '<tr><th>Situação no Curso</th><th>Nome</th><th>Local</th><th>Qual Curso</th><th>Habilidade</th></tr>';
     $('tbody').innerHTML = sorted.map(r => `<tr>
-      <td>${tagGvct(r.situacao)}</td>
+      <td>${tagGvct(r.situacao, r)}</td>
       <td class="name">${esc(r.nome)}</td>
       <td>${esc(r.local)}</td>
       <td><span class="tag t-pend">${esc(r.curso)}</span></td>
@@ -1249,10 +1259,10 @@ function renderSum(){
   };
   const G = GVCT.length ? tallyGvct(GVCT) : fallback;
   const stat = (n,l,c,attrs) => `<div class="stat" style="--c:${c}" ${attrs}><div class="n">${n}</div><div class="l">${l}</div></div>`;
-  const civBox = s => `
+  const civBox = (s, isConcluido = false) => `
     <div class="civ-list">
       <div class="civ-row ec">
-        <span class="civ-lbl">Em curso:</span>
+        <span class="civ-lbl">${isConcluido ? 'Aptos:' : 'Em curso:'}</span>
         <b class="civ-val">${s.ec}</b>
       </div>
       <div class="civ-row sub">
@@ -1268,13 +1278,13 @@ function renderSum(){
         <b class="civ-val">${s.dl}</b>
       </div>
     </div>`;
-  const civCard = (title, dates, s, curso, local) => `
+  const civCard = (title, dates, s, curso, local, isConcluido = false) => `
     <div class="civ-card" data-go="gvct" data-t="${curso}" data-c="${local}" style="cursor:pointer">
       <div class="card-head">
-        <h3>${title} › <span class="civ-dates">${dates}</span></h3>
+        <h3>${title} › <span class="civ-dates">${dates}</span> ${isConcluido ? '<span class="pan-badge bm" style="font-size:.7em;padding:1px 6px">Concluído</span>' : ''}</h3>
         <span class="sub-link">Ver detalhes</span>
       </div>
-      ${civBox(s)}
+      ${civBox(s, isConcluido)}
     </div>`;
 
   $('sum').innerHTML = `
@@ -1381,10 +1391,10 @@ function renderSum(){
       <span class="pan-badge civ">GVCT</span>
     </div>
     <div class="civ-cards">
-      ${civCard('Recertificação LN', '(30 de outubro a 03 de novembro)', G.recLN, 'Recertificação', 'Metade Norte')}
-      ${civCard('Capacitação LN', '(04 a 23 de novembro)', G.capLN, 'Capacitação', 'Metade Norte')}
-      ${civCard('Recertificação LS', '(06 a 11 de novembro)', G.recLS, 'Recertificação', 'Metade Sul')}
-      ${civCard('Capacitação LS', '(06 a 25 de novembro)', G.capLS, 'Capacitação', 'Metade Sul')}
+      ${civCard('Recertificação LN', '(30 de outubro a 03 de novembro)', G.recLN, 'Recertificação', 'Metade Norte', true)}
+      ${civCard('Capacitação LN', '(04 a 23 de novembro)', G.capLN, 'Capacitação', 'Metade Norte', false)}
+      ${civCard('Recertificação LS', '(06 a 11 de novembro)', G.recLS, 'Recertificação', 'Metade Sul', false)}
+      ${civCard('Capacitação LS', '(06 a 25 de novembro)', G.capLS, 'Capacitação', 'Metade Sul', false)}
     </div>
   </div>`;
 }
