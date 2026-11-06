@@ -260,7 +260,15 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
                       <div class="sub-it ds"><span>Desistente:</span> <b>0</b></div>
                     </div>
                   </div>
-                  <div class="stat" style="--c:var(--blue)" data-go="cap" data-turma="t2" data-c="t2_t10"><div class="n">62</div><div class="l">Teste 200m (10/nov)</div></div>
+                  <div class="stat" style="--c:var(--blue);min-width:120px" data-go="cap" data-turma="t2" data-c="t2_t10">
+                    <div class="n" style="font-size:clamp(18px,2vw,28px)">62/0</div>
+                    <div class="l">Teste 200m (10/nov)</div>
+                    <div class="stat-sub-t2">
+                      <div class="sub-it ap"><span>Apto:</span> <b>0</b></div>
+                      <div class="sub-it in"><span>Inapto:</span> <b>0</b></div>
+                      <div class="sub-it ds"><span>Desistente:</span> <b>0</b></div>
+                    </div>
+                  </div>
                   <div class="stat" style="--c:var(--pend)" data-go="cap" data-turma="t2" data-c="t2_teste_all"><div class="n">112</div><div class="l">Total Teste 200m</div></div>
                 </div>
               </div>
@@ -1171,7 +1179,7 @@ function renderCap(){
         <div class="cap">
           ${cb('t2', 't2_certos', 'ap', t2.total, 'Certos p/ Curso')}
           ${cb('t2', 't2_t07', 'pv', `${teste.d07}/${teste.d07_testados || 0}`, 'Teste 07/nov (ABM)')}
-          ${cb('t2', 't2_t10', 'pv', teste.d10, 'Teste 10/nov (BBMs)')}
+          ${cb('t2', 't2_t10', 'pv', `${teste.d10}/${teste.d10_testados || 0}`, 'Teste 10/nov (BBMs)')}
           ${cb('t2', 't2_teste_all', 't', teste.total, 'Total Teste 200m')}
         </div>
         <div class="capbars">
@@ -1290,7 +1298,7 @@ function renderSum(){
   const C = {
     t1: (CAP && CAP.t1) ? CAP.t1 : { total: 33, ec: 27, dl: 6, mar: 25, interna: 2, nv: 26, tr: 7 },
     t2: (CAP && CAP.t2) ? CAP.t2 : { total: 54 },
-    teste: (CAP && CAP.teste) ? CAP.teste : { total: 112, d07: 50, d07_testados: 0, d07_aptos: 0, d07_inaptos: 0, d07_desist: 0, d10: 62 }
+    teste: (CAP && CAP.teste) ? CAP.teste : { total: 112, d07: 50, d07_testados: 0, d07_aptos: 0, d07_inaptos: 0, d07_desist: 0, d10: 62, d10_testados: 0, d10_aptos: 0, d10_inaptos: 0, d10_desist: 0 }
   };
   const fallback = {
     recLN: { total: 140, ec: 140, dl: 0, mar: 122, interna: 18 },
@@ -1400,7 +1408,15 @@ function renderSum(){
                     <div class="sub-it ds"><span>Desistente:</span> <b>${C.teste.d07_desist || 0}</b></div>
                   </div>
                 </div>
-                ${stat(C.teste.d10, 'Teste 200m (10/nov)', 'var(--blue)', 'data-go="cap" data-turma="t2" data-c="t2_t10"')}
+                <div class="stat" style="--c:var(--blue);min-width:120px" data-go="cap" data-turma="t2" data-c="t2_t10">
+                  <div class="n" style="font-size:clamp(18px,2vw,28px)">${C.teste.d10}/${C.teste.d10_testados || 0}</div>
+                  <div class="l">Teste 200m (10/nov)</div>
+                  <div class="stat-sub-t2">
+                    <div class="sub-it ap"><span>Apto:</span> <b>${C.teste.d10_aptos || 0}</b></div>
+                    <div class="sub-it in"><span>Inapto:</span> <b>${C.teste.d10_inaptos || 0}</b></div>
+                    <div class="sub-it ds"><span>Desistente:</span> <b>${C.teste.d10_desist || 0}</b></div>
+                  </div>
+                </div>
                 ${stat(C.teste.total, 'Total Teste 200m', 'var(--pend)', 'data-go="cap" data-turma="t2" data-c="t2_teste_all"')}
               </div>
             </div>
