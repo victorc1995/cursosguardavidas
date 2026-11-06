@@ -137,6 +137,11 @@ body[data-v=seg] .nseg,body[data-v=seg] .charts{display:none!important}body[data
 .cap-subcard .mil-content{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .cap-subcard .big{min-width:95px;font-size:clamp(22px,2.2vw,32px)}
 .cap-subcard .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(75px,1fr));gap:6px;margin:2px 0;flex:1}
+.stat-sub-t2{display:flex;flex-direction:column;gap:1.5px;margin-top:5px;padding-top:4px;border-top:1px solid rgba(255,255,255,.08);font-size:.74em}
+.stat-sub-t2 .sub-it{display:flex;justify-content:space-between;align-items:center;color:var(--mut);line-height:1.25}
+.stat-sub-t2 .sub-it.ap b{color:var(--apto);font-weight:700}
+.stat-sub-t2 .sub-it.in b{color:var(--inapto);font-weight:700}
+.stat-sub-t2 .sub-it.ds b{color:var(--desl);font-weight:700}
 .cap-split{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 @media(max-width:980px){.cap-split{grid-template-columns:1fr}}
 .cap-block{background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
@@ -246,9 +251,17 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
                 <div class="big" style="color:var(--apto);min-width:100px" data-go="cap" data-turma="t2">54<small>certos para o curso</small></div>
                 <div class="stats">
                   <div class="stat" style="--c:var(--apto)" data-go="cap" data-turma="t2" data-c="t2_certos"><div class="n">54</div><div class="l">Certos p/ curso</div></div>
-                  <div class="stat" style="--c:var(--blue)" data-go="cap" data-turma="t2" data-c="t2_t07"><div class="n">50</div><div class="l">Teste 200m (07/nov)</div></div>
-                  <div class="stat" style="--c:var(--blue)" data-go="cap" data-turma="t2" data-c="t2_t10"><div class="n">64</div><div class="l">Teste 200m (10/nov)</div></div>
-                  <div class="stat" style="--c:var(--pend)" data-go="cap" data-turma="t2" data-c="t2_teste_all"><div class="n">114</div><div class="l">Total Teste 200m</div></div>
+                  <div class="stat" style="--c:var(--blue);min-width:120px" data-go="cap" data-turma="t2" data-c="t2_t07">
+                    <div class="n" style="font-size:clamp(18px,2vw,28px)">50/0</div>
+                    <div class="l">Teste 200m (07/nov)</div>
+                    <div class="stat-sub-t2">
+                      <div class="sub-it ap"><span>Apto:</span> <b>0</b></div>
+                      <div class="sub-it in"><span>Inapto:</span> <b>0</b></div>
+                      <div class="sub-it ds"><span>Desistente:</span> <b>0</b></div>
+                    </div>
+                  </div>
+                  <div class="stat" style="--c:var(--blue)" data-go="cap" data-turma="t2" data-c="t2_t10"><div class="n">62</div><div class="l">Teste 200m (10/nov)</div></div>
+                  <div class="stat" style="--c:var(--pend)" data-go="cap" data-turma="t2" data-c="t2_teste_all"><div class="n">112</div><div class="l">Total Teste 200m</div></div>
                 </div>
               </div>
             </div>
@@ -500,7 +513,7 @@ let REC = [], SEG = [], ALL = [], GVCT = [],
     CAP = {
       t1: { total: 33, ec: 27, dl: 6, mar: 25, interna: 2, nv: 26, tr: 7, heads: [], list: [] },
       t2: { total: 54, heads: [], list: [] },
-      teste: { total: 114, d07: 50, d10: 64, heads: [], list: [] }
+      teste: { total: 112, d07: 50, d07_testados: 0, d07_aptos: 0, d07_inaptos: 0, d07_desist: 0, d10: 62, d10_testados: 0, d10_aptos: 0, d10_inaptos: 0, d10_desist: 0, heads: [], list: [] }
     },
     view = 'sum', capSel = 'all', capView = 't1', countdown = CONFIG.refreshSeconds, loading = false;
 const $ = id => document.getElementById(id);
@@ -706,6 +719,7 @@ function capacitTesteT2(table){
   if (nomeIdx < 0) nomeIdx = labels.findIndex(l => l.includes('nome'));
   const dataIdx = col('Prova data', 'data_teste', 'data', 'data teste');
   const v200Idx = col('200m', 'teste 200m');
+  const chamIdx = col('chamada');
 
   const validColIndices = [];
   const heads = [];
@@ -730,17 +744,44 @@ function capacitTesteT2(table){
     else if (dNorm.includes('10')) dKey = '10';
 
     const r200 = g(v200Idx);
+    const r200N = norm(r200);
+    const chamN = norm(g(chamIdx));
+
+    let res = '';
+    if (r200N.includes('inapto') || chamN.includes('inapto')) res = 'inapto';
+    else if (r200N.includes('apto') || chamN.includes('apto')) res = 'apto';
+    else if (r200N.includes('desist') || r200N.includes('deslig') || r200N.includes('ausen') || r200N.includes('falta') ||
+             chamN.includes('desist') || chamN.includes('deslig') || chamN.includes('ausen') || chamN.includes('falta')) res = 'desistente';
+    else if (r200.trim()) res = 'testado';
+
     const cells = validColIndices.map(i => g(i));
-    list.push({ cells, dKey, dRaw, r200, nome: g(nomeIdx) });
+    list.push({ cells, dKey, dRaw, r200, res, nome: g(nomeIdx) });
   }
 
-  const d07 = list.filter(x => x.dKey === '07').length;
-  const d10 = list.filter(x => x.dKey === '10').length;
+  const getStats = key => {
+    const sub = list.filter(x => x.dKey === key);
+    const aptos = sub.filter(x => x.res === 'apto').length;
+    const inaptos = sub.filter(x => x.res === 'inapto').length;
+    const desist = sub.filter(x => x.res === 'desistente').length;
+    const testados = aptos + inaptos + desist + sub.filter(x => x.res === 'testado').length;
+    return { total: sub.length, testados, aptos, inaptos, desist };
+  };
+
+  const s07 = getStats('07');
+  const s10 = getStats('10');
 
   return {
     total: list.length,
-    d07,
-    d10,
+    d07: s07.total,
+    d07_testados: s07.testados,
+    d07_aptos: s07.aptos,
+    d07_inaptos: s07.inaptos,
+    d07_desist: s07.desist,
+    d10: s10.total,
+    d10_testados: s10.testados,
+    d10_aptos: s10.aptos,
+    d10_inaptos: s10.inaptos,
+    d10_desist: s10.desist,
     heads: heads.length ? heads : ['Data do Teste', 'Chamada', '200m', 'id_func', 'graduacao', 'nome_completo', 'obm_origem', 'modalidade'],
     list
   };
@@ -1129,7 +1170,7 @@ function renderCap(){
         </div>
         <div class="cap">
           ${cb('t2', 't2_certos', 'ap', t2.total, 'Certos p/ Curso')}
-          ${cb('t2', 't2_t07', 'pv', teste.d07, 'Teste 07/nov (ABM)')}
+          ${cb('t2', 't2_t07', 'pv', `${teste.d07}/${teste.d07_testados || 0}`, 'Teste 07/nov (ABM)')}
           ${cb('t2', 't2_t10', 'pv', teste.d10, 'Teste 10/nov (BBMs)')}
           ${cb('t2', 't2_teste_all', 't', teste.total, 'Total Teste 200m')}
         </div>
@@ -1227,7 +1268,8 @@ function renderCap(){
       if (hn === '200m' || hn.includes('200m')){
         if (!v) return '—';
         const vn = norm(v);
-        return `<span class="tag ${vn === 'apto' ? 't-apto' : vn === 'inapto' ? 't-inapto' : 't-pend'}">${esc(v)}</span>`;
+        const isDesl = vn.includes('desist') || vn.includes('deslig') || vn.includes('ausen') || vn.includes('falta');
+        return `<span class="tag ${vn === 'apto' ? 't-apto' : vn === 'inapto' ? 't-inapto' : isDesl ? 't-desl' : 't-pend'}">${esc(v)}</span>`;
       }
       if (hn === 'modalidade'){
         return `<span class="tag t-pend">${norm(v).includes('novo') ? 'Novo' : esc(v || 'Novo')}</span>`;
@@ -1248,7 +1290,7 @@ function renderSum(){
   const C = {
     t1: (CAP && CAP.t1) ? CAP.t1 : { total: 33, ec: 27, dl: 6, mar: 25, interna: 2, nv: 26, tr: 7 },
     t2: (CAP && CAP.t2) ? CAP.t2 : { total: 54 },
-    teste: (CAP && CAP.teste) ? CAP.teste : { total: 114, d07: 50, d10: 64 }
+    teste: (CAP && CAP.teste) ? CAP.teste : { total: 112, d07: 50, d07_testados: 0, d07_aptos: 0, d07_inaptos: 0, d07_desist: 0, d10: 62 }
   };
   const fallback = {
     recLN: { total: 140, ec: 140, dl: 0, mar: 122, interna: 18 },
@@ -1349,7 +1391,15 @@ function renderSum(){
               <div class="big" style="color:var(--apto);min-width:100px" data-go="cap" data-turma="t2">${C.t2.total}<small>certos para o curso</small></div>
               <div class="stats">
                 ${stat(C.t2.total, 'Certos p/ curso', 'var(--apto)', 'data-go="cap" data-turma="t2" data-c="t2_certos"')}
-                ${stat(C.teste.d07, 'Teste 200m (07/nov)', 'var(--blue)', 'data-go="cap" data-turma="t2" data-c="t2_t07"')}
+                <div class="stat" style="--c:var(--blue);min-width:120px" data-go="cap" data-turma="t2" data-c="t2_t07">
+                  <div class="n" style="font-size:clamp(18px,2vw,28px)">${C.teste.d07}/${C.teste.d07_testados || 0}</div>
+                  <div class="l">Teste 200m (07/nov)</div>
+                  <div class="stat-sub-t2">
+                    <div class="sub-it ap"><span>Apto:</span> <b>${C.teste.d07_aptos || 0}</b></div>
+                    <div class="sub-it in"><span>Inapto:</span> <b>${C.teste.d07_inaptos || 0}</b></div>
+                    <div class="sub-it ds"><span>Desistente:</span> <b>${C.teste.d07_desist || 0}</b></div>
+                  </div>
+                </div>
                 ${stat(C.teste.d10, 'Teste 200m (10/nov)', 'var(--blue)', 'data-go="cap" data-turma="t2" data-c="t2_t10"')}
                 ${stat(C.teste.total, 'Total Teste 200m', 'var(--pend)', 'data-go="cap" data-turma="t2" data-c="t2_teste_all"')}
               </div>
