@@ -230,12 +230,11 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
               <div class="cap-subhead">
                 <div>
                   <strong>Turma 1</strong>
-                  <span class="civ-dates">(19 de outubro a 09 de novembro)</span>
+                  <span class="civ-dates">(19 de outubro a 09 de novembro · 33 inscritos)</span>
                 </div>
                 <span class="pan-badge bm" style="font-size:.7em;padding:1px 6px">Concluído</span>
               </div>
               <div class="mil-content" style="margin-top:6px">
-                <div class="big" style="color:var(--apto);min-width:85px" data-go="cap" data-turma="t1">27<small>aptos · 33 inscritos</small></div>
                 <div class="stats">
                   <div class="stat" style="--c:var(--apto)" data-go="cap" data-turma="t1" data-c="ec"><div class="n">27</div><div class="l">Aptos</div></div>
                   <div class="stat" style="--c:var(--inapto)" data-go="cap" data-turma="t1" data-c="dl"><div class="n">6</div><div class="l">Desligados</div></div>
@@ -1437,12 +1436,11 @@ function renderSum(){
             <div class="cap-subhead">
               <div>
                 <strong>Turma 1</strong>
-                <span class="civ-dates">(19 de outubro a 09 de novembro)</span>
+                <span class="civ-dates">(19 de outubro a 09 de novembro · ${C.t1.total} inscritos)</span>
               </div>
               <span class="pan-badge bm" style="font-size:.7em;padding:1px 6px">Concluído</span>
             </div>
             <div class="mil-content" style="margin-top:6px">
-              <div class="big" style="color:var(--apto);min-width:85px" data-go="cap" data-turma="t1">${C.t1.ec}<small>aptos · ${C.t1.total} inscritos</small></div>
               <div class="stats">
                 ${stat(C.t1.ec, 'Aptos', 'var(--apto)', 'data-go="cap" data-turma="t1" data-c="ec"')}
                 ${stat(C.t1.dl, 'Desligados', 'var(--inapto)', 'data-go="cap" data-turma="t1" data-c="dl"')}
