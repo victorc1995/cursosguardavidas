@@ -137,6 +137,13 @@ body[data-v=seg] .nseg,body[data-v=seg] .charts{display:none!important}body[data
 .cap-subcard .mil-content{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .cap-subcard .big{min-width:95px;font-size:clamp(22px,2.2vw,32px)}
 .cap-subcard .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(75px,1fr));gap:6px;margin:2px 0;flex:1}
+.cap-subcard[data-turma="t1"] .stat{padding:4px 6px;border-radius:6px}
+.cap-subcard[data-turma="t1"] .stat .n{font-size:clamp(16px,1.6vw,22px);line-height:1}
+.cap-subcard[data-turma="t1"] .stat .l{font-size:.72em}
+.cap-subcard[data-turma="t1"] .big{min-width:85px;font-size:clamp(18px,1.8vw,26px)}
+.cap-subcard[data-turma="t1"] .stats{gap:4px;grid-template-columns:repeat(auto-fit,minmax(60px,1fr))}
+.cap-block[data-turma="t1"] .cb{padding:6px 10px}
+.cap-block[data-turma="t1"] .cb .n{font-size:clamp(20px,2.2vw,34px)}
 .stat-sub-t2{display:flex;flex-direction:column;gap:1.5px;margin-top:5px;padding-top:4px;border-top:1px solid rgba(255,255,255,.08);font-size:.74em}
 .stat-sub-t2 .sub-it{display:flex;justify-content:space-between;align-items:center;color:var(--mut);line-height:1.25}
 .stat-sub-t2 .sub-it.ap b{color:var(--apto);font-weight:700}
@@ -225,12 +232,12 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
                   <strong>Turma 1</strong>
                   <span class="civ-dates">(19 de outubro a 09 de novembro)</span>
                 </div>
-                <span class="pan-badge bm" style="font-size:.7em;padding:1px 6px">Em andamento</span>
+                <span class="pan-badge bm" style="font-size:.7em;padding:1px 6px">Concluído</span>
               </div>
               <div class="mil-content" style="margin-top:6px">
-                <div class="big" style="color:var(--apto);min-width:100px" data-go="cap" data-turma="t1">27<small>em curso · 33 inscritos</small></div>
+                <div class="big" style="color:var(--apto);min-width:85px" data-go="cap" data-turma="t1">27<small>aptos · 33 inscritos</small></div>
                 <div class="stats">
-                  <div class="stat" style="--c:var(--apto)" data-go="cap" data-turma="t1" data-c="ec"><div class="n">27</div><div class="l">Em curso</div></div>
+                  <div class="stat" style="--c:var(--apto)" data-go="cap" data-turma="t1" data-c="ec"><div class="n">27</div><div class="l">Aptos</div></div>
                   <div class="stat" style="--c:var(--inapto)" data-go="cap" data-turma="t1" data-c="dl"><div class="n">6</div><div class="l">Desligados</div></div>
                   <div class="stat" style="--c:var(--ink)" data-go="cap" data-turma="t1" data-c="mar"><div class="n">25</div><div class="l">Mar</div></div>
                   <div class="stat" style="--c:var(--ink)" data-go="cap" data-turma="t1" data-c="interna"><div class="n">2</div><div class="l">Interna</div></div>
@@ -439,13 +446,13 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
             <div class="cap-block-head">
               <div>
                 <h3>Turma 1</h3>
-                <span class="civ-dates">19 de outubro a 09 de novembro · Em andamento</span>
+                <span class="civ-dates">19 de outubro a 09 de novembro · Concluído</span>
               </div>
-              <span class="pan-badge bm">Em curso</span>
+              <span class="pan-badge bm">Concluído</span>
             </div>
             <div class="cap">
               <div class="cb t sel" data-c="all" data-turma="t1"><div class="n">33</div><div class="l">Inscritos</div></div>
-              <div class="cb ap" data-c="ec" data-turma="t1"><div class="n">27</div><div class="l">Em curso</div></div>
+              <div class="cb ap" data-c="ec" data-turma="t1"><div class="n">27</div><div class="l">Aptos</div></div>
               <div class="cb in" data-c="dl" data-turma="t1"><div class="n">6</div><div class="l">Desligados</div></div>
               <div class="cb pv" data-c="mar" data-turma="t1"><div class="n">25</div><div class="l">Águas de Mar</div></div>
               <div class="cb pv" data-c="interna" data-turma="t1"><div class="n">2</div><div class="l">Águas Internas</div></div>
@@ -453,7 +460,7 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
               <div class="cb na" data-c="tr" data-turma="t1"><div class="n">7</div><div class="l">Troca</div></div>
             </div>
             <div class="capbars">
-              <div class="row"><span>Em curso</span><div class="tr"><div style="width:81.8%;background:var(--apto)"></div></div><b>27 de 33</b></div>
+              <div class="row"><span>Aptos</span><div class="tr"><div style="width:81.8%;background:var(--apto)"></div></div><b>27 de 33</b></div>
               <div class="row"><span>Desligados</span><div class="tr"><div style="width:18.2%;background:var(--inapto)"></div></div><b>6 de 33</b></div>
               <div class="row"><span>Águas de Mar</span><div class="tr"><div style="width:75.8%;background:var(--blue)"></div></div><b>25 de 33</b></div>
               <div class="row"><span>Águas Internas</span><div class="tr"><div style="width:6.1%;background:var(--blue)"></div></div><b>2 de 33</b></div>
@@ -1166,13 +1173,13 @@ function renderCap(){
         <div class="cap-block-head">
           <div>
             <h3>Turma 1</h3>
-            <span class="civ-dates">19 de outubro a 09 de novembro · Em andamento</span>
+            <span class="civ-dates">19 de outubro a 09 de novembro · Concluído</span>
           </div>
-          <span class="pan-badge bm">Em curso</span>
+          <span class="pan-badge bm">Concluído</span>
         </div>
         <div class="cap">
           ${cb('t1', 'all', 't', t1.total, 'Inscritos')}
-          ${cb('t1', 'ec', 'ap', t1.ec, 'Em curso')}
+          ${cb('t1', 'ec', 'ap', t1.ec, 'Aptos')}
           ${cb('t1', 'dl', 'in', t1.dl, 'Desligados')}
           ${cb('t1', 'mar', 'pv', t1.mar, 'Águas de Mar')}
           ${cb('t1', 'interna', 'pv', t1.interna, 'Águas Internas')}
@@ -1180,7 +1187,7 @@ function renderCap(){
           ${cb('t1', 'tr', 'na', t1.tr, 'Troca')}
         </div>
         <div class="capbars">
-          ${bar('Em curso', t1.ec, t1.total, 'var(--apto)')}
+          ${bar('Aptos', t1.ec, t1.total, 'var(--apto)')}
           ${bar('Desligados', t1.dl, t1.total, 'var(--inapto)')}
           ${bar('Águas de Mar', t1.mar, t1.total, 'var(--blue)')}
           ${bar('Águas Internas', t1.interna, t1.total, 'var(--blue)')}
@@ -1235,7 +1242,7 @@ function renderCap(){
     const fmtCellT1 = (x, v, h) => {
       const hn = norm(h);
       if (hn === 'curso'){
-        return `<span class="tag ${x.k==='ec'?'t-apto':'t-desl'}">${esc(v || (x.k==='ec'?'Em Curso':'Desligado'))}</span>`;
+        return `<span class="tag ${x.k==='ec'?'t-apto':'t-desl'}">${esc(v || (x.k==='ec'?'Apto':'Desligado'))}</span>`;
       }
       if (hn === 'modalidade' && (x.tip === 'nv' || x.tip === 'tr')){
         return `<span class="tag t-pend">${x.tip === 'nv' ? 'Novo' : 'Troca'}</span>`;
@@ -1432,12 +1439,12 @@ function renderSum(){
                 <strong>Turma 1</strong>
                 <span class="civ-dates">(19 de outubro a 09 de novembro)</span>
               </div>
-              <span class="pan-badge bm" style="font-size:.7em;padding:1px 6px">Em andamento</span>
+              <span class="pan-badge bm" style="font-size:.7em;padding:1px 6px">Concluído</span>
             </div>
             <div class="mil-content" style="margin-top:6px">
-              <div class="big" style="color:var(--apto);min-width:100px" data-go="cap" data-turma="t1">${C.t1.ec}<small>em curso · ${C.t1.total} inscritos</small></div>
+              <div class="big" style="color:var(--apto);min-width:85px" data-go="cap" data-turma="t1">${C.t1.ec}<small>aptos · ${C.t1.total} inscritos</small></div>
               <div class="stats">
-                ${stat(C.t1.ec, 'Em curso', 'var(--apto)', 'data-go="cap" data-turma="t1" data-c="ec"')}
+                ${stat(C.t1.ec, 'Aptos', 'var(--apto)', 'data-go="cap" data-turma="t1" data-c="ec"')}
                 ${stat(C.t1.dl, 'Desligados', 'var(--inapto)', 'data-go="cap" data-turma="t1" data-c="dl"')}
                 ${stat(C.t1.mar, 'Mar', 'var(--ink)', 'data-go="cap" data-turma="t1" data-c="mar"')}
                 ${stat(C.t1.interna, 'Interna', 'var(--ink)', 'data-go="cap" data-turma="t1" data-c="interna"')}
