@@ -88,11 +88,11 @@ body[data-v=seg] .nseg,body[data-v=seg] .charts{display:none!important}body[data
 .mil-card{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:10px;padding:9px 12px;transition:transform .15s,border-color .15s,background .15s}
 .mil-card:hover{background:rgba(255,255,255,.06);border-color:var(--blue);transform:translateY(-2px)}
 .mil-card .card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.mil-card h3{font-size:.98em;font-weight:700;color:#fff;letter-spacing:.02em;margin:0}
+.mil-card h3{font-size:.98em;font-weight:700;color:#fff;letter-spacing:.02em;margin:0;display:inline-flex;align-items:baseline;gap:6px;flex-wrap:wrap}
 .mil-card .sub-link{font-size:.78em;color:var(--mut);font-weight:500}
 .mil-content{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 .mil-content .big{min-width:115px;font-size:clamp(30px,3.2vw,50px)}
-.mil-content .stats{flex:1;min-width:220px;margin:0}
+.mil-content .stats{flex:1;min-width:220px;margin:0;width:100%}
 .mil-prev-card{background:rgba(255,255,255,.02);border:1px dashed var(--line);border-radius:10px;padding:7px 12px;display:flex;align-items:center;gap:10px;transition:background .15s,border-color .15s}
 .mil-prev-card:hover{background:rgba(255,255,255,.05);border-color:var(--blue)}
 .prev-badge{font-size:.7em;font-weight:700;padding:2px 7px;border-radius:6px;background:rgba(59,142,232,.15);color:var(--blue);border:1px solid rgba(59,142,232,.3);text-transform:uppercase;letter-spacing:.04em;flex:none}
@@ -205,11 +205,10 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
       <div class="mil-sections">
         <div class="mil-card" data-go="rec" style="cursor:pointer">
           <div class="card-head">
-            <h3>Recertificação ›</h3>
+            <h3>Recertificação › <span class="civ-dates">(01/10 a 30/11 · 538 militares inscritos)</span></h3>
             <span class="sub-link">Ver detalhes</span>
           </div>
           <div class="mil-content">
-            <div class="big" data-go="rec">538<small>militares inscritos</small></div>
             <div class="stats">
               <div class="stat" style="--c:var(--apto)" data-go="rec" data-r="Apto"><div class="n">195</div><div class="l">Aptos</div></div>
               <div class="stat" style="--c:var(--inapto)" data-go="rec" data-r="Inapto"><div class="n">1</div><div class="l">Inaptos</div></div>
@@ -1417,11 +1416,10 @@ function renderSum(){
     <div class="mil-sections">
       <div class="mil-card" data-go="rec" style="cursor:pointer">
         <div class="card-head">
-          <h3>Recertificação ›</h3>
+          <h3>Recertificação › <span class="civ-dates">(01/10 a 30/11 · ${R.t} militares inscritos)</span></h3>
           <span class="sub-link">Ver detalhes</span>
         </div>
         <div class="mil-content">
-          <div class="big" data-go="rec">${R.t}<small>militares inscritos</small></div>
           <div class="stats">
             ${stat(R.a, 'Aptos', 'var(--apto)', 'data-go="rec" data-r="Apto"')}
             ${stat(R.i, 'Inaptos', 'var(--inapto)', 'data-go="rec" data-r="Inapto"')}
