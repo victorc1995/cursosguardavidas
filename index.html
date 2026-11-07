@@ -254,7 +254,6 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
                 <span class="prev-badge" style="font-size:.7em;padding:1px 6px">Previsão</span>
               </div>
               <div class="mil-content" style="margin-top:6px">
-                <div class="big" style="color:var(--apto);min-width:100px" data-go="cap" data-turma="t2">80<small>certos para o curso</small></div>
                 <div class="stats">
                   <div class="stat" style="--c:var(--apto)" data-go="cap" data-turma="t2" data-c="t2_certos"><div class="n">80</div><div class="l">Certos p/ curso</div></div>
                   <div class="stat" style="--c:var(--blue);min-width:120px" data-go="cap" data-turma="t2" data-c="t2_t07">
@@ -553,18 +552,32 @@ function fetchTab(tab){
     document.head.appendChild(s);
   });
 }
+function getT2NovosAptos(){
+  const t2List = (CAP && CAP.t2 && CAP.t2.list) ? CAP.t2.list : [];
+  if (!t2List.length) return 0;
+  const t2Names = new Set(t2List.map(x => norm(x.nome)).filter(Boolean));
+  const testeList = (CAP && CAP.teste && CAP.teste.list) ? CAP.teste.list : [];
+  return testeList.filter(x => x.res === 'apto' && norm(x.nome) && !t2Names.has(norm(x.nome))).length;
+}
+
+function getT2CertosTotal(){
+  if (!CAP || !CAP.t2) return 80;
+  const t2List = (CAP.t2.list && CAP.t2.list.length) ? CAP.t2.list : [];
+  const base = t2List.length || (CAP.t2.baseTotal != null ? CAP.t2.baseTotal : (CAP.t2.total || 80));
+  return base + getT2NovosAptos();
+}
+
 function updateCapAgg(){
   if (CAP_T1) CAP.t1 = CAP_T1;
   if (CAP_T2) CAP.t2 = CAP_T2;
   if (CAP_TESTE) CAP.teste = CAP_TESTE;
   if (CAP.t2){
-    const base = CAP.t2.baseTotal != null ? CAP.t2.baseTotal : (CAP.t2.list && CAP.t2.list.length ? CAP.t2.list.length : (CAP.t2.total || 80));
+    const t2List = (CAP.t2.list && CAP.t2.list.length) ? CAP.t2.list : [];
+    const base = t2List.length || (CAP.t2.baseTotal != null ? CAP.t2.baseTotal : (CAP.t2.total || 80));
     CAP.t2.baseTotal = base;
-    // Aptos de 07/nov já constam na relação principal (aba Capacitação - T2),
-    // portanto somamos apenas novos aptos do teste de 10/nov.
-    const a10 = (CAP.teste && CAP.teste.d10_aptos) || 0;
-    CAP.t2.aptosTeste = a10;
-    CAP.t2.total = base + a10;
+    const novos = getT2NovosAptos();
+    CAP.t2.aptosTeste = novos;
+    CAP.t2.total = base + novos;
   }
 }
 async function load(){
@@ -1147,12 +1160,8 @@ function renderCap(){
   if (!CAP) return;
   const t1 = CAP.t1 || { total: 33, ec: 27, dl: 6, mar: 25, interna: 2, nv: 26, tr: 7, heads: [], list: [] };
   const teste = CAP.teste || { total: 112, total_aptos: 17, d07: 50, d10: 62, heads: [], list: [] };
-  // Os aptos de 07/nov já constam na relação principal da T2 (aba Capacitação - T2),
-  // portanto somamos apenas novos aptos do teste de 10/nov.
-  const aptosTeste = (teste && teste.d10_aptos) || 0;
   const t2 = CAP.t2 || { total: 80, baseTotal: 80, aptosTeste: 0, heads: [], list: [] };
-  const t2Base = t2.baseTotal != null ? t2.baseTotal : (t2.list && t2.list.length ? t2.list.length : 80);
-  const t2CertosTotal = t2Base + aptosTeste;
+  const t2CertosTotal = getT2CertosTotal();
 
   const isT1 = capView === 't1';
   const isT2 = capView.startsWith('t2');
@@ -1263,12 +1272,12 @@ function renderCap(){
     const baseList = t2.list && t2.list.length ? t2.list : [];
     const heads = t2.heads && t2.heads.length ? t2.heads : ['Curso', 'Aquatlhon', 'Plataforma', 'Salv Completo', 'Teorica', 'Nº', '200m', 'id_func', 'graduacao', 'nome_completo', 'obm_origem', 'modalidade'];
 
-    // Apenas novos aptos do teste de 10/nov que eventualmente ainda não constem na lista principal
+    // Novos aptos do teste de 200m que ainda não constem na relação principal (Capacitação - T2)
     const baseNames = new Set(baseList.map(x => norm(x.nome)).filter(Boolean));
-    const aptosDoTeste10 = (teste.list && teste.list.length)
-      ? teste.list.filter(x => x.dKey === '10' && x.res === 'apto' && !baseNames.has(norm(x.nome)))
+    const aptosDoTeste = (teste.list && teste.list.length)
+      ? teste.list.filter(x => x.res === 'apto' && norm(x.nome) && !baseNames.has(norm(x.nome)))
       : [];
-    const mappedAptos = aptosDoTeste10.map(at => {
+    const mappedAptos = aptosDoTeste.map(at => {
       const tHeads = teste.heads || [];
       const getVal = key => {
         const idx = tHeads.findIndex(h => norm(h).includes(key));
@@ -1361,10 +1370,7 @@ function renderSum(){
     t2: (CAP && CAP.t2) ? CAP.t2 : { total: 80, baseTotal: 80, aptosTeste: 0 },
     teste: (CAP && CAP.teste) ? CAP.teste : { total: 112, total_aptos: 17, d07: 50, d07_testados: 50, d07_aptos: 17, d07_inaptos: 28, d07_desist: 5, d10: 62, d10_testados: 1, d10_aptos: 0, d10_inaptos: 0, d10_desist: 1 }
   };
-  // Os aptos de 07/nov já constam na relação de 80 militares da T2; soma apenas eventuais novos aptos de 10/nov
-  const aptosTeste = (C.teste && C.teste.d10_aptos) || 0;
-  const t2Base = (C.t2 && C.t2.baseTotal != null) ? C.t2.baseTotal : (C.t2 && C.t2.list && C.t2.list.length ? C.t2.list.length : 80);
-  const t2CertosTotal = t2Base + aptosTeste;
+  const t2CertosTotal = getT2CertosTotal();
   const fallback = {
     recLN: { total: 140, ec: 140, dl: 0, mar: 122, interna: 18 },
     capLN: { total: 57, ec: 57, dl: 0, mar: 53, interna: 4 },
@@ -1460,7 +1466,6 @@ function renderSum(){
               <span class="prev-badge" style="font-size:.7em;padding:1px 6px">Previsão</span>
             </div>
             <div class="mil-content" style="margin-top:6px">
-              <div class="big" style="color:var(--apto);min-width:100px" data-go="cap" data-turma="t2">${t2CertosTotal}<small>certos para o curso</small></div>
               <div class="stats">
                 ${stat(t2CertosTotal, 'Certos p/ curso', 'var(--apto)', 'data-go="cap" data-turma="t2" data-c="t2_certos"')}
                 <div class="stat" style="--c:var(--blue);min-width:120px" data-go="cap" data-turma="t2" data-c="t2_t07">
