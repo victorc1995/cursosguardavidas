@@ -137,13 +137,13 @@ body[data-v=seg] .nseg,body[data-v=seg] .charts{display:none!important}body[data
 .cap-subcard .mil-content{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .cap-subcard .big{min-width:95px;font-size:clamp(22px,2.2vw,32px)}
 .cap-subcard .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(75px,1fr));gap:6px;margin:2px 0;flex:1}
-.cap-subcard[data-turma="t1"] .stat{padding:4px 6px;border-radius:6px}
-.cap-subcard[data-turma="t1"] .stat .n{font-size:clamp(16px,1.6vw,22px);line-height:1}
-.cap-subcard[data-turma="t1"] .stat .l{font-size:.72em}
-.cap-subcard[data-turma="t1"] .big{min-width:85px;font-size:clamp(18px,1.8vw,26px)}
-.cap-subcard[data-turma="t1"] .stats{gap:4px;grid-template-columns:repeat(auto-fit,minmax(60px,1fr))}
-.cap-block[data-turma="t1"] .cb{padding:6px 10px}
-.cap-block[data-turma="t1"] .cb .n{font-size:clamp(20px,2.2vw,34px)}
+.cap-subcard[data-turma="t1"] .stat, .cap-subcard[data-turma="t2"] .stat{padding:4px 6px;border-radius:6px}
+.cap-subcard[data-turma="t1"] .stat .n, .cap-subcard[data-turma="t2"] .stat .n{font-size:clamp(16px,1.6vw,22px);line-height:1}
+.cap-subcard[data-turma="t1"] .stat .l, .cap-subcard[data-turma="t2"] .stat .l{font-size:.72em}
+.cap-subcard[data-turma="t1"] .big, .cap-subcard[data-turma="t2"] .big{min-width:85px;font-size:clamp(18px,1.8vw,26px)}
+.cap-subcard[data-turma="t1"] .stats, .cap-subcard[data-turma="t2"] .stats{gap:4px;grid-template-columns:repeat(auto-fit,minmax(60px,1fr))}
+.cap-block[data-turma="t1"] .cb, .cap-block[data-turma="t2"] .cb{padding:6px 10px}
+.cap-block[data-turma="t1"] .cb .n, .cap-block[data-turma="t2"] .cb .n{font-size:clamp(20px,2.2vw,34px)}
 .stat-sub-t2{display:flex;flex-direction:column;gap:1.5px;margin-top:5px;padding-top:4px;border-top:1px solid rgba(255,255,255,.08);font-size:.74em}
 .stat-sub-t2 .sub-it{display:flex;justify-content:space-between;align-items:center;color:var(--mut);line-height:1.25}
 .stat-sub-t2 .sub-it.ap b{color:var(--apto);font-weight:700}
@@ -248,31 +248,16 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
               <div class="cap-subhead">
                 <div>
                   <strong>Turma 2</strong>
-                  <span class="civ-dates">(10 a 30 de novembro)</span>
+                  <span class="civ-dates">(10 a 30 de novembro · 80 inscritos)</span>
                 </div>
-                <span class="prev-badge" style="font-size:.7em;padding:1px 6px">Previsão</span>
+                <span class="pan-badge bm" style="font-size:.7em;padding:1px 6px">Em andamento</span>
               </div>
               <div class="mil-content" style="margin-top:6px">
                 <div class="stats">
-                  <div class="stat" style="--c:var(--apto)" data-go="cap" data-turma="t2" data-c="t2_certos"><div class="n">80</div><div class="l">Certos p/ curso</div></div>
-                  <div class="stat" style="--c:var(--blue);min-width:120px" data-go="cap" data-turma="t2" data-c="t2_t07">
-                    <div class="n" style="font-size:clamp(18px,2vw,28px)">50/50</div>
-                    <div class="l">Teste 200m (07/nov)</div>
-                    <div class="stat-sub-t2">
-                      <div class="sub-it ap"><span>Apto:</span> <b>17</b></div>
-                      <div class="sub-it in"><span>Inapto:</span> <b>28</b></div>
-                      <div class="sub-it ds"><span>Desistente:</span> <b>5</b></div>
-                    </div>
-                  </div>
-                  <div class="stat" style="--c:var(--blue);min-width:120px" data-go="cap" data-turma="t2" data-c="t2_t10">
-                    <div class="n" style="font-size:clamp(18px,2vw,28px)">62/1</div>
-                    <div class="l">Teste 200m (10/nov)</div>
-                    <div class="stat-sub-t2">
-                      <div class="sub-it ap"><span>Apto:</span> <b>0</b></div>
-                      <div class="sub-it in"><span>Inapto:</span> <b>0</b></div>
-                      <div class="sub-it ds"><span>Desistente:</span> <b>1</b></div>
-                    </div>
-                  </div>
+                  <div class="stat" style="--c:var(--apto)" data-go="cap" data-turma="t2" data-c="ec"><div class="n">80</div><div class="l">Em curso</div></div>
+                  <div class="stat" style="--c:var(--inapto)" data-go="cap" data-turma="t2" data-c="dl"><div class="n">0</div><div class="l">Desligados</div></div>
+                  <div class="stat" style="--c:var(--ink)" data-go="cap" data-turma="t2" data-c="mar"><div class="n">0</div><div class="l">Mar</div></div>
+                  <div class="stat" style="--c:var(--ink)" data-go="cap" data-turma="t2" data-c="interna"><div class="n">0</div><div class="l">Interna</div></div>
                 </div>
               </div>
             </div>
@@ -468,20 +453,22 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
             <div class="cap-block-head">
               <div>
                 <h3>Turma 2</h3>
-                <span class="civ-dates">10 a 30 de novembro · Previsto</span>
+                <span class="civ-dates">10 a 30 de novembro · Em andamento</span>
               </div>
-              <span class="prev-badge">Previsão</span>
+              <span class="pan-badge bm">Em andamento</span>
             </div>
             <div class="cap">
-              <div class="cb ap" data-c="t2_certos" data-turma="t2"><div class="n">80</div><div class="l">Certos p/ Curso</div></div>
-              <div class="cb pv" data-c="t2_t07" data-turma="t2"><div class="n">50/50</div><div class="l">Teste 07/nov (ABM)</div></div>
-              <div class="cb pv" data-c="t2_t10" data-turma="t2"><div class="n">62/1</div><div class="l">Teste 10/nov (BBMs)</div></div>
-              <div class="cb t" data-c="t2_teste_all" data-turma="t2"><div class="n">112</div><div class="l">Total Teste 200m</div></div>
+              <div class="cb t sel" data-c="all" data-turma="t2"><div class="n">80</div><div class="l">Inscritos</div></div>
+              <div class="cb ap" data-c="ec" data-turma="t2"><div class="n">80</div><div class="l">Em curso</div></div>
+              <div class="cb in" data-c="dl" data-turma="t2"><div class="n">0</div><div class="l">Desligados</div></div>
+              <div class="cb pv" data-c="mar" data-turma="t2"><div class="n">0</div><div class="l">Águas de Mar</div></div>
+              <div class="cb pv" data-c="interna" data-turma="t2"><div class="n">0</div><div class="l">Águas Internas</div></div>
             </div>
             <div class="capbars">
-              <div class="row"><span>Certos p/ Curso</span><div class="tr"><div style="width:100.0%;background:var(--apto)"></div></div><b>80 militares</b></div>
-              <div class="row"><span>Teste 07/nov</span><div class="tr"><div style="width:44.6%;background:var(--blue)"></div></div><b>50 de 112</b></div>
-              <div class="row"><span>Teste 10/nov</span><div class="tr"><div style="width:55.4%;background:var(--blue)"></div></div><b>62 de 112</b></div>
+              <div class="row"><span>Em curso</span><div class="tr"><div style="width:100.0%;background:var(--apto)"></div></div><b>80 de 80</b></div>
+              <div class="row"><span>Desligados</span><div class="tr"><div style="width:0.0%;background:var(--inapto)"></div></div><b>0 de 80</b></div>
+              <div class="row"><span>Águas de Mar</span><div class="tr"><div style="width:0.0%;background:var(--blue)"></div></div><b>0 de 80</b></div>
+              <div class="row"><span>Águas Internas</span><div class="tr"><div style="width:0.0%;background:var(--blue)"></div></div><b>0 de 80</b></div>
             </div>
           </div>
         </div>
@@ -493,7 +480,7 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
       <h2>Militares <span id="capCount" style="text-transform:none;letter-spacing:0">· 33 registros</span></h2>
       <div class="cap-tbl-switch">
         <button type="button" class="cap-tbtn on" data-cap-view="t1" id="btnTblT1">Turma 1 (33)</button>
-        <button type="button" class="cap-tbtn" data-cap-view="t2_certos" id="btnTblT2Certos">Turma 2 - Certos (80)</button>
+        <button type="button" class="cap-tbtn" data-cap-view="t2_certos" id="btnTblT2Certos">Turma 2 (80)</button>
         <button type="button" class="cap-tbtn" data-cap-view="t2_teste" id="btnTblT2Teste">Turma 2 - Teste 200m (112)</button>
       </div>
     </div>
@@ -523,7 +510,7 @@ let REC = [], SEG = [], ALL = [], GVCT = [],
     CAP_T1 = null, CAP_T2 = null, CAP_TESTE = null,
     CAP = {
       t1: { total: 33, ec: 27, dl: 6, mar: 25, interna: 2, nv: 26, tr: 7, heads: [], list: [] },
-      t2: { total: 80, baseTotal: 80, aptosTeste: 0, heads: [], list: [] },
+      t2: { total: 80, ec: 80, dl: 0, mar: 0, interna: 0, nv: 0, tr: 0, baseTotal: 80, aptosTeste: 0, heads: [], list: [] },
       teste: { total: 112, total_aptos: 17, d07: 50, d07_testados: 50, d07_aptos: 17, d07_inaptos: 28, d07_desist: 5, d10: 62, d10_testados: 1, d10_aptos: 0, d10_inaptos: 0, d10_desist: 1, heads: [], list: [] }
     },
     view = 'sum', capSel = 'all', capView = 't1', countdown = CONFIG.refreshSeconds, loading = false;
@@ -576,6 +563,10 @@ function updateCapAgg(){
     const novos = getT2NovosAptos();
     CAP.t2.aptosTeste = novos;
     CAP.t2.total = base + novos;
+    if (CAP.t2.ec == null) CAP.t2.ec = base + novos;
+    if (CAP.t2.dl == null) CAP.t2.dl = 0;
+    if (CAP.t2.mar == null) CAP.t2.mar = 0;
+    if (CAP.t2.interna == null) CAP.t2.interna = 0;
   }
 }
 async function load(){
@@ -719,6 +710,9 @@ function capacitT1(table){
 function capacitT2(table){
   table = fixHeader(table);
   const col = finder(table), labels = table.cols.map(c => norm(c.label));
+  const cursoIdx = col('Curso', 'curso');
+  const modalIdx = col('Modalidade'); // Águas de Mar / Águas Internas / Desligado
+  const tipoModalIdx = col('modalidade'); // capacitacao_novo / capacitacao_troca
   let nomeIdx = col('nome_completo','nome','nome completo');
   if (nomeIdx < 0) nomeIdx = labels.findIndex(l => l.includes('nome'));
 
@@ -735,13 +729,32 @@ function capacitT2(table){
   for (const r of table.rows){
     const c = r.c || [], g = i => i < 0 || i >= c.length || !c[i] ? '' : cellText(c[i]);
     if (nomeIdx >= 0 ? !g(nomeIdx) : !c.some(x => cellText(x))) continue;
+    const kRaw = g(cursoIdx);
+    const kNorm = norm(kRaw);
+    const mRaw = g(modalIdx);
+    const mNorm = norm(mRaw);
+    const tRaw = g(tipoModalIdx);
+    const tNorm = norm(tRaw);
+
+    const isDl = kNorm.includes('deslig') || mNorm.includes('deslig') || kNorm.includes('desist') || mNorm.includes('desist');
+    const k = isDl ? 'dl' : 'ec';
+    const mod = mNorm.includes('mar') ? 'mar' : mNorm.includes('intern') ? 'interna' : (isDl ? 'dl' : '');
+    const tip = tNorm.includes('novo') ? 'nv' : tNorm.includes('troca') ? 'tr' : '';
+
     const cells = validColIndices.map(i => g(i));
-    list.push({ cells, nome: g(nomeIdx) });
+    list.push({ cells, k, mod, tip, nome: g(nomeIdx) });
   }
 
+  const q = (f, v) => list.filter(x => x[f] === v).length;
   return {
     baseTotal: list.length,
     total: list.length,
+    ec: q('k', 'ec'),
+    dl: q('k', 'dl'),
+    mar: q('mod', 'mar'),
+    interna: q('mod', 'interna'),
+    nv: q('tip', 'nv'),
+    tr: q('tip', 'tr'),
     heads: heads.length ? heads : ['Curso', 'Aquatlhon', 'Plataforma', 'Salv Completo', 'Teorica', 'Nº', '200m', 'id_func', 'graduacao', 'nome_completo', 'obm_origem', 'modalidade'],
     list
   };
@@ -923,7 +936,7 @@ function go(v, f = {}){
       if (f.c === 't2_t07'){ capView = 't2_teste'; capSel = '07'; }
       else if (f.c === 't2_t10'){ capView = 't2_teste'; capSel = '10'; }
       else if (f.c === 't2_teste_all'){ capView = 't2_teste'; capSel = 'all'; }
-      else { capView = 't2_certos'; capSel = 'all'; }
+      else { capView = 't2_certos'; capSel = (f.c && !f.c.startsWith('t2')) ? f.c : 'all'; }
     } else {
       capView = 't1';
       capSel = f.c || 'all';
@@ -963,14 +976,16 @@ document.addEventListener('click', e => {
   if (el){
     const c = el.dataset.c, turma = el.dataset.turma;
     if (turma === 't2' || c.startsWith('t2')){
-      if (c === 't2_certos'){
-        capView = 't2_certos'; capSel = 'all';
-      } else if (c === 't2_t07'){
+      if (c === 't2_t07'){
         capView = 't2_teste'; capSel = capSel === '07' ? 'all' : '07';
       } else if (c === 't2_t10'){
         capView = 't2_teste'; capSel = capSel === '10' ? 'all' : '10';
       } else if (c === 't2_teste_all'){
         capView = 't2_teste'; capSel = 'all';
+      } else if (c === 't2_certos' || c === 'all'){
+        capView = 't2_certos'; capSel = 'all';
+      } else {
+        capView = 't2_certos'; capSel = capSel === c ? 'all' : c;
       }
     } else {
       capView = 't1';
@@ -1168,7 +1183,7 @@ function renderCap(){
   const bar = (l, v, tot, c, unit = 'de') => `<div class="row"><span>${l}</span><div class="tr"><div style="width:${w(v, tot)}%;background:${c}"></div></div><b>${v} ${unit} ${tot}</b></div>`;
   const cb = (turma, k, cl, num, l) => {
     const isSel = (turma === 't1' && isT1 && capSel === k) ||
-                  (turma === 't2' && ((k === 't2_certos' && capView === 't2_certos') || (k === 't2_t07' && capView === 't2_teste' && capSel === '07') || (k === 't2_t10' && capView === 't2_teste' && capSel === '10') || (k === 't2_teste_all' && capView === 't2_teste' && capSel === 'all')));
+                  (turma === 't2' && isT2 && capSel === k);
     return `<div class="cb ${cl}${isSel ? ' sel' : ''}" data-turma="${turma}" data-c="${k}"><div class="n">${num}</div><div class="l">${l}</div></div>`;
   };
 
@@ -1205,27 +1220,29 @@ function renderCap(){
         <div class="cap-block-head">
           <div>
             <h3>Turma 2</h3>
-            <span class="civ-dates">10 a 30 de novembro · Previsto</span>
+            <span class="civ-dates">10 a 30 de novembro · Em andamento</span>
           </div>
-          <span class="prev-badge">Previsão</span>
+          <span class="pan-badge bm">Em andamento</span>
         </div>
         <div class="cap">
-          ${cb('t2', 't2_certos', 'ap', t2CertosTotal, 'Certos p/ Curso')}
-          ${cb('t2', 't2_t07', 'pv', `${teste.d07}/${teste.d07_testados || 0}`, 'Teste 07/nov (ABM)')}
-          ${cb('t2', 't2_t10', 'pv', `${teste.d10}/${teste.d10_testados || 0}`, 'Teste 10/nov (BBMs)')}
-          ${cb('t2', 't2_teste_all', 't', teste.total, 'Total Teste 200m')}
+          ${cb('t2', 'all', 't', t2.total || t2CertosTotal, 'Inscritos')}
+          ${cb('t2', 'ec', 'ap', t2.ec != null ? t2.ec : t2CertosTotal, 'Em curso')}
+          ${cb('t2', 'dl', 'in', t2.dl || 0, 'Desligados')}
+          ${cb('t2', 'mar', 'pv', t2.mar || 0, 'Águas de Mar')}
+          ${cb('t2', 'interna', 'pv', t2.interna || 0, 'Águas Internas')}
         </div>
         <div class="capbars">
-          <div class="row"><span>Certos p/ Curso</span><div class="tr"><div style="width:100%;background:var(--apto)"></div></div><b>${t2CertosTotal} militares</b></div>
-          ${bar('Teste 07/nov', teste.d07, teste.total, 'var(--blue)')}
-          ${bar('Teste 10/nov', teste.d10, teste.total, 'var(--blue)')}
+          ${bar('Em curso', t2.ec != null ? t2.ec : t2CertosTotal, t2.total || t2CertosTotal, 'var(--apto)')}
+          ${bar('Desligados', t2.dl || 0, t2.total || t2CertosTotal, 'var(--inapto)')}
+          ${bar('Águas de Mar', t2.mar || 0, t2.total || t2CertosTotal, 'var(--blue)')}
+          ${bar('Águas Internas', t2.interna || 0, t2.total || t2CertosTotal, 'var(--blue)')}
         </div>
       </div>
     </div>`;
 
   const b1 = $('btnTblT1'), b2c = $('btnTblT2Certos'), b2t = $('btnTblT2Teste');
   if (b1){ b1.textContent = `Turma 1 (${t1.total})`; b1.classList.toggle('on', capView === 't1'); }
-  if (b2c){ b2c.textContent = `Turma 2 - Certos (${t2CertosTotal})`; b2c.classList.toggle('on', capView === 't2_certos'); }
+  if (b2c){ b2c.textContent = `Turma 2 (${t2CertosTotal})`; b2c.classList.toggle('on', capView === 't2_certos'); }
   if (b2t){ b2t.textContent = `Turma 2 - Teste 200m (${teste.total})`; b2t.classList.toggle('on', capView === 't2_teste'); }
 
   if (capView === 't1'){
@@ -1292,19 +1309,29 @@ function renderCap(){
         if (hn.includes('modalidade')) return `Apto no Teste (${at.dRaw || '10/nov'})`;
         return '—';
       });
-      return { cells, nome: at.nome, isFromTeste: true, dRaw: at.dRaw || '10/nov' };
+      return { cells, nome: at.nome, k: 'ec', mod: '', tip: 'nv', isFromTeste: true, dRaw: at.dRaw || '10/nov' };
     });
 
     const fullList = [...baseList, ...mappedAptos];
-    $('capCount').textContent = aptosDoTeste10.length
-      ? `· ${fullList.length} militares certos para o curso (${baseList.length} da relação + ${aptosDoTeste10.length} novos aptos no teste 10/nov) · Turma 2`
-      : `· ${fullList.length} militares certos para o curso · Turma 2`;
+    const filtered = fullList.filter(x => {
+      if (capSel === 'all' || !capSel) return true;
+      if (capSel === 'ec') return x.k === 'ec' || !x.k;
+      if (capSel === 'dl') return x.k === 'dl';
+      if (capSel === 'mar') return x.mod === 'mar';
+      if (capSel === 'interna') return x.mod === 'interna';
+      if (capSel === 'nv') return x.tip === 'nv';
+      if (capSel === 'tr') return x.tip === 'tr';
+      return true;
+    });
+
+    $('capCount').textContent = `· ${filtered.length} de ${fullList.length} registros · Turma 2`;
     $('capHead').innerHTML = '<tr>' + heads.map(h => `<th>${esc(h)}</th>`).join('') + '</tr>';
 
     const fmtCellT2 = (x, v, h) => {
       const hn = norm(h);
-      if (hn === 'curso' && x.isFromTeste){
-        return `<span class="tag t-apto">Apto (Teste)</span>`;
+      if (hn === 'curso'){
+        if (x.isFromTeste) return `<span class="tag t-apto">Apto (Teste)</span>`;
+        return `<span class="tag ${x.k==='dl'?'t-desl':'t-apto'}">${esc(v || (x.k==='dl'?'Desligado':'Em Curso'))}</span>`;
       }
       if (hn === '200m' || hn.includes('200m')){
         return `<span class="tag t-apto">${esc(v || 'Apto')}</span>`;
@@ -1312,17 +1339,21 @@ function renderCap(){
       if (hn === 'modalidade' && x.isFromTeste){
         return `<span class="tag t-apto">${esc(v)}</span>`;
       }
+      if (hn === 'modalidade' && (x.tip === 'nv' || x.tip === 'tr')){
+        return `<span class="tag t-pend">${x.tip === 'nv' ? 'Novo' : 'Troca'}</span>`;
+      }
       if (hn === 'modalidade'){
-        return `<span class="tag t-pend">${norm(v).includes('novo') ? 'Novo' : esc(v || 'Novo')}</span>`;
+        if (norm(v).includes('deslig')) return `<span class="tag t-desl">${esc(v)}</span>`;
+        return esc(v || '—');
       }
       return esc(v || '—');
     };
 
-    $('capBody').innerHTML = fullList.length ? fullList.map(x => '<tr>' + x.cells.map((v, i) => {
+    $('capBody').innerHTML = filtered.length ? filtered.map(x => '<tr>' + x.cells.map((v, i) => {
       const h = heads[i] || '';
       const isNome = /nome/.test(norm(h));
       return `<td${isNome ? ' class="name"' : ''}>${fmtCellT2(x, v, h)}</td>`;
-    }).join('') + '</tr>').join('') : '<tr><td colspan="12" class="empty">Carregando militares da Turma 2…</td></tr>';
+    }).join('') + '</tr>').join('') : '<tr><td colspan="12" class="empty">Nenhum militar encontrado para este filtro.</td></tr>';
 
   } else if (capView === 't2_teste'){
     const list = teste.list && teste.list.length ? teste.list : [];
@@ -1458,31 +1489,16 @@ function renderSum(){
             <div class="cap-subhead">
               <div>
                 <strong>Turma 2</strong>
-                <span class="civ-dates">(10 a 30 de novembro)</span>
+                <span class="civ-dates">(10 a 30 de novembro · ${C.t2.total || t2CertosTotal} inscritos)</span>
               </div>
-              <span class="prev-badge" style="font-size:.7em;padding:1px 6px">Previsão</span>
+              <span class="pan-badge bm" style="font-size:.7em;padding:1px 6px">Em andamento</span>
             </div>
             <div class="mil-content" style="margin-top:6px">
               <div class="stats">
-                ${stat(t2CertosTotal, 'Certos p/ curso', 'var(--apto)', 'data-go="cap" data-turma="t2" data-c="t2_certos"')}
-                <div class="stat" style="--c:var(--blue);min-width:120px" data-go="cap" data-turma="t2" data-c="t2_t07">
-                  <div class="n" style="font-size:clamp(18px,2vw,28px)">${C.teste.d07}/${C.teste.d07_testados || 0}</div>
-                  <div class="l">Teste 200m (07/nov)</div>
-                  <div class="stat-sub-t2">
-                    <div class="sub-it ap"><span>Apto:</span> <b>${C.teste.d07_aptos || 0}</b></div>
-                    <div class="sub-it in"><span>Inapto:</span> <b>${C.teste.d07_inaptos || 0}</b></div>
-                    <div class="sub-it ds"><span>Desistente:</span> <b>${C.teste.d07_desist || 0}</b></div>
-                  </div>
-                </div>
-                <div class="stat" style="--c:var(--blue);min-width:120px" data-go="cap" data-turma="t2" data-c="t2_t10">
-                  <div class="n" style="font-size:clamp(18px,2vw,28px)">${C.teste.d10}/${C.teste.d10_testados || 0}</div>
-                  <div class="l">Teste 200m (10/nov)</div>
-                  <div class="stat-sub-t2">
-                    <div class="sub-it ap"><span>Apto:</span> <b>${C.teste.d10_aptos || 0}</b></div>
-                    <div class="sub-it in"><span>Inapto:</span> <b>${C.teste.d10_inaptos || 0}</b></div>
-                    <div class="sub-it ds"><span>Desistente:</span> <b>${C.teste.d10_desist || 0}</b></div>
-                  </div>
-                </div>
+                ${stat(C.t2.ec != null ? C.t2.ec : t2CertosTotal, 'Em curso', 'var(--apto)', 'data-go="cap" data-turma="t2" data-c="ec"')}
+                ${stat(C.t2.dl || 0, 'Desligados', 'var(--inapto)', 'data-go="cap" data-turma="t2" data-c="dl"')}
+                ${stat(C.t2.mar || 0, 'Mar', 'var(--ink)', 'data-go="cap" data-turma="t2" data-c="mar"')}
+                ${stat(C.t2.interna || 0, 'Interna', 'var(--ink)', 'data-go="cap" data-turma="t2" data-c="interna"')}
               </div>
             </div>
           </div>
