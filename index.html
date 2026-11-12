@@ -76,6 +76,13 @@ footer{font-size:.75em;color:var(--mut);text-align:center;padding:2px 0 6px;flex
 .brand{display:flex;align-items:center;gap:14px}.brand img{height:clamp(44px,5vw,78px);width:auto}
 .badge{display:inline-flex;align-items:center;justify-content:center;min-width:clamp(44px,5vw,78px);height:clamp(44px,5vw,78px);border:2px solid rgba(255,255,255,.6);border-radius:50%;font-weight:700;font-size:.8em}
 body[data-v=seg] .nseg,body[data-v=seg] .charts{display:none!important}body[data-v=seg] .filters{grid-template-columns:1fr 2fr}
+.rec-subnav{display:none;gap:8px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.07)}
+body[data-v=rec] .rec-subnav,body[data-v=seg] .rec-subnav{display:flex}
+.rec-subbtn{display:inline-flex;align-items:center;gap:6px;font-size:.82em;padding:5px 12px;border-radius:6px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--mut);cursor:pointer;transition:all .15s}
+.rec-subbtn:hover{background:rgba(255,255,255,.12);color:#fff}
+.rec-subbtn.on{background:var(--navy);border-color:var(--blue);color:#fff;font-weight:700}
+.rec-subbtn small{background:rgba(255,255,255,.15);padding:1px 6px;border-radius:10px;font-size:.85em;color:inherit}
+.rec-subbtn.on small{background:var(--blue);color:#fff}
 .cb.na{background:#5b7089}.cb.pv{background:#2a7fd4}
 .sum{grid-template-columns:1fr minmax(430px,470px);gap:var(--g);flex:1;min-height:0;overflow:auto}
 @media(max-width:1100px){.sum{grid-template-columns:1fr;overflow:visible}}
@@ -182,14 +189,17 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
 </header>
 <nav class="tabs" id="tabs">
   <button class="tab on" data-v="sum" type="button">Resumo geral</button>
-  <button class="tab" data-v="rec" type="button">Recertificação<small id="nRec">538</small></button>
-  <button class="tab" data-v="bm" type="button">Brigada Militar<small id="nBM">128</small></button>
-  <button class="tab" data-v="seg" type="button">Curso de Segurança<small id="nSeg">58</small></button>
-  <button class="tab" data-v="cap" type="button">Capacitação Militar<small id="nCap">33</small></button>
+  <button class="tab" data-v="rec" type="button">Recertificação CBM<small id="nRec">538</small></button>
+  <button class="tab" data-v="cap" type="button">Capacitação CBM<small id="nCap">33</small></button>
+  <button class="tab" data-v="bm" type="button">Recertificação BM<small id="nBM">128</small></button>
   <button class="tab" data-v="gvct" type="button">GVCT<small id="nGVCT">283</small></button>
 </nav>
 <main>
   <div class="msg" id="msg" style="display: none;"></div>
+  <div class="rec-subnav">
+    <button type="button" class="rec-subbtn on" data-rec-view="rec" id="btnSubRec">Recertificação Geral<small id="nSubRec">538</small></button>
+    <button type="button" class="rec-subbtn" data-rec-view="seg" id="btnSubSeg">Curso de Segurança<small id="nSubSeg">58</small></button>
+  </div>
   <div class="filters vd">
     <select id="fTurma" class="nseg"><option value="">Todas as turmas</option><option value="1ª - 30 de setembro a 02 de outubro">1ª - 30 de setembro a 02 de outubro</option><option value="2ª - 06 outubro a 10 de outubro · Sem OBS">2ª - 06 outubro a 10 de outubro · Sem OBS</option><option value="3ª - 14 outubro a 16 de outubro">3ª - 14 outubro a 16 de outubro</option><option value="4ª- 21 de outubro a 23 de outubro">4ª- 21 de outubro a 23 de outubro</option><option value="5ª - 28 de outubro a 30 de outubro">5ª - 28 de outubro a 30 de outubro</option><option value="6ª - 12 de novembro a 15 de novembro">6ª - 12 de novembro a 15 de novembro</option><option value="7ª - 19 de novembro a 22 de novembro">7ª - 19 de novembro a 22 de novembro</option><option value="8ª - 07 de novembro (Alunos CBFBM)">8ª - 07 de novembro (Alunos CBFBM)</option><option value="8ª - 26 de novembro a 29 de novembro">8ª - 26 de novembro a 29 de novembro</option></select>
     <select id="fModal" class="nseg"><option value="">Todas as modalidades</option><option value="Recertificação Águas Internas">Recertificação Águas Internas</option><option value="Recertificação Mar">Recertificação Mar</option></select>
@@ -206,7 +216,7 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
       <div class="mil-sections">
         <div class="mil-card" data-go="rec" style="cursor:pointer">
           <div class="card-head">
-            <h3>Recertificação › <span class="civ-dates">(01/10 a 30/11 · 538 militares inscritos)</span></h3>
+            <h3>Recertificação CBM › <span class="civ-dates">(01/10 a 30/11 · 538 militares inscritos)</span></h3>
             <span class="sub-link">Ver detalhes</span>
           </div>
           <div class="mil-content">
@@ -216,12 +226,16 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
               <div class="stat" style="--c:var(--desl)" data-go="rec" data-r="Desligado"><div class="n">16</div><div class="l">Desligados / Desistências</div></div>
               <div class="stat" style="--c:var(--pend)" data-go="rec" data-r="Sem resultado"><div class="n">326</div><div class="l">Aguardando resultado</div></div>
             </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:6px;border-top:1px solid rgba(255,255,255,.06);font-size:.8em;color:var(--mut)" data-go="seg">
+              <span>Curso de Segurança: <b style="color:var(--blue)">58</b> militares (56 ativos · 2 desligados)</span>
+              <span class="sub-link" style="color:var(--blue)">Ver curso ›</span>
+            </div>
           </div>
         </div>
 
         <div class="mil-card" style="cursor:pointer">
           <div class="card-head">
-            <h3 data-go="cap">Capacitação Militar ›</h3>
+            <h3 data-go="cap">Capacitação CBM ›</h3>
             <span class="sub-link" data-go="cap">Ver detalhes</span>
           </div>
           <div class="cap-subcards">
@@ -265,36 +279,18 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
           </div>
         </div>
 
-        <div class="bm-card" data-go="bm" style="cursor:pointer">
+        <div class="mil-card" data-go="bm" style="cursor:pointer">
           <div class="card-head">
-            <h3 data-go="bm">Recertificação GV Brigada Militar › <span class="civ-dates">(12/11 a 29/11 · 128 militares inscritos)</span></h3>
+            <h3 data-go="bm">Recertificação BM › <span class="civ-dates">(12/11 a 29/11 · 128 militares inscritos)</span></h3>
             <span class="sub-link" data-go="bm">Ver detalhes</span>
           </div>
-          <div class="bm-subtitle">Turmas e Efetivo (BMRS):</div>
-          <div class="bm-grid">
-            <div class="bm-item" data-go="bm" data-t="1ª - 12 a 15 de novembro">
-              <span class="bm-turma">T1</span>
-              <span class="bm-date">12 a 15 de novembro</span>
-              <b class="bm-vagas">46 militares</b>
-              <span class="pan-badge bm" style="font-size:.68em;padding:1px 5px;margin-top:2px">Em andamento</span>
+          <div class="mil-content">
+            <div class="stats">
+              <div class="stat" style="--c:var(--apto)" data-go="bm" data-r="Apto"><div class="n">0</div><div class="l">Aptos</div></div>
+              <div class="stat" style="--c:var(--inapto)" data-go="bm" data-r="Inapto"><div class="n">0</div><div class="l">Inaptos</div></div>
+              <div class="stat" style="--c:var(--desl)" data-go="bm" data-r="Desligado"><div class="n">0</div><div class="l">Desligados / Desistências</div></div>
+              <div class="stat" style="--c:var(--pend)" data-go="bm" data-r="Sem resultado"><div class="n">128</div><div class="l">Aguardando resultado</div></div>
             </div>
-            <div class="bm-item" data-go="bm" data-t="2ª - 19 a 22 de novembro">
-              <span class="bm-turma">T2</span>
-              <span class="bm-date">19 a 22 de novembro</span>
-              <b class="bm-vagas">47 militares</b>
-              <span class="pan-badge bm" style="font-size:.68em;padding:1px 5px;margin-top:2px">Previsão</span>
-            </div>
-            <div class="bm-item" data-go="bm" data-t="3ª - 26 a 29 de novembro">
-              <span class="bm-turma">T3</span>
-              <span class="bm-date">26 a 29 de novembro</span>
-              <b class="bm-vagas">35 militares</b>
-              <span class="pan-badge bm" style="font-size:.68em;padding:1px 5px;margin-top:2px">Previsão</span>
-            </div>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:6px;border-top:1px solid rgba(255,255,255,.06);font-size:.8em;color:var(--mut)">
-            <span>Águas de Mar: <b style="color:var(--ink)">121</b></span>
-            <span>Águas Internas: <b style="color:var(--ink)">6</b></span>
-            <span>Total Inscritos: <b style="color:var(--blue)">128</b></span>
           </div>
         </div>
       </div>
@@ -1010,7 +1006,7 @@ function ingestBM(table){
 }
 
 /* ---------- visões independentes: cada aba da planilha é uma situação separada ---------- */
-const NOMES = { rec: 'Recertificação', bm: 'Brigada Militar', seg: 'Curso de Segurança', cap: 'Capacitação Militar', gvct: 'Guarda-Vidas Civil Temporário' };
+const NOMES = { rec: 'Recertificação CBM', seg: 'Curso de Segurança', cap: 'Capacitação CBM', bm: 'Recertificação BM', gvct: 'Guarda-Vidas Civil Temporário' };
 function pick(){
   if (view === 'seg') ALL = SEG;
   else if (view === 'gvct') ALL = GVCT;
@@ -1019,7 +1015,10 @@ function pick(){
 }
 function go(v, f = {}){
   view = v; document.body.dataset.v = v;
-  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.v === v));
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.v === v || (v === 'seg' && t.dataset.v === 'rec')));
+  const bSubRec = $('btnSubRec'), bSubSeg = $('btnSubSeg');
+  if (bSubRec) bSubRec.classList.toggle('on', v === 'rec');
+  if (bSubSeg) bSubSeg.classList.toggle('on', v === 'seg');
   ['fTurma','fModal','fCrbm','fRes','fBusca'].forEach(id => $(id).value = '');
   pick(); fillSelects();
   if (f.t) $('fTurma').value = f.t;
@@ -1044,6 +1043,11 @@ function go(v, f = {}){
 document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => go(b.dataset.v)));
 document.addEventListener('click', e => {
   const t = e.target.closest ? e.target : e.target.parentElement;
+  const recSubBtn = t.closest('[data-rec-view]');
+  if (recSubBtn){
+    go(recSubBtn.dataset.recView);
+    return;
+  }
   const tbtn = t.closest('.cap-tbtn[data-cap-view]');
   if (tbtn){
     capView = tbtn.dataset.capView;
@@ -1165,7 +1169,9 @@ function render(){
   $('nSeg').textContent = SEG.length ? SEG.length : '';
   $('nCap').textContent = CAP ? CAP.total : '';
   if ($('nGVCT')) $('nGVCT').textContent = GVCT.length ? GVCT.length : '';
-  $('subtitle').textContent = isGvct ? 'Guarda-Vidas Civil Temporário · Processo Seletivo' : isSeg ? 'Curso de Segurança' : (view === 'cap' ? 'Capacitação Militar' : isBm ? 'Recertificação Guarda-Vidas · Brigada Militar' : '');
+  $('subtitle').textContent = isGvct ? 'Guarda-Vidas Civil Temporário · Processo Seletivo' : isSeg ? 'Recertificação CBM · Curso de Segurança' : (view === 'rec' ? 'Recertificação Guarda-Vidas · CBMRS' : (view === 'cap' ? 'Capacitação Guarda-Vidas · CBMRS' : isBm ? 'Recertificação Guarda-Vidas · Brigada Militar' : ''));
+  if ($('nSubRec')) $('nSubRec').textContent = REC.length ? REC.length : '538';
+  if ($('nSubSeg')) $('nSubSeg').textContent = SEG.length ? SEG.length : '58';
 
   const fr = $('fRes').value, fm = $('fModal').value, ft = $('fTurma').value, fc = $('fCrbm').value;
   const kpi = (num,label,color,sub='',attr='',sel=false) => `<div class="kpi${sel?' sel':''}" ${attr} style="border-top-color:${color}"><div class="n">${num}</div><div class="l">${label}</div>${sub?`<div class="s">${sub}</div>`:''}</div>`;
@@ -1572,20 +1578,7 @@ function renderSum(){
     total: 283
   };
   const G = GVCT.length ? tallyGvct(GVCT) : fallback;
-  const fallbackBM = {
-    total: 128,
-    t1: 46,
-    t1Pres: 46,
-    t2: 47,
-    t3: 35,
-    mar: 122,
-    interna: 6,
-    aptos: 0,
-    inaptos: 0,
-    desl: 0,
-    pend: 128
-  };
-  const B = BM.length ? tallyBM(BM) : fallbackBM;
+  const B = BM.length ? tally(BM) : { t: 128, a: 0, i: 0, d: 0, p: 128 };
   const stat = (n,l,c,attrs) => `<div class="stat" style="--c:${c}" ${attrs}><div class="n">${n}</div><div class="l">${l}</div></div>`;
   const civBox = (s, isConcluido = false) => `
     <div class="civ-list">
@@ -1624,7 +1617,7 @@ function renderSum(){
     <div class="mil-sections">
       <div class="mil-card" data-go="rec" style="cursor:pointer">
         <div class="card-head">
-          <h3>Recertificação › <span class="civ-dates">(01/10 a 30/11 · ${R.t} militares inscritos)</span></h3>
+          <h3>Recertificação CBM › <span class="civ-dates">(01/10 a 30/11 · ${R.t} militares inscritos)</span></h3>
           <span class="sub-link">Ver detalhes</span>
         </div>
         <div class="mil-content">
@@ -1634,12 +1627,16 @@ function renderSum(){
             ${stat(R.d, 'Desligados / Desistências', 'var(--desl)', 'data-go="rec" data-r="Desligado"')}
             ${stat(R.p, 'Aguardando resultado', 'var(--pend)', 'data-go="rec" data-r="Sem resultado"')}
           </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:6px;border-top:1px solid rgba(255,255,255,.06);font-size:.8em;color:var(--mut)" data-go="seg">
+            <span>Curso de Segurança: <b style="color:var(--blue)">${SEG.length || 58}</b> militares (${(SEG.filter(r=>r.resultado==='Ativo').length) || 56} ativos · ${(SEG.filter(r=>r.resultado==='Desligado').length) || 2} desligados)</span>
+            <span class="sub-link" style="color:var(--blue)">Ver curso ›</span>
+          </div>
         </div>
       </div>
 
       <div class="mil-card" style="cursor:pointer">
         <div class="card-head">
-          <h3 data-go="cap" data-turma="t1">Capacitação Militar ›</h3>
+          <h3 data-go="cap" data-turma="t1">Capacitação CBM ›</h3>
           <span class="sub-link" data-go="cap" data-turma="t1">Ver detalhes</span>
         </div>
         <div class="cap-subcards">
@@ -1683,36 +1680,18 @@ function renderSum(){
         </div>
       </div>
 
-      <div class="bm-card" data-go="bm" style="cursor:pointer">
+      <div class="mil-card" data-go="bm" style="cursor:pointer">
         <div class="card-head">
-          <h3 data-go="bm">Recertificação GV Brigada Militar › <span class="civ-dates">(12/11 a 29/11 · ${B.total} militares inscritos)</span></h3>
+          <h3 data-go="bm">Recertificação BM › <span class="civ-dates">(12/11 a 29/11 · ${B.t} militares inscritos)</span></h3>
           <span class="sub-link" data-go="bm">Ver detalhes</span>
         </div>
-        <div class="bm-subtitle">Turmas e Efetivo (BMRS):</div>
-        <div class="bm-grid">
-          <div class="bm-item" data-go="bm" data-t="1ª - 12 a 15 de novembro">
-            <span class="bm-turma">T1</span>
-            <span class="bm-date">12 a 15 de novembro</span>
-            <b class="bm-vagas">${B.t1} militares</b>
-            <span class="pan-badge bm" style="font-size:.68em;padding:1px 5px;margin-top:2px">Em andamento</span>
+        <div class="mil-content">
+          <div class="stats">
+            ${stat(B.a, 'Aptos', 'var(--apto)', 'data-go="bm" data-r="Apto"')}
+            ${stat(B.i, 'Inaptos', 'var(--inapto)', 'data-go="bm" data-r="Inapto"')}
+            ${stat(B.d, 'Desligados / Desistências', 'var(--desl)', 'data-go="bm" data-r="Desligado"')}
+            ${stat(B.p, 'Aguardando resultado', 'var(--pend)', 'data-go="bm" data-r="Sem resultado"')}
           </div>
-          <div class="bm-item" data-go="bm" data-t="2ª - 19 a 22 de novembro">
-            <span class="bm-turma">T2</span>
-            <span class="bm-date">19 a 22 de novembro</span>
-            <b class="bm-vagas">${B.t2} militares</b>
-            <span class="pan-badge bm" style="font-size:.68em;padding:1px 5px;margin-top:2px">Previsão</span>
-          </div>
-          <div class="bm-item" data-go="bm" data-t="3ª - 26 a 29 de novembro">
-            <span class="bm-turma">T3</span>
-            <span class="bm-date">26 a 29 de novembro</span>
-            <b class="bm-vagas">${B.t3} militares</b>
-            <span class="pan-badge bm" style="font-size:.68em;padding:1px 5px;margin-top:2px">Previsão</span>
-          </div>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:6px;border-top:1px solid rgba(255,255,255,.06);font-size:.8em;color:var(--mut)">
-          <span>Águas de Mar: <b style="color:var(--ink)">${B.mar}</b></span>
-          <span>Águas Internas: <b style="color:var(--ink)">${B.interna}</b></span>
-          <span>Total Inscritos: <b style="color:var(--blue)">${B.total}</b></span>
         </div>
       </div>
     </div>
