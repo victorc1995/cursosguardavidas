@@ -183,6 +183,7 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
 <nav class="tabs" id="tabs">
   <button class="tab on" data-v="sum" type="button">Resumo geral</button>
   <button class="tab" data-v="rec" type="button">Recertificação<small id="nRec">538</small></button>
+  <button class="tab" data-v="bm" type="button">Brigada Militar<small id="nBM">128</small></button>
   <button class="tab" data-v="seg" type="button">Curso de Segurança<small id="nSeg">58</small></button>
   <button class="tab" data-v="cap" type="button">Capacitação Militar<small id="nCap">33</small></button>
   <button class="tab" data-v="gvct" type="button">GVCT<small id="nGVCT">283</small></button>
@@ -264,28 +265,36 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
           </div>
         </div>
 
-        <div class="bm-card">
+        <div class="bm-card" data-go="bm" style="cursor:pointer">
           <div class="card-head">
-            <h3>Recertificação GV Brigada Militar</h3>
-            <span class="pan-badge bm">BMRS</span>
+            <h3 data-go="bm">Recertificação GV Brigada Militar › <span class="civ-dates">(12/11 a 29/11 · 128 militares inscritos)</span></h3>
+            <span class="sub-link" data-go="bm">Ver detalhes</span>
           </div>
-          <div class="bm-subtitle">Previsão de Turmas:</div>
+          <div class="bm-subtitle">Turmas e Efetivo (BMRS):</div>
           <div class="bm-grid">
-            <div class="bm-item">
+            <div class="bm-item" data-go="bm" data-t="1ª - 12 a 15 de novembro">
               <span class="bm-turma">T1</span>
               <span class="bm-date">12 a 15 de novembro</span>
-              <b class="bm-vagas">48 militares</b>
+              <b class="bm-vagas">46 militares</b>
+              <span class="pan-badge bm" style="font-size:.68em;padding:1px 5px;margin-top:2px">Em andamento</span>
             </div>
-            <div class="bm-item">
+            <div class="bm-item" data-go="bm" data-t="2ª - 19 a 22 de novembro">
               <span class="bm-turma">T2</span>
               <span class="bm-date">19 a 22 de novembro</span>
-              <b class="bm-vagas">46 militares</b>
+              <b class="bm-vagas">47 militares</b>
+              <span class="pan-badge bm" style="font-size:.68em;padding:1px 5px;margin-top:2px">Previsão</span>
             </div>
-            <div class="bm-item">
+            <div class="bm-item" data-go="bm" data-t="3ª - 26 a 29 de novembro">
               <span class="bm-turma">T3</span>
               <span class="bm-date">26 a 29 de novembro</span>
-              <b class="bm-vagas">33 militares</b>
+              <b class="bm-vagas">35 militares</b>
+              <span class="pan-badge bm" style="font-size:.68em;padding:1px 5px;margin-top:2px">Previsão</span>
             </div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:6px;border-top:1px solid rgba(255,255,255,.06);font-size:.8em;color:var(--mut)">
+            <span>Águas de Mar: <b style="color:var(--ink)">121</b></span>
+            <span>Águas Internas: <b style="color:var(--ink)">6</b></span>
+            <span>Total Inscritos: <b style="color:var(--blue)">128</b></span>
           </div>
         </div>
       </div>
@@ -498,6 +507,7 @@ const CONFIG = {
   refreshSeconds: 30,
   tabs: {
     rec: { gid: '0' },                        // aba "Recertificacao CBM"
+    bm: { sheet: 'Brigada Militar' },         // aba "Brigada Militar"
     seg: { gid: '889021045' },                // aba "Curso Seguranca"
     cap: { gid: '204610528' },                // aba "Capacitação - T1"
     capT2: { gid: '1582293698' },            // aba "Capacitação - T2"
@@ -506,7 +516,8 @@ const CONFIG = {
   }
 };
 /* ========================= */
-let REC = [], SEG = [], ALL = [], GVCT = [],
+const FALLBACK_BM = [{"nome": "EDERSON LUIS PIRES TRINDADE", "grad": "1º Sgt PM", "id": "2912180", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "1º BPChq BM/Porto Alegre - Porto Alegre", "crbm": "CPChq", "resultado": "Sem resultado", "obs": ""}, {"nome": "RICARDO MARQUES DOS SANTOS", "grad": "1º Sgt PM", "id": "3138976", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "1º BPChq BM/Porto Alegre - Porto Alegre", "crbm": "CPChq", "resultado": "Sem resultado", "obs": ""}, {"nome": "MEDRICK DE OLIVEIRA RODRIGUES", "grad": "1º Sgt PM", "id": "3142795", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "1º BPChq BM/Porto Alegre - Porto Alegre", "crbm": "CPChq", "resultado": "Sem resultado", "obs": ""}, {"nome": "FABRICIO DOS SANTOS MADEIRA", "grad": "1º Sgt PM", "id": "2986744", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "4º RPMon/Santana do livramento - Santana do Livramento", "crbm": "CPChq", "resultado": "Sem resultado", "obs": ""}, {"nome": "BRUNO DE OLIVEIRA NASCIMENTO", "grad": "1º Sgt PM", "id": "3705498", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "2º RPMon/Santana do Livramento - Santana do Livramento", "crbm": "CRPM-FO", "resultado": "Sem resultado", "obs": ""}, {"nome": "JOSUE DE OLIVEIRA PADILHA", "grad": "1º Sgt PM", "id": "2917076", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "23º BPM/Venâncio Aires - Venâncio Aires", "crbm": "CRPM-VRP", "resultado": "Sem resultado", "obs": ""}, {"nome": "ANTONIO CARLOS MONTENEGRO CORREA", "grad": "2º Sgt PM", "id": "2886618", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "1º BPAmb BM/Sapucaia do Sul - Sapucaia do Sul", "crbm": "CPAmb BM", "resultado": "Sem resultado", "obs": ""}, {"nome": "ANDREI FERNANDES DE LIMA", "grad": "2º Sgt PM", "id": "3700909", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "21º BPM - Porto Alegre", "crbm": "CPC", "resultado": "Sem resultado", "obs": ""}, {"nome": "ALEXANDRE CASAGRANDE DENARDIN", "grad": "2º Sgt PM", "id": "2414635", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "1º BPChq BM/Porto Alegre - Porto Alegre", "crbm": "CPChq", "resultado": "Sem resultado", "obs": ""}, {"nome": "JONATAS LEVANDOSKI DAVILA", "grad": "2º Sgt PM", "id": "3720306", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "1º BPChq BM/Porto Alegre - Porto Alegre", "crbm": "CPChq", "resultado": "Sem resultado", "obs": ""}, {"nome": "TIBERIO GOMES PESSOA", "grad": "2º Sgt PM", "id": "2870991", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "35º BPM/Caçapava do Sul - Caçapava do Sul", "crbm": "CRPM-C", "resultado": "Sem resultado", "obs": ""}, {"nome": "JOSE ALEXANDRE GRANADO OLIVEIRA", "grad": "2º Sgt PM", "id": "2693194", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "35º BPM/Cachoeira do Sul - Cachoeira do Sul", "crbm": "CRPM-C", "resultado": "Sem resultado", "obs": ""}, {"nome": "JERONIMO ZAMBARDA DE LIMA", "grad": "2º Sgt PM", "id": "3707580", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "35º BPM/Cachoeira do Sul - Cachoeira do Sul", "crbm": "CRPM-C", "resultado": "Sem resultado", "obs": ""}, {"nome": "CLAITON FONTOURA SIQUEIRA", "grad": "2º Sgt PM", "id": "3151395", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "31º BPM/Eldorado do Sul - Eldorado do Sul", "crbm": "CRPM-CS", "resultado": "Sem resultado", "obs": ""}, {"nome": "GABRIEL OLIVEIRA DE SOUZA", "grad": "2º Sgt PM", "id": "3719170", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "26º BPM/Cachoeirinha - Cachoeirinha", "crbm": "CRPM-DJ", "resultado": "Sem resultado", "obs": ""}, {"nome": "MARCIO RODRIGO DAPONTE", "grad": "2º Sgt PM", "id": "3167038", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "CRPM-DJ - Alvorada", "crbm": "CRPM-DJ", "resultado": "Sem resultado", "obs": ""}, {"nome": "WAGNER MORA MACHADO", "grad": "2º Sgt PM", "id": "3717577", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "2º RPMon/Santana do Livramento - Santana do Livramento", "crbm": "CRPM-FO", "resultado": "Sem resultado", "obs": ""}, {"nome": "ANDRE CARLOS FLESCH", "grad": "2º Sgt PM", "id": "2427486", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "2ª Cia Ind PM/Taquara - Taquara", "crbm": "CRPM-Hort", "resultado": "Sem resultado", "obs": ""}, {"nome": "RAMON TEIXEIRA", "grad": "2º Sgt PM", "id": "3706249", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "5ª Cia Ind PM/Feliz - Feliz", "crbm": "CRPM-VC", "resultado": "Sem resultado", "obs": ""}, {"nome": "ALESSANDRO FREITAS DA SILVA", "grad": "2º Sgt PM", "id": "2381222", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "23º BPM/Candelária - Candelária", "crbm": "CRPM-VRP", "resultado": "Sem resultado", "obs": ""}, {"nome": "CASSIO VIERO RAVALHA", "grad": "2º Sgt PM", "id": "3548600", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "23º BPM/Santa Cruz do Sul - Santa Cruz do Sul", "crbm": "CRPM-VRP", "resultado": "Sem resultado", "obs": ""}, {"nome": "RODRIGO CARNELOSSO", "grad": "2º Sgt PM", "id": "2682524", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "23º BPM/Venâncio Aires - Venâncio Aires", "crbm": "CRPM-VRP", "resultado": "Sem resultado", "obs": ""}, {"nome": "RAFAEL DA SILVA PLATES", "grad": "2º Sgt PM", "id": "3154831", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "32º BPM/Sapiranga - Sapiranga", "crbm": "CRPM-VRS", "resultado": "Sem resultado", "obs": ""}, {"nome": "LUIS CARLOS MARTINS LISCANO", "grad": "2º Sgt PM", "id": "2692864", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "3º BPM/Novo Hamburgo - Novo Hamburgo", "crbm": "CRPM-VRS", "resultado": "Sem resultado", "obs": ""}, {"nome": "ROSSANO MACHADO DE SOUZA", "grad": "2º Sgt PM", "id": "3147711", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "25º BPM/São Leopoldo - São Leopoldo", "crbm": "CRPM-VRS", "resultado": "Sem resultado", "obs": ""}, {"nome": "KAILO FERNANDO MANICA", "grad": "2º Sgt PM", "id": "3166406", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "25º BPM/Portão - Portão", "crbm": "CRPM-VRS", "resultado": "Sem resultado", "obs": ""}, {"nome": "FABIANO ALVES DA SILVA", "grad": "Sd PM", "id": "2821214", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "19º BPM - Porto Alegre", "crbm": "CPC", "resultado": "Sem resultado", "obs": ""}, {"nome": "LUCAS PAES BOHRER", "grad": "Sd PM", "id": "3136850", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "1º BPChq BM/Porto Alegre - Porto Alegre", "crbm": "CPChq", "resultado": "Sem resultado", "obs": ""}, {"nome": "WAGNER JORGE VIEIRA GOULART", "grad": "Sd PM", "id": "3161463", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "1º BPChq BM/Porto Alegre - Porto Alegre", "crbm": "CPChq", "resultado": "Sem resultado", "obs": ""}, {"nome": "DANIEL TOPOR TIMM", "grad": "Sd PM", "id": "2970090", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "15º BPM/Canoas - Canoas", "crbm": "CPM", "resultado": "Sem resultado", "obs": ""}, {"nome": "ANDREO PRUSSIANO CORREA", "grad": "Sd PM", "id": "3715647", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "34º BPM/Esteio - Esteio", "crbm": "CPM", "resultado": "Sem resultado", "obs": ""}, {"nome": "EMERSON FABIANO PIRES SCHWERTNER", "grad": "Sd PM", "id": "2784874", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "15º BPM/Canoas - Canoas", "crbm": "CPM", "resultado": "Sem resultado", "obs": ""}, {"nome": "CRISTIAN DOS SANTOS CARVALHO", "grad": "Sd PM", "id": "3137031", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "35º BPM/Cachoeira do Sul - Cachoeira do Sul", "crbm": "CRPM-C", "resultado": "Sem resultado", "obs": ""}, {"nome": "RODRIGO MIGUEL PAVAN", "grad": "Sd PM", "id": "3709272", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "17º BPM/Gravataí - Gravataí", "crbm": "CRPM-DJ", "resultado": "Sem resultado", "obs": ""}, {"nome": "SANDRO SCHMIDT", "grad": "Sd PM", "id": "3719065", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "17º BPM/Gravataí - Gravataí", "crbm": "CRPM-DJ", "resultado": "Sem resultado", "obs": ""}, {"nome": "VINICIOS SILVA DE VARGAS", "grad": "Sd PM", "id": "3710530", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "26º BPM/Cachoeirinha - Cachoeirinha", "crbm": "CRPM-DJ", "resultado": "Sem resultado", "obs": ""}, {"nome": "DENIS FERNANDES RAMOS", "grad": "Sd PM", "id": "2912171", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "2º RPMon/Rosário do Sul - Rosário do Sul", "crbm": "CRPM-FO", "resultado": "Sem resultado", "obs": ""}, {"nome": "EDERSON GONCALVES DA SILVA", "grad": "Sd PM", "id": "3136108", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "2º RPMon/Rosário do Sul - Rosário do Sul", "crbm": "CRPM-FO", "resultado": "Sem resultado", "obs": ""}, {"nome": "LUIZ INACIO GONCALVES MENDES", "grad": "Sd PM", "id": "2957175", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "2º RPMon/Santana do Livramento - Santana do Livramento", "crbm": "CRPM-FO", "resultado": "Sem resultado", "obs": ""}, {"nome": "ANDERSON DORNELES PEDROSO", "grad": "Sd PM", "id": "3085252", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "5º BPM/Montenegro - Montenegro", "crbm": "CRPM-VC", "resultado": "Sem resultado", "obs": ""}, {"nome": "MAIKEL FRANCISCO SILVEIRA PEREIRA", "grad": "Sd PM", "id": "3146359", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "23º BPM/Candelária - Candelária", "crbm": "CRPM-VRP", "resultado": "Sem resultado", "obs": ""}, {"nome": "JOSUE COSTA DA SILVA", "grad": "Sd PM", "id": "2917084", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "23º BPM/Santa Cruz do Sul - Santa Cruz do Sul", "crbm": "CRPM-VRP", "resultado": "Sem resultado", "obs": ""}, {"nome": "NICOLAS LUCAS GARCIA", "grad": "Sd PM", "id": "2925729", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "25º BPM/São Leopoldo - São Leopoldo", "crbm": "CRPM-VRS", "resultado": "Sem resultado", "obs": ""}, {"nome": "LUCAS TADEU KLAFKE", "grad": "Sd PM", "id": "3148122", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "25º BPM/São Leopoldo - São Leopoldo", "crbm": "CRPM-VRS", "resultado": "Sem resultado", "obs": ""}, {"nome": "JEFFERSON AVILA SANGER", "grad": "Sd PM", "id": "2972123", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "25º BPM/Capela de Santana - Capela de Santana", "crbm": "CRPM-VRS", "resultado": "Sem resultado", "obs": ""}, {"nome": "LEANDRO BARROS DE CANDIO", "grad": "Sd PM", "id": "3146960", "turma": "1ª - 12 a 15 de novembro", "turmaCurta": "1ª", "modal": "Recertificação Mar", "chamada": "Presente", "obm": "DS - Porto Alegre", "crbm": "DS", "resultado": "Sem resultado", "obs": ""}, {"nome": "RICARDO MENDES MENDONCA", "grad": "1º Sgt PM", "id": "2915162", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "2º BPChq BM/Santa Maria - Santa Maria", "crbm": "CPChq", "resultado": "Sem resultado", "obs": ""}, {"nome": "RAFAEL SOARES PINTO", "grad": "1º Sgt PM", "id": "2971470", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "2º BPChq BM/Santa Maria - Santa Maria", "crbm": "CPChq", "resultado": "Sem resultado", "obs": ""}, {"nome": "FABIANO DE MELO MENEZES", "grad": "1º Sgt PM", "id": "2971836", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "2º BPChq BM/Santa Maria - Santa Maria", "crbm": "CPChq", "resultado": "Sem resultado", "obs": ""}, {"nome": "MARCO AURELIO VARGAS KERSCHE", "grad": "1º Sgt PM", "id": "2324547", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "1º RPMon/Santa Maria - Santa Maria", "crbm": "CRPM-C", "resultado": "Sem resultado", "obs": ""}, {"nome": "ELIZANDRO DUTRA SANTOS", "grad": "1º Sgt PM", "id": "2825830", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "44º BPM/Santa Rosa - Santa Rosa", "crbm": "CRPM-FN", "resultado": "Sem resultado", "obs": ""}, {"nome": "WILLIAN JONATHAN DOS SANTOS EGUILHOR", "grad": "1º Sgt PM", "id": "2987112", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "46º BPM/Dom Pedrito - Dom Pedrito", "crbm": "CRPM-FO", "resultado": "Sem resultado", "obs": ""}, {"nome": "CLEBERSON MARCIO DE ALMEIDA MARTINS", "grad": "1º Sgt PM", "id": "2918633", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "38º BPM/Carazinho - Carazinho", "crbm": "CRPM-P", "resultado": "Sem resultado", "obs": ""}, {"nome": "GIDSON ROGER GOMES CARDOSO", "grad": "2º Sgt PM", "id": "3152405", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "11º BPM - Porto Alegre", "crbm": "CPC", "resultado": "Sem resultado", "obs": ""}, {"nome": "LUCIANO BRITES ANTUNES", "grad": "2º Sgt PM", "id": "2683016", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "2º BPChq BM/Santa Maria - Santa Maria", "crbm": "CPChq", "resultado": "Sem resultado", "obs": ""}, {"nome": "MATEUS OLIVEIRA IZAGUIR", "grad": "2º Sgt PM", "id": "3155854", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "2º BPChq BM/Santa Maria - Santa Maria", "crbm": "CPChq", "resultado": "Sem resultado", "obs": ""}, {"nome": "DOUGLAS SCOTI ROSA", "grad": "2º Sgt PM", "id": "3161579", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "2º BPChq BM/Santa Maria - Santa Maria", "crbm": "CPChq", "resultado": "Sem resultado", "obs": ""}, {"nome": "CRISTIANO TAVARES", "grad": "2º Sgt PM", "id": "2958317", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "1º RPMon/Santa Maria - Santa Maria", "crbm": "CRPM-C", "resultado": "Sem resultado", "obs": ""}, {"nome": "MARCELO POSSER NUNES", "grad": "2º Sgt PM", "id": "3155765", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "1º RPMon/Santa Maria - Santa Maria", "crbm": "CRPM-C", "resultado": "Sem resultado", "obs": ""}, {"nome": "JULIANO DE FREITAS DAMBROS", "grad": "2º Sgt PM", "id": "3709400", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "1º RPMon/Santa Maria - Santa Maria", "crbm": "CRPM-C", "resultado": "Sem resultado", "obs": ""}, {"nome": "CESAR GIOVANI BARCELLOS LUCCA", "grad": "2º Sgt PM", "id": "2829703", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "1º RPMon/Santa Maria - Santa Maria", "crbm": "CRPM-C", "resultado": "Sem resultado", "obs": ""}, {"nome": "THOMAS ALIBIO BUTZKE", "grad": "2º Sgt PM", "id": "2686325", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "44º BPM/Três de Maio - Três de Maio", "crbm": "CRPM-FN", "resultado": "Sem resultado", "obs": ""}, {"nome": "VANILSON GUARIZE", "grad": "2º Sgt PM", "id": "2519232", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "44º BPM/Tuparendi - Tuparendi", "crbm": "CRPM-FN", "resultado": "Sem resultado", "obs": ""}, {"nome": "AMELIO RODRIGO RIBAS", "grad": "2º Sgt PM", "id": "2913771", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "7º BPM/Três Passos - Três Passos", "crbm": "CRPM-FN", "resultado": "Sem resultado", "obs": ""}, {"nome": "MARCEU MARTINBIANCO RIBEIRO", "grad": "2º Sgt PM", "id": "2917955", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "42º BPM/Capão da Canoa - Capão da Canoa", "crbm": "CRPM-L", "resultado": "Sem resultado", "obs": ""}, {"nome": "FLAVIO PRESTES DUARTE", "grad": "2º Sgt PM", "id": "2388049", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "14º BPM/São Luiz Gonzaga - São Luiz Gonzaga", "crbm": "CRPM-Mis", "resultado": "Sem resultado", "obs": ""}, {"nome": "JUNIOR DE ARAUJO PES", "grad": "2º Sgt PM", "id": "2812967", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "14º BPM/São Luiz Gonzaga - São Luiz Gonzaga", "crbm": "CRPM-Mis", "resultado": "Sem resultado", "obs": ""}, {"nome": "MARCELO VARGAS DE LIMA", "grad": "2º Sgt PM", "id": "2427559", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "27º BPM/Eugênio de Castro - Eugênio de Castro", "crbm": "CRPM-Mis", "resultado": "Sem resultado", "obs": ""}, {"nome": "PETERSOM JARDIM LOPES", "grad": "2º Sgt PM", "id": "2694697", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "3º RPMon/Passo Fundo - Passo Fundo", "crbm": "CRPM-P", "resultado": "Sem resultado", "obs": ""}, {"nome": "TATIANE PURPER REIS", "grad": "2º Sgt PM", "id": "3710670", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "22º BPM/Lajeado - Lajeado", "crbm": "CRPM-VT", "resultado": "Sem resultado", "obs": ""}, {"nome": "DIOGO TREVISIOL DE MELO", "grad": "2º Sgt PM", "id": "3156427", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "HBM-SM - Santa Maria", "crbm": "DS", "resultado": "Sem resultado", "obs": ""}, {"nome": "DIEGO MATHIAS CAMARGO KELLER", "grad": "Sd PM", "id": "2958074", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "2º BPChq BM/Santa Maria - Santa Maria", "crbm": "CPChq", "resultado": "Sem resultado", "obs": ""}, {"nome": "FABIANO CORREIA LEAL", "grad": "Sd PM", "id": "2986914", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "2º BPChq BM/Santa Maria - Santa Maria", "crbm": "CPChq", "resultado": "Sem resultado", "obs": ""}, {"nome": "WILIAN DIEGO DA LUZ WACHTER", "grad": "Sd PM", "id": "3155900", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "2º BPChq BM/Santa Maria - Santa Maria", "crbm": "CPChq", "resultado": "Sem resultado", "obs": ""}, {"nome": "ANDERSON RICARDO DA SILVA DE LIMA", "grad": "Sd PM", "id": "2991438", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "1º RPMon/Santa Maria - Santa Maria", "crbm": "CRPM-C", "resultado": "Sem resultado", "obs": ""}, {"nome": "JOEZER OBEM DE VARGAS", "grad": "Sd PM", "id": "2972271", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "45º BPM/Santiago - Santiago", "crbm": "CRPM-EO", "resultado": "Sem resultado", "obs": ""}, {"nome": "LUCAS BOFF TURCHIELLO", "grad": "Sd PM", "id": "3147908", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "45º BPM/Santiago - Santiago", "crbm": "CRPM-EO", "resultado": "Sem resultado", "obs": ""}, {"nome": "VINICIUS RODRIGUES SEVERO", "grad": "Sd PM", "id": "3161013", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "45º BPM/Santiago - Santiago", "crbm": "CRPM-EO", "resultado": "Sem resultado", "obs": ""}, {"nome": "REGIS UILHAN SCHULZ", "grad": "Sd PM", "id": "2994917", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "44º BPM/Santo Cristo - Santo Cristo", "crbm": "CRPM-FN", "resultado": "Sem resultado", "obs": ""}, {"nome": "FAUSTINO DANIEL PAVEGLIO", "grad": "Sd PM", "id": "3145000", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "44º BPM/Tuparendi - Tuparendi", "crbm": "CRPM-FN", "resultado": "Sem resultado", "obs": ""}, {"nome": "PABLO RICARDO DE OLIVEIRA BRAGA", "grad": "Sd PM", "id": "3717089", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "46º BPM/Dom Pedrito - Dom Pedrito", "crbm": "CRPM-FO", "resultado": "Sem resultado", "obs": ""}, {"nome": "LUCAS PADILHA HABERMANN", "grad": "Sd PM", "id": "3710289", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "46º BPM/Dom Pedrito - Dom Pedrito", "crbm": "CRPM-FO", "resultado": "Sem resultado", "obs": ""}, {"nome": "DIOGO ANDRE FERREIRA PEDROSO", "grad": "Sd PM", "id": "2969998", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "CRPM-Mis - Santo Ângelo", "crbm": "CRPM-Mis", "resultado": "Sem resultado", "obs": ""}, {"nome": "LEONARDO KAISER RAMOS", "grad": "Sd PM", "id": "2970295", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "14º BPM/São Luiz Gonzaga - São Luiz Gonzaga", "crbm": "CRPM-Mis", "resultado": "Sem resultado", "obs": ""}, {"nome": "MATEUS RODRIGUES LOPES", "grad": "Sd PM", "id": "2994895", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "14º BPM/São Luiz Gonzaga - São Luiz Gonzaga", "crbm": "CRPM-Mis", "resultado": "Sem resultado", "obs": ""}, {"nome": "RAFAEL PAULA DA SILVA", "grad": "Sd PM", "id": "2995042", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Águas Internas", "chamada": "—", "obm": "27º BPM/Entre Ijuís - Entre-Ijuís", "crbm": "CRPM-Mis", "resultado": "Sem resultado", "obs": ""}, {"nome": "LAURENCE ZANCAN SAMUEL", "grad": "Sd PM", "id": "3149471", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "27º BPM/Santo Ângelo - Santo Ângelo", "crbm": "CRPM-Mis", "resultado": "Sem resultado", "obs": ""}, {"nome": "JEFFERSON AMARO", "grad": "Sd PM", "id": "3149501", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "27º BPM/Santo Ângelo - Santo Ângelo", "crbm": "CRPM-Mis", "resultado": "Sem resultado", "obs": ""}, {"nome": "GUSTAVO JOSE FEYH", "grad": "Sd PM", "id": "2826518", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Águas Internas", "chamada": "—", "obm": "29º BPM/Augusto Pestana - Augusto Pestana", "crbm": "CRPM-Mis", "resultado": "Sem resultado", "obs": ""}, {"nome": "IVAN DOS SANTOS STAMBOROSKI", "grad": "Sd PM", "id": "3717593", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "29º BPM/Ijuí - Ijuí", "crbm": "CRPM-Mis", "resultado": "Sem resultado", "obs": ""}, {"nome": "FRANCIS RAFAEL ROTH DE SOUZA", "grad": "Sd PM", "id": "3149609", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "3º RPMon/Passo Fundo - Passo Fundo", "crbm": "CRPM-P", "resultado": "Sem resultado", "obs": ""}, {"nome": "JOSE LUIS LOVATO DA SILVA", "grad": "Sd PM", "id": "2916215", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "HBM-SM - Santa Maria", "crbm": "DS", "resultado": "Sem resultado", "obs": ""}, {"nome": "PAULO REGIS BARRETO MACHADO", "grad": "SD PM", "id": "3163539", "turma": "2ª - 19 a 22 de novembro", "turmaCurta": "2ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "2ª CIa INd PM Taquara - Taquara", "crbm": "CRPM-Hort", "resultado": "Sem resultado", "obs": ""}, {"nome": "CRISTINE MARTINS TEIXEIRA", "grad": "1º Sgt PM", "id": "3709450", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "5º BPChq BM/Pelotas - Pelotas", "crbm": "CPChq", "resultado": "Sem resultado", "obs": ""}, {"nome": "DEIVID CRISTIANO COOPER ALVES", "grad": "1º Sgt PM", "id": "2971283", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "6º BPChq BM/Uruguaiana - Uruguaiana", "crbm": "CPChq", "resultado": "Sem resultado", "obs": ""}, {"nome": "SALEH SOARES ABDEL GHANI", "grad": "1º Sgt PM", "id": "2691655", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "46º BPM/Bagé - Bagé", "crbm": "CRPM-FO", "resultado": "Sem resultado", "obs": ""}, {"nome": "TIAGO DA SILVA STEDILE", "grad": "1º Sgt PM", "id": "3153070", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "10º BPM/Vacaria - Vacaria", "crbm": "CRPM-NE", "resultado": "Sem resultado", "obs": ""}, {"nome": "THIAGO CANEZ LOPES", "grad": "1º Sgt PM", "id": "2956632", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "4º BPM/Pelotas - Pelotas", "crbm": "CRPM-Sul", "resultado": "Sem resultado", "obs": ""}, {"nome": "GUILHERME DE RODRIGUES TORRES", "grad": "1º Sgt PM", "id": "2956993", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "4º BPM/Pelotas - Pelotas", "crbm": "CRPM-Sul", "resultado": "Sem resultado", "obs": ""}, {"nome": "RICHER WILLIAN MACIEL PIRES", "grad": "1º Sgt PM", "id": "3192253", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "5º BPM/Montenegro - Montenegro", "crbm": "CRPM-VC", "resultado": "Sem resultado", "obs": ""}, {"nome": "EDUARDO THIEL", "grad": "2º Sgt PM", "id": "3702707", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "5º BPChq BM/Pelotas - Pelotas", "crbm": "CPChq", "resultado": "Sem resultado", "obs": ""}, {"nome": "VINICIUS FETTER ARONES", "grad": "2º Sgt PM", "id": "3195686", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "6º BPChq BM/Uruguaiana - Uruguaiana", "crbm": "CPChq", "resultado": "Sem resultado", "obs": ""}, {"nome": "MAIQUE DIONATA AQUILLA", "grad": "2º Sgt PM", "id": "2914980", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "47º BPM/Alegrete - Alegrete", "crbm": "CRPM-EO", "resultado": "Sem resultado", "obs": ""}, {"nome": "RAFAEL VARGAS CORREA", "grad": "2º Sgt PM", "id": "2783550", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "4º BPChq BM/Caxias do Sul - Caxias do Sul", "crbm": "CPChq", "resultado": "Sem resultado", "obs": ""}, {"nome": "DIOGO DA SILVA RODRIGUES", "grad": "2º Sgt PM", "id": "3153126", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "10º BPM/Vacaria - Vacaria", "crbm": "CRPM-NE", "resultado": "Sem resultado", "obs": ""}, {"nome": "LUCAS RODRIGUES SEVERO", "grad": "2º Sgt PM", "id": "3166317", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "12º BPM/Caxias do Sul - Caxias do Sul", "crbm": "CRPM-Ser", "resultado": "Sem resultado", "obs": ""}, {"nome": "NEREU ALVES GODINHO", "grad": "2º Sgt PM", "id": "2877511", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "43º BPM/Bento Gonçalves - Bento Gonçalves", "crbm": "CRPM-Ser", "resultado": "Sem resultado", "obs": ""}, {"nome": "ANA MARIA BELARMINO MIZAEL", "grad": "2º Sgt PM", "id": "2857197", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Águas Internas", "chamada": "—", "obm": "3ª Cia Ind PAmb BM/Rio Grande - Rio Grande", "crbm": "CPAmb BM", "resultado": "Sem resultado", "obs": ""}, {"nome": "ANTONIO MARCOS FOSTER DE FREITAS", "grad": "2º Sgt PM", "id": "2915960", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "30º BPM/São Lourenço do Sul - São Lourenço do Sul", "crbm": "CRPM-CS", "resultado": "Sem resultado", "obs": ""}, {"nome": "FRANCISCO ANDRADE DE MOURA", "grad": "2º Sgt PM", "id": "2687879", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "4º BPM/Canguçu - Canguçu", "crbm": "CRPM-Sul", "resultado": "Sem resultado", "obs": ""}, {"nome": "ADELAR RIBEIRO CAMPOS", "grad": "2º Sgt PM", "id": "2329956", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "3º BPM/Novo Hamburgo - Novo Hamburgo", "crbm": "CRPM-VRS", "resultado": "Sem resultado", "obs": ""}, {"nome": "CRISTIAN DAVILA RAMOS", "grad": "Sd PM", "id": "3708446", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "6º BPChq BM/Uruguaiana - Uruguaiana", "crbm": "CPChq", "resultado": "Sem resultado", "obs": ""}, {"nome": "HELIO VILSON OLIVEIRA NUNES", "grad": "Sd PM", "id": "2823985", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "47º BPM/Alegrete - Alegrete", "crbm": "CRPM-EO", "resultado": "Sem resultado", "obs": ""}, {"nome": "VALNEI GOMES DA SILVA", "grad": "Sd PM", "id": "2969238", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "2º RPMon/São Gabriel - São Gabriel", "crbm": "CRPM-FO", "resultado": "Sem resultado", "obs": ""}, {"nome": "JULIANO CAMARGO MUSSOLINE", "grad": "Sd PM", "id": "3165930", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "46º BPM/Lavras do Sul - Lavras do Sul", "crbm": "CRPM-FO", "resultado": "Sem resultado", "obs": ""}, {"nome": "LUCAS MOREIRA SILVEIRA", "grad": "Sd PM", "id": "2824426", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "46º BPM/Bagé - Bagé", "crbm": "CRPM-FO", "resultado": "Sem resultado", "obs": ""}, {"nome": "MARCUS RAFAEL DA SILVA PACKAESER", "grad": "Sd PM", "id": "3153398", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "3º RPMon/Guaporé - Guaporé", "crbm": "CRPM-P", "resultado": "Sem resultado", "obs": ""}, {"nome": "RODRIGO MELLO PEREIRA", "grad": "Sd PM", "id": "2996359", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "12º BPM/Caxias do Sul - Caxias do Sul", "crbm": "CRPM-Ser", "resultado": "Sem resultado", "obs": ""}, {"nome": "MARLON MACHADO DA SILVEIRA", "grad": "Sd PM", "id": "2994780", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "43º BPM/Bento Gonçalves - Bento Gonçalves", "crbm": "CRPM-Ser", "resultado": "Sem resultado", "obs": ""}, {"nome": "JULIAN RAFAEL BRUM DA SILVA", "grad": "Sd PM", "id": "3139239", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "43º BPM/Bento Gonçalves - Bento Gonçalves", "crbm": "CRPM-Ser", "resultado": "Sem resultado", "obs": ""}, {"nome": "JOSE RUDINEI DA SILVA PORTELA", "grad": "Sd PM", "id": "3152022", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "43º BPM/Bento Gonçalves - Bento Gonçalves", "crbm": "CRPM-Ser", "resultado": "Sem resultado", "obs": ""}, {"nome": "EDERSON CANNINI", "grad": "Sd PM", "id": "3716368", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "43º BPM/Bento Gonçalves - Bento Gonçalves", "crbm": "CRPM-Ser", "resultado": "Sem resultado", "obs": ""}, {"nome": "MARCO DE FRANCESCHI", "grad": "Sd PM", "id": "3155510", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "22º BPM/Arroio do Meio - Arroio do Meio", "crbm": "CRPM-VT", "resultado": "Sem resultado", "obs": ""}, {"nome": "NILMAR DA CUNHA ALMEIDA", "grad": "Sd PM", "id": "2856433", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "30º BPM/São Lourenço do Sul - São Lourenço do Sul", "crbm": "CRPM-CS", "resultado": "Sem resultado", "obs": ""}, {"nome": "LEANDRO DA CRUZ MACHADO", "grad": "Sd PM", "id": "2996375", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Águas Internas", "chamada": "—", "obm": "4º BPM/Arroio do Padre - Arroio do Padre", "crbm": "CRPM-Sul", "resultado": "Sem resultado", "obs": ""}, {"nome": "FRANCISCO FABIO DE MORAES PEREIRA", "grad": "Sd PM", "id": "3166279", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Mar", "chamada": "—", "obm": "4º BPM/Morro Redondo - Morro Redondo", "crbm": "CRPM-Sul", "resultado": "Sem resultado", "obs": ""}, {"nome": "CARLOS ANTONIO CRAVO CENTURION", "grad": "Sd PM", "id": "2912414", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Águas Internas", "chamada": "—", "obm": "6º BPM/Rio Grande - Rio Grande", "crbm": "CRPM-Sul", "resultado": "Sem resultado", "obs": ""}, {"nome": "FRANCISCO VIANA PIRES", "grad": "Sd PM", "id": "2912570", "turma": "3ª - 26 a 29 de novembro", "turmaCurta": "3ª", "modal": "Recertificação Águas Internas", "chamada": "—", "obm": "6º BPM/Santa Vitória do Palmar - Santa Vitória do Palmar", "crbm": "CRPM-Sul", "resultado": "Sem resultado", "obs": ""}];
+let REC = [], SEG = [], ALL = [], GVCT = [], BM = FALLBACK_BM,
     CAP_T1 = null, CAP_T2 = null, CAP_TESTE = null,
     CAP = {
       t1: { total: 33, ec: 27, dl: 6, mar: 25, interna: 2, nv: 26, tr: 7, heads: [], list: [] },
@@ -575,6 +586,7 @@ async function load(){
   const errs = [];
   const jobs = [
     ['rec','Recertificação', t => REC = ingest(t,false)],
+    ['bm','Brigada Militar', t => BM = ingestBM(t)],
     ['seg','Curso de Segurança', t => SEG = ingest(t,true)],
     ['cap','Capacitação Militar T1', t => { CAP_T1 = capacitT1(t); updateCapAgg(); }],
     ['capT2','Capacitação Militar T2', t => { CAP_T2 = capacitT2(t); updateCapAgg(); }],
@@ -915,11 +927,94 @@ function ingestGVCT(table){
   return out;
 }
 
+/* Brigada Militar: Recertificação BMRS · Aba "Brigada Militar" */
+function ingestBM(table){
+  table = fixHeader(table);
+  const col = finder(table);
+  const ix = {
+    turma: col('Turma', 'turma'),
+    obs: col('OBS', 'obs'),
+    chamada: col('Chamada', 'chamada'),
+    aquatlhon: col('Aquatlhon', 'aquatlon'),
+    salv: col('Salv comp', 'salvamento completo', 'salv comp'),
+    teorico: col('Teorico', 'teórico', 'teorica', 'teórica'),
+    id: col('Id. Func.', 'id_func', 'id func', 'id'),
+    grad: col('Graduação', 'graduacao', 'grad'),
+    nome: col('Nome Completo', 'nome_completo', 'nome'),
+    comando: col('Comando', 'crbm', 'cpm'),
+    opm: col('OPM', 'opm'),
+    cidade: col('Cidade', 'cidade', 'municipio'),
+    hab: col('Habilidade', 'habilidades', 'modalidade')
+  };
+  if (ix.nome < 0) throw new Error('coluna "Nome Completo" não encontrada na aba Brigada Militar');
+  const out = [];
+  for (const r of table.rows){
+    const c = r.c || [], g = i => (i < 0 || i >= c.length || !c[i]) ? '' : cellText(c[i]);
+    const nome = g(ix.nome);
+    if (!nome) continue;
+    const tRaw = g(ix.turma);
+    let turma = tRaw;
+    const tn = norm(tRaw);
+    if (tn.includes('01') || tn.includes('1')) turma = '1ª - 12 a 15 de novembro';
+    else if (tn.includes('02') || tn.includes('2')) turma = '2ª - 19 a 22 de novembro';
+    else if (tn.includes('03') || tn.includes('3')) turma = '3ª - 26 a 29 de novembro';
+
+    const hRaw = g(ix.hab);
+    let modal = 'Recertificação Mar';
+    if (norm(hRaw).includes('intern')) modal = 'Recertificação Águas Internas';
+    else if (norm(hRaw).includes('mar')) modal = 'Recertificação Mar';
+
+    const cham = g(ix.chamada);
+    const chNorm = norm(cham);
+    const obs = g(ix.obs);
+    const obsNorm = norm(obs);
+    const aqNorm = norm(g(ix.aquatlhon));
+    const svNorm = norm(g(ix.salv));
+    const teNorm = norm(g(ix.teorico));
+
+    let resultado = 'Sem resultado';
+    const isDesl = chNorm.includes('deslig') || chNorm.includes('desist') || chNorm.includes('ausen') || chNorm.includes('falta') ||
+                   obsNorm.includes('deslig') || obsNorm.includes('desist');
+    const isInapto = aqNorm.includes('inapto') || svNorm.includes('inapto') || teNorm.includes('inapto');
+    const isApto = aqNorm === 'apto' && svNorm === 'apto' && teNorm === 'apto';
+
+    if (isDesl) resultado = 'Desligado';
+    else if (isInapto) resultado = 'Inapto';
+    else if (isApto) resultado = 'Apto';
+
+    const comando = g(ix.comando) || 'BMRS';
+    const opm = g(ix.opm);
+    const cidade = g(ix.cidade);
+    let obm = opm;
+    if (cidade && opm && !opm.toLowerCase().includes(cidade.toLowerCase())) obm = `${opm} - ${cidade}`;
+    else if (!obm) obm = comando;
+
+    out.push({
+      nome,
+      grad: g(ix.grad) || '—',
+      id: (g(ix.id) || '—').replace(/\.0$/, ''),
+      turma,
+      turmaCurta: turma.split(' - ')[0].trim(),
+      modal,
+      chamada: cham || '—',
+      comando,
+      opm: opm || '—',
+      cidade: cidade || '—',
+      obm,
+      crbm: comando,
+      resultado,
+      obs
+    });
+  }
+  return out;
+}
+
 /* ---------- visões independentes: cada aba da planilha é uma situação separada ---------- */
-const NOMES = { rec: 'Recertificação', seg: 'Curso de Segurança', cap: 'Capacitação Militar', gvct: 'Guarda-Vidas Civil Temporário' };
+const NOMES = { rec: 'Recertificação', bm: 'Brigada Militar', seg: 'Curso de Segurança', cap: 'Capacitação Militar', gvct: 'Guarda-Vidas Civil Temporário' };
 function pick(){
   if (view === 'seg') ALL = SEG;
   else if (view === 'gvct') ALL = GVCT;
+  else if (view === 'bm') ALL = BM;
   else ALL = REC;
 }
 function go(v, f = {}){
@@ -929,8 +1024,8 @@ function go(v, f = {}){
   pick(); fillSelects();
   if (f.t) $('fTurma').value = f.t;
   if (f.r) $('fRes').value = f.r;
-  if (f.c && v === 'gvct') $('fCrbm').value = f.c;
-  if (f.m && v === 'gvct') $('fModal').value = f.m;
+  if (f.c && (v === 'gvct' || v === 'bm')) $('fCrbm').value = f.c;
+  if (f.m && (v === 'gvct' || v === 'bm')) $('fModal').value = f.m;
   if (v === 'cap'){
     if (f.turma === 't2' || (f.c && f.c.startsWith('t2'))){
       if (f.c === 't2_t07'){ capView = 't2_teste'; capSel = '07'; }
@@ -1013,6 +1108,16 @@ function fillSelects(){
     $('fBusca').placeholder = 'Buscar por nome ou local…';
     return;
   }
+  if (view === 'bm'){
+    fillSelect('fTurma', ALL.map(r=>r.turma), 'Todas as turmas', (a,b) => turmaOrder(a)-turmaOrder(b) || a.localeCompare(b,'pt-BR'));
+    fillSelect('fModal', ALL.map(r=>r.modal), 'Todas as modalidades');
+    fillSelect('fCrbm', ALL.map(r=>r.crbm), 'Todos os Comandos');
+    const fr = $('fRes'), cur = fr.value, ops = [{v:'Apto',l:'Apto'},{v:'Inapto',l:'Inapto'},{v:'Desligado',l:'Desligados / Desistências'},{v:'Sem resultado',l:'Aguardando resultado'}];
+    fr.innerHTML = '<option value="">Todos os resultados</option>' + ops.map(o => `<option value="${o.v}">${o.l}</option>`).join('');
+    if (ops.some(o => o.v === cur)) fr.value = cur;
+    $('fBusca').placeholder = 'Buscar por nome, OPM ou cidade…';
+    return;
+  }
   fillSelect('fTurma', ALL.map(r=>r.turma), 'Todas as turmas', (a,b) => turmaOrder(a)-turmaOrder(b) || a.localeCompare(b,'pt-BR'));
   fillSelect('fModal', ALL.map(r=>r.modal), view === 'seg' ? 'Todas as graduações' : 'Todas as modalidades');
   const fr = $('fRes'), cur = fr.value, ops = view === 'seg'
@@ -1032,6 +1137,13 @@ function filtered(skipModal){
                            (!res || r.situacao === res) &&
                            (!q || norm(r.nome).includes(q) || norm(r.local).includes(q)));
   }
+  if (view === 'bm'){
+    return ALL.filter(r => (!t || r.turma === t) &&
+                           (!m || skipModal || r.modal === m) &&
+                           (!c || r.crbm === c) &&
+                           (!res || r.resultado === res) &&
+                           (!q || norm(r.nome).includes(q) || norm(r.obm).includes(q) || norm(r.crbm).includes(q) || norm(r.grad).includes(q)));
+  }
   return ALL.filter(r => (!t||r.turma===t) && (!m||skipModal||r.modal===m) && (!c||r.crbm===c) && (!res||r.resultado===res) && (!q || norm(r.nome).includes(q) || norm(r.obm).includes(q)));
 }
 ['fTurma','fModal','fCrbm','fRes'].forEach(id => $(id).addEventListener('change', render));
@@ -1042,17 +1154,18 @@ $('refreshBtn').addEventListener('click', load);
 function count(arr, fn){ const m = new Map(); arr.forEach(x => { const k = fn(x); if (k) m.set(k,(m.get(k)||0)+1); }); return [...m.entries()]; }
 function render(){
   const rows = filtered(), n = rows.length;
-  const isSeg = view === 'seg', isGvct = view === 'gvct';
+  const isSeg = view === 'seg', isGvct = view === 'gvct', isBm = view === 'bm';
   const aptos = rows.filter(r=>r.resultado==='Apto').length, inaptos = rows.filter(r=>r.resultado==='Inapto').length;
-  const desl = rows.filter(r=>r.resultado==='Desligado' || (!isGvct && r.resultado==='Ausente')).length;
+  const desl = rows.filter(r=>r.resultado==='Desligado' || (!isGvct && !isBm && r.resultado==='Ausente')).length;
   const pend = isGvct ? 0 : (n - aptos - inaptos - desl);
   const emCurso = rows.filter(r=>r.situacao==='Em curso').length;
 
   $('nRec').textContent = REC.length ? REC.length : '';
+  if ($('nBM')) $('nBM').textContent = BM.length ? BM.length : '';
   $('nSeg').textContent = SEG.length ? SEG.length : '';
   $('nCap').textContent = CAP ? CAP.total : '';
   if ($('nGVCT')) $('nGVCT').textContent = GVCT.length ? GVCT.length : '';
-  $('subtitle').textContent = isGvct ? 'Guarda-Vidas Civil Temporário · Processo Seletivo' : isSeg ? 'Curso de Segurança' : (view === 'cap' ? 'Capacitação Militar' : '');
+  $('subtitle').textContent = isGvct ? 'Guarda-Vidas Civil Temporário · Processo Seletivo' : isSeg ? 'Curso de Segurança' : (view === 'cap' ? 'Capacitação Militar' : isBm ? 'Recertificação Guarda-Vidas · Brigada Militar' : '');
 
   const fr = $('fRes').value, fm = $('fModal').value, ft = $('fTurma').value, fc = $('fCrbm').value;
   const kpi = (num,label,color,sub='',attr='',sel=false) => `<div class="kpi${sel?' sel':''}" ${attr} style="border-top-color:${color}"><div class="n">${num}</div><div class="l">${label}</div>${sub?`<div class="s">${sub}</div>`:''}</div>`;
@@ -1103,7 +1216,12 @@ function render(){
     }
     const f = x => rs.filter(r=>r.resultado===x).length;
     const a = f('Apto') + (isSeg ? f('Ativo') : 0), i = f('Inapto'), d = f('Desligado') + f('Ausente'), p = tot-a-i-d, w = v => (v/tot*100).toFixed(2)+'%';
-    return `<div class="th">${esc(t)} <span>· ${tot} inscritos</span></div>
+    let badge = '';
+    if (isBm){
+      if (t.startsWith('1ª')) badge = ' <span class="pan-badge bm" style="font-size:.7em;padding:1px 6px">Em andamento</span>';
+      else badge = ' <span class="pan-badge bm" style="font-size:.7em;padding:1px 6px">Previsão</span>';
+    }
+    return `<div class="th">${esc(t)}${badge} <span>· ${tot} inscritos</span></div>
       <div class="bar"><div class="a" style="width:${w(a)}" title="Apto: ${a}"></div><div class="i" style="width:${w(i)}" title="Inapto: ${i}"></div><div class="d" style="width:${w(d)}" title="${isSeg?'Desligado: ':'Desligado / Desistência: '}${d}"></div><div class="p" style="width:${w(p)}" title="Sem resultado: ${p}"></div></div>
       <div class="sub">${isSeg ? `${a} ativos · ${d} desligados` : `${a} apto · ${i} inapto · ${d} desl./desist. · ${p} aguardando`}</div>`;
   }).join('') : '<div class="empty">Sem dados para o filtro atual.</div>';
@@ -1135,6 +1253,26 @@ function render(){
     const tagc = r => `<span class="tag ${r.resultado==='Ativo'?'t-apto':'t-desl'}">${r.resultado}</span>`;
     $('thead').innerHTML = '<tr><th>Nome</th><th>Graduação</th><th>OBM</th><th>Situação</th></tr>';
     $('tbody').innerHTML = sorted.map(r => `<tr><td class="name">${esc(r.nome)}</td><td>${esc(r.grad)}</td><td>${esc(r.obm)}</td><td>${tagc(r)}</td></tr>`).join('');
+  } else if (isBm){
+    const sorted = [...rows].sort((a,b) => turmaOrder(a.turma)-turmaOrder(b.turma) || a.turma.localeCompare(b.turma,'pt-BR') || a.nome.localeCompare(b.nome,'pt-BR'));
+    $('tblCount').textContent = `· ${n} registros`;
+    const cls = {Apto:'t-apto', Inapto:'t-inapto', Desligado:'t-desl', 'Sem resultado':'t-pend'};
+    const tagc = r => `<span class="tag ${cls[r.resultado] || 't-pend'}">${r.resultado}</span>`;
+    const tagCham = c => {
+      if (norm(c) === 'presente') return '<span class="tag t-apto">Presente</span>';
+      if (norm(c).includes('deslig') || norm(c).includes('ausen')) return `<span class="tag t-desl">${esc(c)}</span>`;
+      return esc(c || '—');
+    };
+    $('thead').innerHTML = '<tr><th>Nome</th><th>Graduação</th><th>Comando / OPM</th><th>Turma</th><th>Modalidade</th><th>Chamada</th><th>Resultado</th></tr>';
+    $('tbody').innerHTML = sorted.map(r => `<tr>
+      <td class="name">${esc(r.nome)}</td>
+      <td>${esc(r.grad)}</td>
+      <td>${esc(r.obm)}</td>
+      <td>${esc(r.turma)}</td>
+      <td>${esc(r.modal)}</td>
+      <td>${tagCham(r.chamada)}</td>
+      <td>${tagc(r)}</td>
+    </tr>`).join('');
   } else {
     const sorted = [...rows].sort((a,b) => turmaOrder(a.turma)-turmaOrder(b.turma) || a.turma.localeCompare(b.turma,'pt-BR') || a.nome.localeCompare(b.nome,'pt-BR'));
     $('tblCount').textContent = `· ${n} registros`;
@@ -1147,6 +1285,31 @@ function render(){
 
 /* ---------- resumo geral (cada aba continua separada) ---------- */
 function tally(rows){ const f = x => rows.filter(r=>r.resultado===x).length, a = f('Apto'), i = f('Inapto'), d = f('Desligado'); return { t: rows.length, a, i, d, p: rows.length-a-i-d }; }
+function tallyBM(rows){
+  const t1 = rows.filter(r => r.turma.startsWith('1ª'));
+  const t2 = rows.filter(r => r.turma.startsWith('2ª'));
+  const t3 = rows.filter(r => r.turma.startsWith('3ª'));
+  const mar = rows.filter(r => r.modal.includes('Mar')).length;
+  const interna = rows.filter(r => r.modal.includes('Internas')).length;
+  const aptos = rows.filter(r => r.resultado === 'Apto').length;
+  const inaptos = rows.filter(r => r.resultado === 'Inapto').length;
+  const desl = rows.filter(r => r.resultado === 'Desligado').length;
+  const pend = rows.length - aptos - inaptos - desl;
+  const t1Pres = t1.filter(r => norm(r.chamada) === 'presente').length;
+  return {
+    total: rows.length,
+    t1: t1.length,
+    t1Pres,
+    t2: t2.length,
+    t3: t3.length,
+    mar,
+    interna,
+    aptos,
+    inaptos,
+    desl,
+    pend
+  };
+}
 function tallyGvct(rows){
   const stat = (isRec, isNorte) => {
     const sub = rows.filter(r => {
@@ -1409,6 +1572,20 @@ function renderSum(){
     total: 283
   };
   const G = GVCT.length ? tallyGvct(GVCT) : fallback;
+  const fallbackBM = {
+    total: 128,
+    t1: 46,
+    t1Pres: 46,
+    t2: 47,
+    t3: 35,
+    mar: 122,
+    interna: 6,
+    aptos: 0,
+    inaptos: 0,
+    desl: 0,
+    pend: 128
+  };
+  const B = BM.length ? tallyBM(BM) : fallbackBM;
   const stat = (n,l,c,attrs) => `<div class="stat" style="--c:${c}" ${attrs}><div class="n">${n}</div><div class="l">${l}</div></div>`;
   const civBox = (s, isConcluido = false) => `
     <div class="civ-list">
@@ -1506,28 +1683,36 @@ function renderSum(){
         </div>
       </div>
 
-      <div class="bm-card">
+      <div class="bm-card" data-go="bm" style="cursor:pointer">
         <div class="card-head">
-          <h3>Recertificação GV Brigada Militar</h3>
-          <span class="pan-badge bm">BMRS</span>
+          <h3 data-go="bm">Recertificação GV Brigada Militar › <span class="civ-dates">(12/11 a 29/11 · ${B.total} militares inscritos)</span></h3>
+          <span class="sub-link" data-go="bm">Ver detalhes</span>
         </div>
-        <div class="bm-subtitle">Previsão de Turmas:</div>
+        <div class="bm-subtitle">Turmas e Efetivo (BMRS):</div>
         <div class="bm-grid">
-          <div class="bm-item">
+          <div class="bm-item" data-go="bm" data-t="1ª - 12 a 15 de novembro">
             <span class="bm-turma">T1</span>
             <span class="bm-date">12 a 15 de novembro</span>
-            <b class="bm-vagas">48 militares</b>
+            <b class="bm-vagas">${B.t1} militares</b>
+            <span class="pan-badge bm" style="font-size:.68em;padding:1px 5px;margin-top:2px">Em andamento</span>
           </div>
-          <div class="bm-item">
+          <div class="bm-item" data-go="bm" data-t="2ª - 19 a 22 de novembro">
             <span class="bm-turma">T2</span>
             <span class="bm-date">19 a 22 de novembro</span>
-            <b class="bm-vagas">46 militares</b>
+            <b class="bm-vagas">${B.t2} militares</b>
+            <span class="pan-badge bm" style="font-size:.68em;padding:1px 5px;margin-top:2px">Previsão</span>
           </div>
-          <div class="bm-item">
+          <div class="bm-item" data-go="bm" data-t="3ª - 26 a 29 de novembro">
             <span class="bm-turma">T3</span>
             <span class="bm-date">26 a 29 de novembro</span>
-            <b class="bm-vagas">33 militares</b>
+            <b class="bm-vagas">${B.t3} militares</b>
+            <span class="pan-badge bm" style="font-size:.68em;padding:1px 5px;margin-top:2px">Previsão</span>
           </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:6px;border-top:1px solid rgba(255,255,255,.06);font-size:.8em;color:var(--mut)">
+          <span>Águas de Mar: <b style="color:var(--ink)">${B.mar}</b></span>
+          <span>Águas Internas: <b style="color:var(--ink)">${B.interna}</b></span>
+          <span>Total Inscritos: <b style="color:var(--blue)">${B.total}</b></span>
         </div>
       </div>
     </div>
