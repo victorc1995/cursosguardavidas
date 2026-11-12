@@ -226,10 +226,6 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
               <div class="stat" style="--c:var(--desl)" data-go="rec" data-r="Desligado"><div class="n">25</div><div class="l">Desligados / Desistências</div></div>
               <div class="stat" style="--c:var(--pend)" data-go="rec" data-r="Sem resultado"><div class="n">189</div><div class="l">Aguardando resultado</div></div>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:6px;border-top:1px solid rgba(255,255,255,.06);font-size:.8em;color:var(--mut)" data-go="seg">
-              <span>Curso de Segurança: <b style="color:var(--blue)">58</b> militares (56 ativos · 2 desligados)</span>
-              <span class="sub-link" style="color:var(--blue)">Ver curso ›</span>
-            </div>
           </div>
         </div>
 
@@ -1646,10 +1642,6 @@ function renderSum(){
             ${stat(R.i, 'Inaptos', 'var(--inapto)', 'data-go="rec" data-r="Inapto"')}
             ${stat(R.d, 'Desligados / Desistências', 'var(--desl)', 'data-go="rec" data-r="Desligado"')}
             ${stat(R.p, 'Aguardando resultado', 'var(--pend)', 'data-go="rec" data-r="Sem resultado"')}
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:6px;border-top:1px solid rgba(255,255,255,.06);font-size:.8em;color:var(--mut)" data-go="seg">
-            <span>Curso de Segurança: <b style="color:var(--blue)">${SEG.length || 58}</b> militares (${(SEG.filter(r=>r.resultado==='Ativo').length) || 56} ativos · ${(SEG.filter(r=>r.resultado==='Desligado').length) || 2} desligados)</span>
-            <span class="sub-link" style="color:var(--blue)">Ver curso ›</span>
           </div>
         </div>
       </div>
