@@ -218,7 +218,7 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
       <div class="mil-sections">
         <div class="mil-card" data-go="rec" style="cursor:pointer">
           <div class="card-head">
-            <h3>Recertificação CBM › <span class="civ-dates">(01/10 a 30/11 · 537 militares inscritos)</span></h3>
+            <h3>Recertificação CBM › <span class="civ-dates">(01/10 a 30/11 · 537 militares inscritos)</span> <span class="pan-badge bm" style="font-size:.7em;padding:1px 6px">Concluído</span></h3>
             <span class="sub-link">Ver detalhes</span>
           </div>
           <div class="mil-content">
@@ -233,7 +233,7 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
 
         <div class="mil-card" style="cursor:pointer">
           <div class="card-head">
-            <h3 data-go="cap">Capacitação CBM ›</h3>
+            <h3 data-go="cap">Capacitação CBM › <span class="pan-badge bm" style="font-size:.7em;padding:1px 6px">Concluído</span></h3>
             <span class="sub-link" data-go="cap">Ver detalhes</span>
           </div>
           <div class="cap-subcards">
@@ -263,11 +263,11 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
                   <strong>Turma 2</strong>
                   <span class="civ-dates">(10 a 30 de novembro · 120 inscritos)</span>
                 </div>
-                <span class="pan-badge bm" style="font-size:.7em;padding:1px 6px">Em andamento</span>
+                <span class="pan-badge bm" style="font-size:.7em;padding:1px 6px">Concluído</span>
               </div>
               <div class="mil-content" style="margin-top:6px">
                 <div class="stats">
-                  <div class="stat" style="--c:var(--apto)" data-go="cap" data-turma="t2" data-c="ec"><div class="n">112</div><div class="l">Em curso</div></div>
+                  <div class="stat" style="--c:var(--apto)" data-go="cap" data-turma="t2" data-c="ec"><div class="n">112</div><div class="l">Aptos</div></div>
                   <div class="stat" style="--c:var(--inapto)" data-go="cap" data-turma="t2" data-c="dl"><div class="n">8</div><div class="l">Desligados</div></div>
                   <div class="stat" style="--c:var(--ink)" data-go="cap" data-turma="t2" data-c="mar"><div class="n">105</div><div class="l">Mar</div></div>
                   <div class="stat" style="--c:var(--ink)" data-go="cap" data-turma="t2" data-c="interna"><div class="n">7</div><div class="l">Interna</div></div>
@@ -279,7 +279,7 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
 
         <div class="mil-card" data-go="bm" style="cursor:pointer">
           <div class="card-head">
-            <h3 data-go="bm">Recertificação BM › <span class="civ-dates">(12/11 a 29/11 · 128 militares inscritos)</span></h3>
+            <h3 data-go="bm">Recertificação BM › <span class="civ-dates">(12/11 a 29/11 · 128 militares inscritos)</span> <span class="pan-badge bm" style="font-size:.7em;padding:1px 6px">Concluído</span></h3>
             <span class="sub-link" data-go="bm">Ver detalhes</span>
           </div>
           <div class="mil-content">
@@ -326,12 +326,12 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
         </div>
         <div class="civ-card" data-go="gvct" data-t="Capacitação" data-c="Metade Norte" style="cursor:pointer">
           <div class="card-head">
-            <h3>Capacitação LN › <span class="civ-dates">(04 a 23 de novembro)</span></h3>
+            <h3>Capacitação LN › <span class="civ-dates">(04 a 23 de novembro)</span> <span class="pan-badge bm" style="font-size:.7em;padding:1px 6px">Concluído</span></h3>
             <span class="sub-link">Ver detalhes</span>
           </div>
           <div class="civ-list">
             <div class="civ-row ec">
-              <span class="civ-lbl">Em curso:</span>
+              <span class="civ-lbl">Aptos:</span>
               <b class="civ-val">54</b>
             </div>
             <div class="civ-row sub">
@@ -374,12 +374,12 @@ body[data-v=seg] .kpis{grid-template-columns:repeat(3,1fr)}body[data-v=seg] .kpi
         </div>
         <div class="civ-card" data-go="gvct" data-t="Capacitação" data-c="Metade Sul" style="cursor:pointer">
           <div class="card-head">
-            <h3>Capacitação LS › <span class="civ-dates">(06 a 25 de novembro)</span></h3>
+            <h3>Capacitação LS › <span class="civ-dates">(06 a 25 de novembro)</span> <span class="pan-badge bm" style="font-size:.7em;padding:1px 6px">Concluído</span></h3>
             <span class="sub-link">Ver detalhes</span>
           </div>
           <div class="civ-list">
             <div class="civ-row ec">
-              <span class="civ-lbl">Em curso:</span>
+              <span class="civ-lbl">Aptos:</span>
               <b class="civ-val">30</b>
             </div>
             <div class="civ-row sub">
@@ -1453,7 +1453,7 @@ function renderSum(){
     <div class="mil-sections">
       <div class="mil-card" data-go="rec" style="cursor:pointer">
         <div class="card-head">
-          <h3>Recertificação CBM › <span class="civ-dates">(01/10 a 30/11 · ${R.t} militares inscritos)</span></h3>
+          <h3>Recertificação CBM › <span class="civ-dates">(01/10 a 30/11 · ${R.t} militares inscritos)</span> <span class="pan-badge bm" style="font-size:.7em;padding:1px 6px">Concluído</span></h3>
           <span class="sub-link">Ver detalhes</span>
         </div>
         <div class="mil-content">
@@ -1468,7 +1468,7 @@ function renderSum(){
 
       <div class="mil-card" style="cursor:pointer">
         <div class="card-head">
-          <h3 data-go="cap" data-turma="t1">Capacitação CBM ›</h3>
+          <h3 data-go="cap" data-turma="t1">Capacitação CBM › <span class="pan-badge bm" style="font-size:.7em;padding:1px 6px">Concluído</span></h3>
           <span class="sub-link" data-go="cap" data-turma="t1">Ver detalhes</span>
         </div>
         <div class="cap-subcards">
@@ -1498,11 +1498,11 @@ function renderSum(){
                 <strong>Turma 2</strong>
                 <span class="civ-dates">(10 a 30 de novembro · ${C.t2.total} inscritos)</span>
               </div>
-              <span class="pan-badge bm" style="font-size:.7em;padding:1px 6px">Em andamento</span>
+              <span class="pan-badge bm" style="font-size:.7em;padding:1px 6px">Concluído</span>
             </div>
             <div class="mil-content" style="margin-top:6px">
               <div class="stats">
-                ${stat(C.t2.ec, 'Em curso', 'var(--apto)', 'data-go="cap" data-turma="t2" data-c="ec"')}
+                ${stat(C.t2.ec, 'Aptos', 'var(--apto)', 'data-go="cap" data-turma="t2" data-c="ec"')}
                 ${stat(C.t2.dl, 'Desligados', 'var(--inapto)', 'data-go="cap" data-turma="t2" data-c="dl"')}
                 ${stat(C.t2.mar, 'Mar', 'var(--ink)', 'data-go="cap" data-turma="t2" data-c="mar"')}
                 ${stat(C.t2.interna, 'Interna', 'var(--ink)', 'data-go="cap" data-turma="t2" data-c="interna"')}
@@ -1514,7 +1514,7 @@ function renderSum(){
 
       <div class="mil-card" data-go="bm" style="cursor:pointer">
         <div class="card-head">
-          <h3 data-go="bm">Recertificação BM › <span class="civ-dates">(12/11 a 29/11 · ${B.t} militares inscritos)</span></h3>
+          <h3 data-go="bm">Recertificação BM › <span class="civ-dates">(12/11 a 29/11 · ${B.t} militares inscritos)</span> <span class="pan-badge bm" style="font-size:.7em;padding:1px 6px">Concluído</span></h3>
           <span class="sub-link" data-go="bm">Ver detalhes</span>
         </div>
         <div class="mil-content">
@@ -1536,9 +1536,9 @@ function renderSum(){
     </div>
     <div class="civ-cards">
       ${civCard('Recertificação LN', '(30 de outubro a 03 de novembro)', G.recLN, 'Recertificação', 'Metade Norte', true)}
-      ${civCard('Capacitação LN', '(04 a 23 de novembro)', G.capLN, 'Capacitação', 'Metade Norte', false)}
+      ${civCard('Capacitação LN', '(04 a 23 de novembro)', G.capLN, 'Capacitação', 'Metade Norte', true)}
       ${civCard('Recertificação LS', '(06 a 10 de novembro)', G.recLS, 'Recertificação', 'Metade Sul', true)}
-      ${civCard('Capacitação LS', '(06 a 25 de novembro)', G.capLS, 'Capacitação', 'Metade Sul', false)}
+      ${civCard('Capacitação LS', '(06 a 25 de novembro)', G.capLS, 'Capacitação', 'Metade Sul', true)}
     </div>
   </div>`;
 }
